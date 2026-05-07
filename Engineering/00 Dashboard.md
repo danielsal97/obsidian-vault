@@ -10,6 +10,9 @@ General knowledge that carries across every project and every job.
 - [[C/Structs and Unions]] — memory layout, padding, opaque pointers, bit fields, unions
 - [[C/Memory - malloc and free]] — how malloc works, fragmentation, custom allocators, tools
 - [[C/Undefined Behavior]] — what UB is, common sources, why it's dangerous, sanitizers
+- [[C/Bitwise Operations]] — AND/OR/XOR/shift, masking patterns, byte reversal, GCC builtins
+- [[C/Serialization]] — manual serialization, packed structs, byte order, length-prefix framing
+- [[C/File IO]] — POSIX open/read/write/lseek, stdio, flags, errno, atomic write pattern
 
 ## C++
 - [[C++/RAII]] — resource lifetimes, destructors, stack unwinding, writing RAII classes
@@ -18,6 +21,10 @@ General knowledge that carries across every project and every job.
 - [[C++/Virtual Functions]] — vtable, override, pure virtual, virtual destructor, slicing
 - [[C++/Templates]] — function/class templates, specialization, SFINAE, type traits
 - [[C++/STL Containers]] — vector, map, unordered_map, priority_queue, algorithms
+- [[C++/Exception Handling]] — hierarchy, custom exceptions, noexcept, safety levels, re-throwing
+- [[C++/Inheritance]] — access specifiers, multiple inheritance, diamond problem, virtual inheritance
+- [[C++/Operator Overloading]] — all operators, functors, conversion, rcstring example
+- [[C++/Type Casting]] — static_cast, dynamic_cast, const_cast, reinterpret_cast
 
 ### C++ Versions
 - [[C++/Version Comparison]] — feature timeline table, which standard to target, compiler support
@@ -32,6 +39,12 @@ General knowledge that carries across every project and every job.
 - [[Linux/File Descriptors]] — everything is a file, fd lifecycle, dup, pipe, socketpair
 - [[Linux/epoll]] — select vs poll vs epoll, level vs edge triggered, Reactor pattern
 - [[Linux/Sockets TCP]] — server/client setup, RecvAll, byte ordering, disconnect
+- [[Linux/UDP Sockets]] — UDP vs TCP, message boundaries, MTU, broadcast, LDS protocol
+- [[Linux/Threads - pthreads]] — create, mutex, condition variable, rwlock, TLS, pitfalls
+- [[Linux/Shared Memory]] — shm_open, mmap MAP_SHARED, POSIX shm, sync requirements
+- [[Linux/Semaphores]] — sem_init, named semaphores, counting semaphores, producer/consumer
+- [[Linux/mmap]] — file-backed mapping, anonymous mapping, msync, madvise, MAP_SHARED
+- [[Linux/IPC Overview]] — all IPC mechanisms compared: pipes, sockets, shm, signals, mq
 
 ## Memory Management
 - [[Memory/Process Memory Layout]] — text, data, BSS, heap, stack, virtual memory
@@ -39,7 +52,23 @@ General knowledge that carries across every project and every job.
 - [[Memory/Memory Errors and Tools]] — leak, use-after-free, double free, overflow, ASan, Valgrind
 
 ## Build Process
-- [[Build Process]] — preprocessor → compiler → linker, .o/.a/.so, Make, flags
+- [[Build Process/Overview]] — full pipeline diagram, commands, stage-by-stage summary
+- [[Build Process/1 - Preprocessor]] — #include, #define, header guards, conditional compilation
+- [[Build Process/2 - Compiler]] — parsing, type checking, optimization levels, template instantiation
+- [[Build Process/3 - Assembler]] — assembly → object file, ELF format, symbol table, relocations
+- [[Build Process/4 - Linker]] — symbol resolution, static vs dynamic linking, PLT/GOT, common errors
+
+## Design Patterns
+- [[Design Patterns/Singleton]] — one instance, thread-safe construction, testability tradeoff
+- [[Design Patterns/Factory]] — create objects via interface, dependency inversion, unique_ptr ownership
+- [[Design Patterns/Observer]] — publisher/subscriber, thread-safe notify, weak_ptr observers
+- [[Design Patterns/Command]] — encapsulate requests, work queues, undo/redo, lambda shortcut
+- [[Design Patterns/Reactor]] — epoll event loop, handler dispatch, LDS single-threaded model
+- [[Design Patterns/Strategy]] — swappable algorithms at runtime, IStorage as strategy in LDS
+
+## Concurrency
+- [[Concurrency/Multithreading Patterns]] — thread pool, producer/consumer, lock hierarchy, futures
+- [[Concurrency/Memory Ordering]] — happens-before, std::atomic, acquire/release, CAS, false sharing
 
 ## Interview Prep
 - [[Interview/Interview Guide]] — 3-min pitch, cold Q&A, bugs to mention
