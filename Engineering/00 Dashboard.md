@@ -25,6 +25,7 @@ General knowledge that carries across every project and every job.
 - [[C++/Inheritance]] — access specifiers, multiple inheritance, diamond problem, virtual inheritance
 - [[C++/Operator Overloading]] — all operators, functors, conversion, rcstring example
 - [[C++/Type Casting]] — static_cast, dynamic_cast, const_cast, reinterpret_cast
+- [[C++/Effective C++ - Meyers]] — Scott Meyers guidelines: RAII, const, Rule of Five, override, noexcept, lambdas, atomic
 
 ### C++ Versions
 - [[C++/Version Comparison]] — feature timeline table, which standard to target, compiler support
