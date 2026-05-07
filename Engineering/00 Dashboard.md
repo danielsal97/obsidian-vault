@@ -39,7 +39,8 @@ General knowledge that carries across every project and every job.
 - [[Linux/Signals]] — sigaction, async-signal-safety, signalfd, SIGPIPE, SIGUSR1/2
 - [[Linux/File Descriptors]] — everything is a file, fd lifecycle, dup, pipe, socketpair
 - [[Linux/epoll]] — select vs poll vs epoll, level vs edge triggered, Reactor pattern
-- [[Linux/Sockets TCP]] — server/client setup, RecvAll, byte ordering, disconnect
+- [[Linux/Networking]] — bottom-up: physical → IP → TCP/UDP → TLS → HTTP/DNS; byte ordering, tools, LDS map
+- [[Linux/Sockets TCP]] — TCP socket API in depth, RecvAll, byte ordering, disconnect
 - [[Linux/UDP Sockets]] — UDP vs TCP, message boundaries, MTU, broadcast, LDS protocol
 - [[Linux/Threads - pthreads]] — create, mutex, condition variable, rwlock, TLS, pitfalls
 - [[Linux/Shared Memory]] — shm_open, mmap MAP_SHARED, POSIX shm, sync requirements
