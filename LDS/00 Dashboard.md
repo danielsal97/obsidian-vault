@@ -1,7 +1,7 @@
-1# LDS — Local Drive Storage
+# LDS — Local Drive Storage
 ## IoT-based NAS/RAID01 Drive System
 
-**Language:** C++20 | **Duration:** ~16 weeks | **Difficulty:** Intermediate → Advanced  
+**Language:** C++20 | **Duration:** ~17 weeks | **Difficulty:** Intermediate → Advanced  
 **Last updated:** 2026-05-08
 
 ---
@@ -18,10 +18,10 @@
 | NBD Driver Communication | ✅ Done |
 | Logger | ✅ Done |
 | InputMediator | ✅ Done |
-| **Bug fixes #3, #8, #10** | ❌ Must do before Phase 2A |
-| **Reactor upgrade (per-fd handlers)** | ❌ Phase 2A |
-| **TCPServer (Linux side)** | ❌ Phase 2A |
-| **BlockClient (Mac side)** | ❌ Phase 2A |
+| Shared interfaces/ (IDriverComm, IMediator, IStorage) | ✅ Done — Phase 2A |
+| TCPDriverComm (Linux TCP server, drop-in for IDriverComm) | ✅ Done — Phase 2A |
+| TCP client test (Python — `test/integration/test_tcp_client.py`) | ✅ Done — Phase 2A |
+| LDS.cpp dual mode (nbd / tcp via CLI arg) | ✅ Done — Phase 2A |
 | RAID01 Manager | ❌ Phase 2 |
 | MinionProxy | ❌ Phase 2 |
 | ResponseManager | ❌ Phase 2 |
@@ -37,10 +37,11 @@
 
 ## Active Phase
 
-> **Phase 2A — Mac Client TCP Bridge** (May 6–20 2026, ~16 hrs)
+> **Phase 2 — Data Management & Network** (May 21 – Jun 17 2026, ~46 hrs)
 
-**Immediate next step:** Fix bugs #3, #8, #10 → upgrade Reactor → build TCPServer + BlockClient  
-See: [[Phase 2A Execution Plan]]
+**Phase 2A ✅ Done** — TCPDriverComm + Python client + dual-mode LDS.cpp on GitHub  
+**Immediate next step:** RAID01Manager → MinionProxy → ResponseManager → Scheduler  
+See: [[Phase 2 Execution Plan]]
 
 ---
 
@@ -49,8 +50,8 @@ See: [[Phase 2A Execution Plan]]
 | Phase                                             | Focus                           | Dates         | Hours       | Status   |
 | ------------------------------------------------- | ------------------------------- | ------------- | ----------- | -------- |
 | [[Phase 1 - Core Framework Integration\|Phase 1]] | Core framework, NBD, wiring     | Apr 2026      | 18          | ✅ Done   |
-| [[Phase 2A - Mac Client TCP Bridge\|Phase 2A]]    | Mac client ↔ Linux TCP          | May 6–20 2026 | 16          | ⏳ Active |
-| [[Phase 2 - Data Management & Network\|Phase 2]]  | RAID01, MinionProxy, Scheduler  | May 21–Jun 17 2026 | 46     | ⏳        |
+| [[Phase 2A - Mac Client TCP Bridge\|Phase 2A]]    | Mac client ↔ Linux TCP          | May 6–20 2026      | 16     | ✅ Done   |
+| [[Phase 2 - Data Management & Network\|Phase 2]]  | RAID01, MinionProxy, Scheduler  | May 21–Jun 17 2026 | 46     | ⏳ Active |
 | [[Phase 3 - Reliability Features\|Phase 3]]       | Watchdog, AutoDiscovery         | Jun 18–Jul 8 2026  | 24     | ⏳        |
 | [[Phase 4 - Minion Server\|Phase 4]]              | Minion-side implementation      | Jul 9–22 2026      | 12     | ⏳        |
 | [[Phase 5 - Integration & Testing\|Phase 5]]      | Full system integration + tests | Jul 23–Aug 12 2026 | 68     | ⏳        |
@@ -63,16 +64,17 @@ See: [[Phase 2A Execution Plan]]
 
 ```
 Reactor ✅
-  ├─→ InputMediator ✅ ──→ LocalStorage ✅
+  ├─→ InputMediator ✅ (dispatches via lambdas → LocalStorage ✅)
   │
   ├─→ [Phase 2A] Reactor upgrade (per-fd handlers)
   │         └─→ TCPServer ──→ LocalStorage
   │                └─→ BlockClient (Mac) ← two real machines talking
   │
-  └─→ [Phase 2+] RAID01Manager ──→ MinionProxy ──→ Minion Server
-                       └─→ Scheduler ──→ ResponseManager
-                               └─→ Watchdog ──→ AutoDiscovery
-                                                    └─→ Integration Tests
+  └─→ [Phase 2] ReadCommand / WriteCommand (classes, replace lambdas)
+        └─→ RAID01Manager ──→ MinionProxy ──→ Minion Server
+                  └─→ Scheduler ──→ ResponseManager
+                          └─→ Watchdog ──→ AutoDiscovery
+                                  └─→ Integration Tests
 ```
 
 ---
@@ -87,7 +89,7 @@ Reactor ✅
 - [[Concurrency Model]]
 - [[Request Lifecycle]]
 - [[Wire Protocol Spec]]
-- [[Architecture/Client-Server Architecture]] ← NEW Phase 2A
+- [[Architecture/Client-Server Architecture]]
 
 ### Design Patterns
 - [[Singleton]] — Logger, Factory access
@@ -115,7 +117,7 @@ Reactor ✅
 - [[Interview Guide]]
 
 ### Architecture Decisions
-- [[Why TCP for Client]] ← NEW Phase 2A
+- [[Why TCP for Client]]
 - [[Why UDP not TCP]]
 - [[Why Templates not Virtual Functions]]
 - [[Why RAII]]
@@ -124,7 +126,7 @@ Reactor ✅
 - [[Why signalfd not sigaction]]
 
 ### Manager
-- [[Phase 2A Execution Plan]] ← NEW active sprint
+- [[Phase 2A Execution Plan]] ← active sprint
 - [[Phase 2 Execution Plan]]
 - [[Timeline & Milestones]]
 - [[Project Status & Metrics]]
@@ -133,8 +135,8 @@ Reactor ✅
 - [[Test Strategy]]
 
 ### Components (Phase 2A)
-- [[Components/TCPServer]] ← NEW
-- [[Components/BlockClient]] ← NEW
+- [[Components/TCPServer]]
+- [[Components/BlockClient]]
 
 ### DevOps & Setup
 - [[DevOps/Build System]] ← Make targets, flags, shared library, how to add components

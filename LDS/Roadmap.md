@@ -11,8 +11,8 @@
 
 ```
 Phase 1 — Core Framework Integration   ✅ COMPLETE   (18 hrs)
-Phase 2A — Mac Client TCP Bridge       ⏳ ACTIVE     (16 hrs)  ← YOU ARE HERE
-Phase 2 — Data Management & Network    ⏳ Pending    (46 hrs)
+Phase 2A — Mac Client TCP Bridge       ✅ DONE       (16 hrs)
+Phase 2 — Data Management & Network    ⏳ ACTIVE     (46 hrs)  ← YOU ARE HERE
 Phase 3 — Reliability Features         ⏳ Pending    (24 hrs)
 Phase 4 — Minion Server                ⏳ Pending    (12 hrs)
 Phase 5 — Integration & Testing        ⏳ Pending    (68 hrs)
@@ -21,8 +21,8 @@ Phase 6 — Optimization & Polish        ⏳ Pending    (26 hrs)
 Total                                              ~210 hrs
 ```
 
-> **Active sprint:** Build Mac client ↔ Linux master TCP link.  
-> See [[Phase 2A Execution Plan]].
+> **Active sprint:** RAID01Manager → MinionProxy → ResponseManager → Scheduler.  
+> See [[Phase 2 Execution Plan]].
 
 ---
 
@@ -38,12 +38,10 @@ Total                                              ~210 hrs
 | NBD Driver Communication | 1 | — | ✅ Done |
 | Logger | 1 | — | ✅ Done |
 | InputMediator | 1 | 4 | ✅ Done |
-| **Bug fixes #3 #8 #10** | pre-2A | 1 | ❌ Must do first |
-| **Reactor upgrade (per-fd handlers)** | 2A | 2 | ❌ Active |
-| **NetworkProtocol wire format** | 2A | 1 | ❌ Active |
-| **TCPServer (Linux)** | 2A | 5 | ❌ Active |
-| **BlockClient (Mac)** | 2A | 4 | ❌ Active |
-| **CLI demo + end-to-end test** | 2A | 3 | ❌ Active |
+| Shared interfaces/ (IDriverComm, IMediator, IStorage) | 2A | — | ✅ Done |
+| TCPDriverComm (Linux TCP server) | 2A | — | ✅ Done |
+| LDS.cpp dual mode (nbd / tcp) | 2A | — | ✅ Done |
+| TCP client test (Python) | 2A | — | ✅ Done |
 | RAID01 Manager | 2 | 12 | ❌ Todo |
 | MinionProxy | 2 | 14 | ❌ Todo |
 | ResponseManager | 2 | 10 | ❌ Todo |
@@ -73,9 +71,15 @@ All done. Reactor, NBD, ThreadPool, Factory, PNP, InputMediator wired together.
 
 ---
 
-### Phase 2A — Mac Client TCP Bridge ⏳ ← YOU ARE HERE
-**Dates:** May 6–20 2026 | **Effort:** 16 hrs | [[Phase 2A - Mac Client TCP Bridge]]  
-See full execution plan: [[Phase 2A Execution Plan]]
+### Phase 2A — Mac Client TCP Bridge ✅ Done
+**Dates:** May 6–20 2026 | **Effort:** 16 hrs | [[Phase 2A - Mac Client TCP Bridge]]
+
+**What was built:**
+- `TCPDriverComm` — implements `IDriverComm`, drop-in for `NBDDriverComm` over TCP
+- `interfaces/` — shared `IDriverComm.hpp`, `IMediator.hpp`, `IStorage.hpp`
+- `LDS.cpp` — dual mode: `./lds nbd <dev> <size>` or `./lds tcp <port> <size>`
+- `test/integration/test_tcp_client.py` — Python client (used in place of C++ BlockClient)
+- `test/unit/test_tcp_driver.cpp` — unit tests for TCPDriverComm
 
 #### Pre-work (before any new code)
 - [ ] Fix bug #3 — always reply to kernel even on storage error

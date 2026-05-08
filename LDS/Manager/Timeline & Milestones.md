@@ -5,8 +5,8 @@
 | Phase | Start | End | Weeks | Hours | Status |
 |---|---|---|---|---|---|
 | Phase 1 — Core Framework | 2026-04-01 | 2026-04-18 | 2 | 18 | ✅ Complete |
-| Phase 2A — Mac Client TCP Bridge | 2026-05-06 | 2026-05-20 | 2 | 16 | ⏳ Active |
-| Phase 2 — Data & Network | 2026-05-21 | 2026-06-17 | 4 | 46 | ⏳ |
+| Phase 2A — Mac Client TCP Bridge | 2026-05-06 | 2026-05-20 | 2 | 16 | ✅ Complete |
+| Phase 2 — Data & Network | 2026-05-21 | 2026-06-17 | 4 | 46 | ⏳ Active |
 | Phase 3 — Reliability | 2026-06-18 | 2026-07-08 | 3 | 24 | ⏳ |
 | Phase 4 — Minion Server | 2026-07-09 | 2026-07-22 | 2 | 12 | ⏳ |
 | Phase 5 — Integration | 2026-07-23 | 2026-08-12 | 3 | 68 | ⏳ |
@@ -23,7 +23,7 @@
 |---|---|---|---|
 | M0 — Foundation | 2026-04-18 | ✅ Done | Plugin system, NBD, all Phase 1 components |
 | M1 — Components Wire Together | 2026-04-18 | ✅ Done | InputMediator + lambdas + ThreadPool flowing end-to-end |
-| M2A — Mac ↔ Linux TCP on real hardware | 2026-05-20 | ⏳ Active | Two machines, real network, write/read verified |
+| M2A — Mac ↔ Linux TCP on real hardware | 2026-05-20 | ✅ Done | TCPDriverComm + Python client, dual-mode LDS.cpp |
 | M2 — Network Communication | End Phase 2 | ⏳ | Master ↔ Minion UDP working, async responses |
 | M3 — Fault Tolerance | End Phase 3 | ⏳ | RAID01 working, failure detection + auto-discovery |
 | M4 — Full System Working | End Phase 5 | ⏳ | All components integrated, tests passing |
@@ -41,6 +41,7 @@
 | 2026-04-30 | Obsidian vault created with full architecture coverage |
 | 2026-05-01 | Docker setup created |
 | 2026-05-06 | Phase 2A sprint started — TCPServer + BlockClient |
+| 2026-05-08 | Phase 2A complete — TCPDriverComm + Python client + dual-mode LDS.cpp |
 
 ---
 
