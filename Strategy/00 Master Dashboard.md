@@ -57,7 +57,8 @@ Evening  (30 min)    Apply — 2–3 job applications + follow up on pending one
 
 ### Strategy
 - [[Strategy/Progress Tracker]] — 57 topic checkboxes + job milestones ← check this daily
-- [[Strategy/Learning Curriculum]] — full ordered study path with times and LDS tie-ins
+- [[Strategy/Interview Prep Track]] — interview-first order: pitch → DS+A → C++ → concurrency → systems
+- [[Strategy/Learning Curriculum]] — full bottom-up study path with times and LDS tie-ins
 
 ### Job Search
 - [[LDS/Manager/Job Search Plan]] — GitHub checklist, CV bullets, where to apply, pitch
