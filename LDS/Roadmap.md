@@ -3,7 +3,7 @@
 
 **Project:** IoT-based NAS/RAID01 Drive System (Master-Minion)  
 **Language:** C++20 | **Target:** August 2026 | **Total effort:** ~210 hrs  
-**Last updated:** 2026-05-06
+**Last updated:** 2026-05-08
 
 ---
 
@@ -117,7 +117,7 @@ See full execution plan: [[Phase 2A Execution Plan]]
 ---
 
 ### Phase 2 — Data Management & Network ⏳
-**Dates:** May 2026 | **Effort:** 46 hrs | [[Phase 2 - Data Management & Network]]  
+**Dates:** May 21 – Jun 17 2026 | **Effort:** 46 hrs | [[Phase 2 - Data Management & Network]]  
 See full execution plan: [[Phase 2 Execution Plan]]
 
 #### Pre-work (before any new code)
@@ -286,14 +286,20 @@ Files in `test/integration/`:
 
 ```
 Reactor ✅
-  └─→ InputMediator ✅
-        ├─→ ReadCommand ✅ ──→ RAID01Manager (2.1) ──→ MinionProxy (2.2)
-        └─→ WriteCommand ✅         └─→ Scheduler (2.4) ──→ ResponseManager (2.3)
-                                           └─→ Watchdog (3.1)
-                                           └─→ AutoDiscovery (3.2)
-                                                   └─→ Minion Server (4.1)
-                                                           └─→ Integration Tests (5.x)
-                                                                   └─→ Polish (6.x)
+  ├─→ InputMediator ✅ (dispatches via lambdas → LocalStorage)
+  │
+  ├─→ [Phase 2A] Reactor upgrade (per-fd handlers)
+  │         └─→ TCPServer ──→ LocalStorage
+  │                └─→ BlockClient (Mac) ← two real machines talking
+  │
+  └─→ [Phase 2] ReadCommand / WriteCommand (classes, replace lambdas)
+        └─→ RAID01Manager (2.1) ──→ MinionProxy (2.2)
+                 └─→ Scheduler (2.4) ──→ ResponseManager (2.3)
+                          └─→ Watchdog (3.1)
+                          └─→ AutoDiscovery (3.2)
+                                  └─→ Minion Server (4.1)
+                                          └─→ Integration Tests (5.x)
+                                                  └─→ Polish (6.x)
 ```
 
 **Build order for Phase 2:** RAID01Manager → MinionProxy → ResponseManager → Scheduler

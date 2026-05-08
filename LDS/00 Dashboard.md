@@ -2,7 +2,7 @@
 ## IoT-based NAS/RAID01 Drive System
 
 **Language:** C++20 | **Duration:** ~16 weeks | **Difficulty:** Intermediate → Advanced  
-**Last updated:** 2026-05-06
+**Last updated:** 2026-05-08
 
 ---
 
@@ -46,16 +46,16 @@ See: [[Phase 2A Execution Plan]]
 
 ## Phase Timeline
 
-| Phase | Focus | Dates | Hours | Status |
-|---|---|---|---|---|
-| [[Phase 1 - Core Framework Integration\|Phase 1]] | Core framework, NBD, wiring | Apr 2026 | 18 | ✅ Done |
-| [[Phase 2A - Mac Client TCP Bridge\|Phase 2A]] | Mac client ↔ Linux TCP | May 6–20 2026 | 16 | ⏳ Active |
-| [[Phase 2 - Data Management & Network\|Phase 2]] | RAID01, MinionProxy, Scheduler | May–Jun 2026 | 46 | ⏳ |
-| [[Phase 3 - Reliability Features\|Phase 3]] | Watchdog, AutoDiscovery | Jun 2026 | 24 | ⏳ |
-| [[Phase 4 - Minion Server\|Phase 4]] | Minion-side implementation | Jun–Jul 2026 | 12 | ⏳ |
-| [[Phase 5 - Integration & Testing\|Phase 5]] | Full system integration + tests | Jul 2026 | 68 | ⏳ |
-| [[Phase 6 - Optimization & Polish\|Phase 6]] | Performance, CI/CD, docs | Aug 2026 | 26 | ⏳ |
-| **Total** | | | **210 hrs** | |
+| Phase                                             | Focus                           | Dates         | Hours       | Status   |
+| ------------------------------------------------- | ------------------------------- | ------------- | ----------- | -------- |
+| [[Phase 1 - Core Framework Integration\|Phase 1]] | Core framework, NBD, wiring     | Apr 2026      | 18          | ✅ Done   |
+| [[Phase 2A - Mac Client TCP Bridge\|Phase 2A]]    | Mac client ↔ Linux TCP          | May 6–20 2026 | 16          | ⏳ Active |
+| [[Phase 2 - Data Management & Network\|Phase 2]]  | RAID01, MinionProxy, Scheduler  | May 21–Jun 17 2026 | 46     | ⏳        |
+| [[Phase 3 - Reliability Features\|Phase 3]]       | Watchdog, AutoDiscovery         | Jun 18–Jul 8 2026  | 24     | ⏳        |
+| [[Phase 4 - Minion Server\|Phase 4]]              | Minion-side implementation      | Jul 9–22 2026      | 12     | ⏳        |
+| [[Phase 5 - Integration & Testing\|Phase 5]]      | Full system integration + tests | Jul 23–Aug 12 2026 | 68     | ⏳        |
+| [[Phase 6 - Optimization & Polish\|Phase 6]]      | Performance, CI/CD, docs        | Aug 13–26 2026     | 26     | ⏳        |
+| **Total**                                         |                                 |               | **210 hrs** |          |
 
 ---
 
