@@ -130,3 +130,22 @@ This is why `epoll_wait()` uses zero CPU while waiting — the thread is not run
 | Signal | Async notification | Simple events (SIGINT, SIGUSR1) |
 
 LDS uses: Unix socketpair (NBD), signalfd (signals via epoll), TCP (Mac client).
+
+---
+
+## Understanding Check
+
+> [!question]- Why is a syscall more expensive than a regular function call?
+> A syscall requires a CPU mode switch from user mode to kernel mode — the CPU saves registers, switches the stack pointer to the kernel stack, validates arguments, runs the kernel function, then switches back. A regular function call just pushes a stack frame. The mode switch alone costs hundreds of nanoseconds vs a few nanoseconds for a function call. This is why minimising syscalls (e.g., using `epoll` to batch I/O events rather than calling `read` repeatedly) matters for performance.
+
+> [!question]- After `fork()`, parent and child share physical memory pages. A child writes to a variable. What happens?
+> Copy-on-write. The kernel marks all shared pages as read-only. When the child writes to a page, the CPU raises a page fault. The kernel catches it, copies just that page for the child, marks it writable, and the write completes transparently. The parent's page is unchanged. This makes `fork()` fast even for a 1GB process — only pages that are actually written get copied.
+
+> [!question]- Why does `epoll_wait()` use zero CPU while waiting for events?
+> When a thread calls `epoll_wait()`, the kernel marks it as sleeping (blocked). The scheduler does not schedule it until at least one registered fd becomes ready. While sleeping, the thread uses no CPU cycles. When a packet arrives or a connection is accepted, the kernel wakes the thread and `epoll_wait` returns. This is the difference between blocking I/O (efficient) and busy-waiting (burns CPU checking in a loop).
+
+> [!question]- Why does a bug in a kernel module crash the entire machine, but a bug in a userspace program only crashes that process?
+> Kernel modules run in kernel mode — they share the kernel's address space with no memory protection between them. A bad pointer write can corrupt any kernel data structure. Userspace processes run in isolated virtual address spaces — a segfault only affects that process; the kernel catches the fault, kills the process, and keeps running. The NBD kernel module in LDS means a bug there would be catastrophic, which is why LDS runs the actual storage logic in userspace (safer, debuggable).
+
+> [!question]- Why can the LDS Reactor watch an NBD socketpair fd, a signalfd, and TCP client sockets all in the same `epoll_wait()`?
+> Because in Unix, everything is a file descriptor — they all implement the same `read`/`write`/`poll` kernel interface. `epoll` works at the fd level, not the type level. The kernel tracks readiness for any fd registered with epoll. This uniformity is the core design principle that makes the single-threaded Reactor pattern work across heterogeneous I/O sources.

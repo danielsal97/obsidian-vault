@@ -163,3 +163,22 @@ print_tuple(t, std::make_index_sequence<3>{});
 | `std::exchange` | In move constructors |
 | Digit separators | For readability in large literals and bitmasks |
 | Return type deduction | Short functions where type is obvious |
+
+---
+
+## Understanding Check
+
+> [!question]- `std::unique_ptr<int>(new int(42))` vs `std::make_unique<int>(42)` — why is the latter preferred?
+> Exception safety. In a function call like `f(unique_ptr<int>(new int(42)), might_throw())`, the compiler may evaluate `new int(42)` first, then call `might_throw()` before constructing the `unique_ptr` — if `might_throw()` throws, the raw pointer leaks. `make_unique` is a single expression: allocation and ownership transfer happen atomically. It also avoids writing the type twice and is cleaner to read.
+
+> [!question]- C++11 couldn't move a `unique_ptr` into a lambda. What's the C++14 solution and why does it matter for LDS?
+> Lambda move capture: `[p = std::move(ptr)]`. This creates a new variable `p` inside the lambda by moving from `ptr`. In C++11, captures had to be copies or references — you couldn't move a non-copyable type like `unique_ptr` into a lambda. In LDS, this lets you move a command object into the lambda that submits it to the ThreadPool without losing ownership or copying.
+
+> [!question]- `std::exchange(other.m_data, nullptr)` in a move constructor — what does this do and why is it the right pattern?
+> `exchange` atomically sets `other.m_data` to `nullptr` and returns the old value, which is then used to initialise the new object's member. In one expression: read the source, null out the source. Without it, you'd write `auto tmp = other.m_data; other.m_data = nullptr;` — same result, more lines, more chance of error. It expresses the "steal and null" move pattern clearly.
+
+> [!question]- A generic lambda `[](auto a, auto b) { return a + b; }` — what does the compiler actually generate?
+> A functor (anonymous class) whose `operator()` is a template. For each unique combination of argument types, the compiler instantiates a separate overload. `add(1, 2)` and `add(1.5, 2.5)` produce two different overloads internally. It's equivalent to a struct with a templated `operator()` — same as a function template, just written inline.
+
+> [!question]- You see `auto` return type on a function. What constraint does C++14 impose, and when does it fail?
+> All `return` statements in the function must deduce to the same type. If one returns `int` and another returns `double`, the compiler errors with "inconsistent deduction." For recursive functions, the return type must be deducable from at least one non-recursive return statement that appears before any recursive call in the function body.

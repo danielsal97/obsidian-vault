@@ -257,3 +257,22 @@ struct MyClass {
     inline static int count = 0;   // defined here, no .cpp needed
 };
 ```
+
+---
+
+## Understanding Check
+
+> [!question]- `if constexpr` vs a regular `if` inside a template — why does the difference matter?
+> With a regular `if`, both branches must compile for every template instantiation, even the one that won't execute. If branch A only works for `int` and branch B only works for `std::string`, the compiler errors on the wrong branch even though it's never taken. `if constexpr` discards the non-taken branch at compile time — it's not instantiated at all. This replaces complex SFINAE specialisations with readable code.
+
+> [!question]- `std::optional<int>` vs returning `-1` as "not found" — what does optional add?
+> Explicit intent and type safety. Returning `-1` is a convention — callers can ignore it and use the value. `optional` makes the absent case part of the type: callers must check `has_value()` or `value_or()` to get the data. It also works for any type (not just integers where a sentinel value exists), and self-documents that the function can legitimately return nothing.
+
+> [!question]- A `std::string_view` is returned from a function. The caller stores it. What can go wrong?
+> If the `string_view` was constructed from a local `std::string` inside the function, that string is destroyed when the function returns — the `string_view` now points to freed memory. `string_view` is a non-owning reference: it's safe only as long as the source string outlives it. Safe use: as a function parameter (caller owns the string), or as a local variable within a scope where the source is guaranteed alive.
+
+> [!question]- Structured bindings with `auto [key, value]` in a map loop — are `key` and `value` copies or references?
+> With `auto [key, value]`, they are copies. With `auto& [key, value]`, they are references to the map elements (modifiable). With `const auto& [key, value]`, they are const references (read-only, no copy). Always use `const auto&` when iterating for read-only access — avoids copying the key and value.
+
+> [!question]- `[[nodiscard]]` on a function — give a real example where forgetting the return value is a bug.
+> `bool mutex.try_lock()` — if you call it without checking the return value, you think you hold the lock but you don't. `std::vector::empty()` — calling `v.empty()` and ignoring the result does nothing (you probably meant to `if (v.empty()) return`). Adding `[[nodiscard]]` to these functions turns the silent bug into a compiler warning at the call site.

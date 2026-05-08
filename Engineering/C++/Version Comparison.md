@@ -109,3 +109,22 @@
 g++ -std=c++20 ...   # enable C++20
 g++ -std=c++17 ...   # enable C++17
 ```
+
+---
+
+## Understanding Check
+
+> [!question]- `make_unique` was introduced in C++14, not C++11. What did people do in C++11, and what problem does `make_unique` fix?
+> In C++11: `std::unique_ptr<int> p(new int(42))`. The problem is exception safety: in `f(unique_ptr<int>(new int(42)), g())`, if `g()` throws after `new` but before the `unique_ptr` is constructed, you leak. `make_unique` combines allocation and construction atomically — no leak window. It also avoids writing the type twice and makes ownership intent clear.
+
+> [!question]- When should you use `std::string_view` instead of `const std::string&` as a function parameter?
+> Use `string_view` when: the function only reads the string (doesn't store it), and the caller might pass a string literal, a `std::string`, or a substring. `string_view` avoids constructing a `std::string` from a literal (which allocates). The danger: never store a `string_view` in a member variable or return it from a function — it can dangle if the source string is destroyed.
+
+> [!question]- LDS targets C++20 but uses mostly C++11/14 features (`std::atomic`, lambdas, `shared_ptr`, `= delete`). What does this tell you about version targeting?
+> Targeting a standard means "at minimum this version" — you can use any feature up to that version. LDS was written using C++11/14 idioms because that's what the codebase needs. Targeting C++20 just ensures the compiler won't reject any C++20 syntax if you add it later (e.g., `std::span` for buffer parameters, `std::jthread` for the ThreadPool). It's forward-compatibility, not a requirement to use every feature.
+
+> [!question]- An interviewer asks "what's new in modern C++?" — what's the most impactful answer you can give in 30 seconds?
+> C++11 was the revolution: move semantics (no more expensive copies), RAII smart pointers (no manual memory management), lambdas (inline callbacks without functor boilerplate), and a real threading model. C++17 added `optional`, `variant`, `string_view`, and structured bindings for cleaner code. C++20 added concepts (readable template constraints) and `span` (safe array views). The common theme: making the safe thing the easy thing.
+
+> [!question]- `std::variant` vs C-style `union` — what does variant guarantee that union doesn't?
+> A C union has no runtime type tracking — reading the wrong member is UB. `std::variant` always knows which type it holds (stored as a discriminant), `std::get<T>` throws if the type doesn't match, and `std::get_if<T>` returns nullptr safely. Variant also calls the correct constructor and destructor as the type changes — union doesn't. The cost: slightly larger (size of largest type + discriminant + alignment padding).

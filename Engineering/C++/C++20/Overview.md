@@ -269,3 +269,22 @@ More efficient than `condition_variable` for simple flag patterns.
 | Modules | Low — tooling not mature yet |
 
 **LDS uses:** `std::atomic<bool>`, `std::shared_mutex`, `std::function`, lambdas, `shared_ptr`, `= delete`, `override` — all C++11/14.
+
+---
+
+## Understanding Check
+
+> [!question]- Concepts vs SFINAE — why are concepts considered a strict improvement?
+> SFINAE error messages are pages of incomprehensible template instantiation noise — the actual constraint violation is buried. Concepts produce a single clear error: "T does not satisfy Sortable because it lacks operator<". Concepts also express intent in the code itself — a reader can see what a template requires without decoding the SFINAE logic. The runtime behaviour is identical; it's entirely a compile-time/DX improvement.
+
+> [!question]- `std::span<int>` vs passing `(int* data, size_t n)` — what does span add?
+> `span` bundles the pointer and size together and provides bounds checking (in debug mode), range-based for, and standard algorithm compatibility. It's also a self-documenting type — the caller knows it's a non-owning view of contiguous data. The main guarantee: you can't accidentally pass a mismatched pointer/size pair. For LDS, `span<std::byte>` would replace raw `char*` + length pairs in the wire protocol handler.
+
+> [!question]- `std::jthread` vs `std::thread` — what specific bug does `jthread` prevent?
+> Forgetting to call `join()` or `detach()`. `std::thread` calls `std::terminate()` in its destructor if it's joinable and not yet joined/detached. This crashes the program. `jthread` automatically joins on destruction — RAII for threads. It also supports cooperative cancellation via `stop_token`, so you can signal the thread to finish without shared `atomic<bool>` flags.
+
+> [!question]- Coroutines with `co_await` vs a callback-based async approach — what problem do they solve?
+> Callback hell / inversion of control. With callbacks, the flow of a multi-step async operation is split across multiple functions — hard to read, hard to debug, error handling is scattered. With coroutines, the entire async operation looks like sequential code: `auto result = co_await step1(); auto data = co_await step2(result);`. The compiler transforms it into a state machine. Stack traces are also meaningful — you can see where you are in the sequence.
+
+> [!question]- LDS currently uses C++11/14 features. Which single C++20 feature would most improve the LDS codebase and why?
+> `std::span`. LDS passes raw `char*` + length pairs for buffer handling throughout the NBD and TCP protocol code. `std::span<std::byte>` would make these interfaces type-safe, self-documenting, and bounds-checkable. Second place: `std::jthread` for the ThreadPool workers — eliminates the manual `join()` loop in the destructor and adds clean stop-token cancellation without the `atomic<bool>` shutdown flag.

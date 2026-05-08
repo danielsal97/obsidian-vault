@@ -258,3 +258,22 @@ std::is_same<int, long>::value    // false
 std::remove_pointer<int*>::type   // int
 std::add_const<int>::type         // const int
 ```
+
+---
+
+## Understanding Check
+
+> [!question]- `auto x = 5;` — does this make C++ dynamically typed? What actually happens?
+> No. `auto` is compile-time type deduction — the compiler infers `int` from the literal `5` and `x` is a fixed `int` for its entire lifetime. There is no runtime type tracking. It's purely a convenience to avoid writing the type when it's obvious from context. `auto` is resolved before the program runs.
+
+> [!question]- You store a lambda with `[&]` capture in an `std::function` and push it into the LDS ThreadPool. What can go wrong?
+> Dangling reference. `[&]` captures all local variables by reference — if the lambda outlives the function where it was created (which it does, since the ThreadPool runs it asynchronously), all the captured references dangle. The stack frame is gone. Fix: capture by value `[=]` or explicitly capture only what's needed by value `[x, y]`. For large objects, move into the lambda `[p = std::move(ptr)]` (C++14).
+
+> [!question]- `f(nullptr)` vs `f(NULL)` vs `f(0)` — when does the difference matter?
+> When there are overloads `f(int)` and `f(int*)`: `f(nullptr)` unambiguously calls `f(int*)`. `f(NULL)` and `f(0)` may call `f(int)` because NULL is often defined as `0` (an integer). This is the entire reason `nullptr` exists — to give the null pointer a distinct type (`std::nullptr_t`) that only converts to pointer types.
+
+> [!question]- What bug does `override` catch that would otherwise compile silently?
+> Virtual function signature mismatch. If you write `void f(float)` intending to override `virtual void f(int)`, the compiler silently creates a new non-virtual function — polymorphism is broken and the base version is called. With `override`, the compiler verifies that the function actually overrides a virtual in the base class. The bug becomes a compile error instead of a runtime mystery.
+
+> [!question]- Before C++11, C++ had no standard threading model. What did that mean in practice for Linux programs like LDS?
+> Every platform had its own API: Linux used pthreads (`pthread_create`, `pthread_mutex_t`), Windows used `CreateThread`. Code that used threads was not portable. C++11 standardised `std::thread`, `std::mutex`, `std::condition_variable`, and `std::atomic` — the same code compiles and runs correctly on any platform. LDS uses `std::thread` and `std::mutex` instead of raw pthreads for this reason.
