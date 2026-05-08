@@ -525,3 +525,22 @@ See [[Concurrency/Memory Ordering]].
 - [[Inheritance]] — polymorphism, slicing
 - [[Type Casting]] — named casts
 - [[Concurrency/Memory Ordering]] — atomic vs volatile
+
+---
+
+## Understanding Check
+
+> [!question]- Meyers says "never call virtual functions during construction or destruction." What exactly happens in LDS if `InputMediator`'s base class called a virtual `onInit()` in its constructor, and why is the derived override never reached?
+> During execution of the base constructor, the object's dynamic type is the base — the derived subobject does not yet exist. The `vptr` is set to the base's vtable, so the virtual call dispatches to the base version. In LDS terms: if `InputMediator` inherited from some `MediatorBase` that called `virtual onInit()` in `MediatorBase()`, `InputMediator::onInit()` would never be called during construction — the mediator's setup logic would silently be skipped, leaving it in an uninitialized state when `run()` is called. The fix is to call initialization logic explicitly after construction (e.g., via a separate `init()` call or factory function).
+
+> [!question]- Meyers recommends the member initializer list over body assignment. What is the concrete performance difference for a `std::string` member, and why does order in the list matter?
+> A `std::string` member is default-constructed (empty string allocated) before the constructor body runs, then assigned in the body — two operations. The initializer list directly constructs it with the given value — one operation. For large strings this avoids an unnecessary allocation and copy. Order matters because members are *initialized in the order they are declared in the class*, not the order they appear in the initializer list. If the list order differs from declaration order, the compiler may warn and, more importantly, a member that appears later in declaration order but earlier in the list may be initialized before a member it depends on — causing use of an uninitialized value.
+
+> [!question]- What goes wrong if you forget to handle self-assignment in `operator=`, and why does copy-and-swap solve both the self-assignment and exception safety problems simultaneously?
+> Without a self-assignment check, `delete[] m_data` destroys the buffer, and then `m_data = new char[rhs.m_size]` followed by `memcpy(... rhs.m_data ...)` reads from the just-freed memory — undefined behavior. Copy-and-swap takes `rhs` by value (a copy is made before the function body), so by definition `rhs` is always a distinct object. Even if `a = a` is called, the copy is made first (now a separate object), and the swap exchanges `this`'s state with that copy. Self-assignment is safe, and if the copy constructor throws, `this` is unchanged (strong guarantee).
+
+> [!question]- Meyers says to prefer `nullptr` over `0` or `NULL`. What real overload resolution bug does this prevent, and is there an equivalent pitfall in LDS?
+> `0` is an integer literal; `NULL` is typically `0` or `0L`. When two overloads exist — `f(int)` and `f(void*)` — passing `0` or `NULL` calls `f(int)`, which is almost certainly wrong when the intent is a null pointer. `nullptr` has type `std::nullptr_t`, which converts to any pointer type but not to integral types, so `f(nullptr)` unambiguously calls `f(void*)`. In LDS: if `InputMediator` has overloads for `Register(IStorage*)` and a hypothetical `Register(int id)`, passing `0` to mean "no storage" would call the integer overload silently. Using `nullptr` catches this at compile time.
+
+> [!question]- Meyers warns against default lambda capture `[=]` and `[&]`. What dangling reference bug could appear in LDS if a lambda capturing `[&]` is stored in the thread pool's work queue?
+> `[&]` captures variables by reference — the lambda holds a reference to a stack-allocated local. If the lambda is created in a function, stored in the thread pool queue, and that function returns before the thread executes the lambda, all captured references dangle. In LDS a command-creation lambda like `[&data]{ process(data); }` where `data` is a local `DriverData` on the caller's stack would result in the worker thread accessing freed stack memory. The correct approach is explicit capture by value `[data]` or capture of a `shared_ptr` to heap-allocated data.

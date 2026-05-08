@@ -181,3 +181,22 @@ send(fd, buf, n, MSG_NOSIGNAL);  // don't send SIGPIPE for this call
 ```
 
 Always check `send()`/`write()` return value — if the client disconnected, it returns -1 with `errno == EPIPE`.
+
+---
+
+## Understanding Check
+
+> [!question]- Why is calling printf() inside a signal handler dangerous, even though it seems to work most of the time?
+> printf() is not async-signal-safe because it uses malloc internally and holds an internal lock on the stdio buffer. If the signal interrupts the main thread while it is already inside printf() or malloc(), the handler re-enters the same locked data structures — causing a deadlock or heap corruption. It "works most of the time" because the race is unlikely but not impossible. The correct pattern is to set a volatile sig_atomic_t flag in the handler and do the actual work in the main loop.
+
+> [!question]- What goes wrong if you register a signal handler with signal() instead of sigaction() on Linux?
+> The POSIX-defined behavior of signal() is implementation-defined. On some systems, after the first delivery the handler is automatically reset to SIG_DFL, so a second signal kills the process before you can re-register. sigaction() guarantees the handler stays registered, lets you control which signals are blocked during handler execution via sa_mask, and provides SA_RESTART to automatically resume interrupted syscalls. Always use sigaction() for reliable behavior.
+
+> [!question]- Why does the LDS Reactor use signalfd + epoll for SIGINT/SIGTERM instead of a traditional async signal handler?
+> A traditional handler would need to be async-signal-safe and could interrupt any point in the event loop, requiring careful flag-checking after every blocking call. signalfd converts signal delivery into a readable file descriptor event, so the Reactor's existing epoll loop handles it at a well-defined point — after returning from epoll_wait. There are no async-safety constraints, no SA_RESTART concerns, and no need to check a global flag after every operation. The shutdown path becomes a normal code path.
+
+> [!question]- What happens to blocked signals when a process calls fork() or exec()?
+> After fork(), the child inherits the parent's signal mask (blocked signals) and signal handlers. After exec(), signal handlers are reset to their defaults (SIG_DFL) because the handler function addresses no longer exist in the new program image, but the signal mask is preserved. This means if you blocked SIGTERM before exec, the new program starts with SIGTERM still blocked — which can be surprising. Good practice: reset the signal mask to empty before exec in the child.
+
+> [!question]- What is the purpose of volatile sig_atomic_t, and what breaks if you use a plain int for the shutdown flag instead?
+> volatile prevents the compiler from caching the variable in a register — without it, the compiler might optimize the main loop to read the flag once and never re-read it from memory, making the loop run forever after a signal. sig_atomic_t guarantees the read and write are atomic at the hardware level on the current platform — a plain int could theoretically be written in multiple machine instructions on some architectures, allowing the main loop to see a partially-written value. Both qualifiers are needed for correctness.

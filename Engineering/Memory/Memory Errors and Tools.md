@@ -183,3 +183,22 @@ g++ -fsanitize=address,undefined -g program.cpp -o program
   ```makefile
   make CXXFLAGS="-fsanitize=address -g"
   ```
+
+---
+
+## Understanding Check
+
+> [!question]- Why does use-after-free often cause crashes far from the actual bug site rather than at the point of the bad access?
+> After free(), the memory is returned to malloc's free list. If a subsequent allocation reuses that block, the freed region now contains live data for a completely different object. When the use-after-free write occurs, it silently corrupts that new object's fields — not the old one. The program continues normally until the new object is used and the corrupted data causes an error, which could be thousands of instructions later in an unrelated code path. This temporal distance between cause and symptom makes use-after-free one of the hardest bugs to diagnose without tools like ASan.
+
+> [!question]- What goes wrong if you use ASan and Valgrind together on the same binary?
+> ASan works by replacing the system allocator with its own instrumented allocator and inserting shadow memory checks around every memory access at compile time. Valgrind also instruments memory at runtime by replacing allocator calls and intercepting memory accesses. Running both simultaneously causes conflicts: ASan's shadow memory region interferes with Valgrind's instrumentation, and Valgrind may misinterpret ASan's intentional poison bytes as legitimate allocations or accesses. Use one or the other for a given debugging session — ASan for speed and compile-time precision, Valgrind when you need to work on an unmodified binary or need its specific memcheck output format.
+
+> [!question]- Why is sending uninitialized stack data in a network buffer both a bug and a security vulnerability?
+> Functionally, the receiver gets garbage bytes that may cause protocol parsing errors or crashes. From a security standpoint, those uninitialized bytes may contain fragments of previous stack frames: passwords, cryptographic keys, pointers, or other sensitive data that was on the stack before this function was called. An attacker can read the received buffer and reconstruct information they should not have. This is the class of vulnerability exploited by Heartbleed (which returned uninitialized heap memory over TLS). The fix is to always initialize buffers before sending: memset(buf, 0, sizeof(buf)) or use calloc instead of malloc.
+
+> [!question]- When would you use MSan (MemorySanitizer) instead of ASan (AddressSanitizer), and why can't ASan catch uninitialized reads?
+> ASan detects memory that is accessed outside its valid allocation bounds or after it has been freed — it tracks the validity of memory regions (allocated vs. freed vs. out-of-bounds). It does not track whether the bytes within a valid allocation have been written with meaningful data. MSan tracks the initialization state of every byte: it marks memory as "uninitialized" when allocated and "initialized" when written, then reports a read of any uninitialized byte. Use MSan specifically when hunting for logic bugs caused by reading garbage values from uninitialized variables or buffers — a class ASan cannot see because the memory address is technically valid.
+
+> [!question]- In a long-running LDS minion process, how would you detect a small per-request memory leak without restarting the service?
+> Watch /proc/PID/status and specifically the VmRSS field over time — if it grows steadily proportional to request count without plateauing, a leak is likely. More precisely, track VmRSS before and after a known-clean idle period to separate fragmentation from actual leaks. For online leak detection without recompilation, attach Valgrind with --pid or use the heap profiler built into jemalloc/tcmalloc (malloc_stats_print). In development, build with -fsanitize=address,leak and run a representative workload — ASan's leak sanitizer prints all live allocations at process exit with full stack traces. In production, gperftools' heap profiler can sample allocations with low overhead.

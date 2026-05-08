@@ -129,4 +129,23 @@ char* bad() {
     return buf;   // buf is gone after return — dangling pointer
 }
 // Fix: pass buffer as parameter, or malloc it (caller must free)
+
+---
+
+## Understanding Check
+
+> [!question]- Why does `strncpy` fail to guarantee null termination, and what is the correct safe-copy pattern?
+> `strncpy` was designed to pad fixed-width fields, not to be a safe `strcpy`. When the source is longer than `n`, it copies exactly `n` bytes and stops — without writing a `'\0'`. The destination buffer has no terminator, so any subsequent string function will run past the end looking for one. The correct pattern is `strncpy(buf, src, sizeof(buf) - 1); buf[sizeof(buf) - 1] = '\0';` — always force the final byte to zero regardless of what `strncpy` wrote.
+
+> [!question]- What goes wrong if you compare two C strings with `==` instead of `strcmp`?
+> `==` compares the pointer values (addresses), not the contents. Two separate arrays containing "hello" have different addresses, so `s1 == s2` is false even when the strings are identical. The reverse is also tricky: two `const char*` pointing to the same string literal may compare equal with `==` because the compiler can coalesce literals — but this is implementation-specific and cannot be relied on. Always use `strcmp` (or `strncmp` for bounded comparison) to test string equality.
+
+> [!question]- Why is modifying a string literal undefined behavior, even though the pointer type `char*` technically allows writes?
+> String literals are placed by the linker in a read-only data segment (`.rodata`). The `char*` type does not convey this — it is a historical remnant from before `const` existed in C. Writing through that pointer attempts to modify read-only memory, which on modern systems triggers a segfault (write to a read-protected page). The fix is to always declare string literals as `const char*` so the compiler catches accidental write attempts at compile time.
+
+> [!question]- In LDS, if you build a command string with `snprintf` to send over TCP and the buffer is too small, what happens to the serialized message?
+> `snprintf` always null-terminates (when `size > 0`) and returns the number of characters that *would* have been written. If that return value is `>= size`, the output was truncated — the buffer holds a partial string ending in `'\0'`. If you then transmit `strlen(buf)` bytes, the receiver gets a truncated message. The correct pattern is to check the return value: if `ret >= sizeof(buf)`, either allocate a larger buffer or treat it as an error before sending anything.
+
+> [!question]- `strlen` is O(n) — it scans until it finds '\0'. Why can this be a hidden performance problem, and how do you avoid it?
+> Every call to `strlen` walks the entire string. If you call it inside a loop (e.g., `for (i = 0; i < strlen(s); i++)`) the loop becomes O(n²). A similar trap is passing `strlen(s)` as an argument to multiple functions on the same string, causing repeated scans. The fix is to compute `strlen` once, store it in a `size_t len` variable, and reuse that value. For dynamic strings where the length is known at construction time (e.g., after `snprintf`), cache the return value directly.
 ```

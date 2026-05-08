@@ -245,4 +245,23 @@ public:
     
     ~RCString() { release(); }
 };
+
+---
+
+## Understanding Check
+
+> [!question]- Why must `operator=` return `*this` by reference instead of by value, and what breaks if it returns void?
+> Returning by reference enables chained assignment: `a = b = c` is parsed as `a = (b = c)`. If `operator=` returns void, `b = c` produces nothing and the outer `a = ...` has no right-hand operand — compile error. If it returns by value, `a = (b = c)` copies the result of `b = c` into `a`, which is an extra (potentially expensive) copy and also fails for types that are non-copyable. The convention of returning `T&` matches all built-in types and the standard library, ensuring your type works in any generic context that chains assignments.
+
+> [!question]- Why should `operator&&` and `operator||` generally not be overloaded, and what important behavior is lost if you do?
+> The built-in `&&` and `||` have short-circuit evaluation: if the left operand fully determines the result, the right operand is *not evaluated at all*. An overloaded operator is a regular function call — both arguments are evaluated before the function is invoked. Code relying on short-circuit behavior to avoid side effects or null dereferences (e.g., `ptr && ptr->isValid()`) would silently break: `ptr->isValid()` is called even when `ptr` is null, causing a crash.
+
+> [!question]- What goes wrong if you implement `operator+` as a member function and then try to write `2 + myObj`?
+> A member `operator+` takes `this` as the left operand. `2 + myObj` means `(2).operator+(myObj)` — but `2` is an `int` and has no such overload. The compiler cannot convert `int` to your type (unless an implicit conversion exists) to make it the left operand. A non-member `friend operator+(const T& lhs, const T& rhs)` handles both `myObj + 2` and `2 + myObj` symmetrically, because both sides are regular parameters subject to implicit conversion.
+
+> [!question]- In the `RCString` copy-on-write `operator[]`, what subtle bug occurs in a multithreaded environment where two threads both read the refcount and both decide to detach?
+> Both threads read `*m_refcount > 1` as true and each proceeds to decrement and allocate a private copy. The refcount is a plain `int*` — no atomic operations. Thread A decrements it to 1 and sets `m_refcount` to a new counter; Thread B also decrements what it thinks is the original counter (now 1, not 2) to 0, then `release()` is called on the original data prematurely — the shared buffer is freed while Thread A may still be writing into its "private" copy. The fix is to use atomic operations or a mutex around the detach logic, or to abandon copy-on-write in favor of `std::string` which handles this internally.
+
+> [!question]- Why is it better to implement `operator+` in terms of `operator+=` rather than the other way around?
+> `operator+=` modifies `*this` in-place — it is the primitive operation that does the real work with no extra copies. `operator+` must return a new object (cannot modify either operand since both are `const`). The natural implementation is: `T operator+(T lhs, const T& rhs) { lhs += rhs; return lhs; }` — take the left operand by value (copy), modify it with `+=`, return it. If you implement `+=` in terms of `+`, you create a temporary and then copy-assign, doing an extra allocation and copy every time. The `+=`-first approach also ensures both operators stay consistent: there is only one implementation of the actual arithmetic.
 ```

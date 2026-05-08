@@ -199,4 +199,23 @@ On 32-bit systems: 4 bytes.
 sizeof(int*)    // 8 on 64-bit
 sizeof(char*)   // 8 on 64-bit — same as int*
 sizeof(void*)   // 8 on 64-bit
+
+---
+
+## Understanding Check
+
+> [!question]- Why does pointer arithmetic move in units of the pointed-to type rather than bytes, and what breaks if you cast to the wrong type first?
+> Because the compiler uses the pointer's type to know how many bytes constitute one element. `int* p; p++` moves 4 bytes so that `p` now points at the next `int`, not the next byte. If you cast `int*` to `char*` and increment, you move 1 byte, which is valid but gives you access to the middle of an `int`. Casting to the wrong type and doing arithmetic lands you at an address that doesn't correspond to a real object boundary, leading to garbage reads or undefined behavior.
+
+> [!question]- What goes wrong if you return a pointer to a local variable from a function?
+> The local variable lives on the stack frame of the called function. When the function returns, that frame is popped — the memory is still there physically, but it's now "free" and will be overwritten by the next function call. The returned pointer is dangling: any dereference is undefined behavior. In practice, the value often looks correct immediately after the call but gets silently corrupted the moment another function uses the stack.
+
+> [!question]- `const int* p` and `int* const p` look similar. Why does the position of `const` produce completely different behavior?
+> Reading right-to-left: `const int* p` means "p is a pointer to const int" — you can reassign `p` to point elsewhere, but you cannot write through it (`*p = 5` is illegal). `int* const p` means "p is a const pointer to int" — `p` cannot be reassigned, but you can write through it (`*p = 5` is fine). Mixing them up leads to compiler errors or, worse, accidentally exposing mutation of data that should be immutable.
+
+> [!question]- A function dispatch table using function pointers is used in LDS's mediator pattern. What is the key advantage of a dispatch table over a switch statement, and what must you guarantee about the function pointer signatures?
+> A dispatch table eliminates a branch chain and adds new handlers without modifying existing code — you just populate a new slot, which satisfies the open/closed principle. In LDS the InputMediator routes input events to handlers by type; a table indexed by event type gives O(1) dispatch instead of a linear switch. The critical guarantee is that every function pointer in the table must have exactly the same signature as declared — calling a function through a pointer with a mismatched signature (wrong number of parameters, different return type) is undefined behavior and will corrupt the stack or registers.
+
+> [!question]- When is a void* the right tool, and when does it become dangerous?
+> `void*` is appropriate for genuinely type-agnostic code: `malloc`, `memcpy`, `qsort` comparators, and generic container implementations all have no choice but to accept any type. It becomes dangerous when the cast back to the concrete type is wrong — dereferencing a `void*` cast to the wrong type violates strict aliasing and produces UB. It also erases all compiler type-checking, so a miscast compiles silently. In C++ this is why templates replace most uses of `void*`: the type information is preserved at compile time.
 ```

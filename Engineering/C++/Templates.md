@@ -182,3 +182,22 @@ void serialize(T val) {
     }
 }
 ```
+
+---
+
+## Understanding Check
+
+> [!question]- Why must template implementations live in header files rather than `.cpp` files, and what goes wrong if you put them in a `.cpp`?
+> The compiler instantiates a template — generates concrete code — at the point where it is *used*, not where it is *defined*. That point is in the caller's translation unit. If the implementation is in a `.cpp`, it is not visible to the caller's translation unit at compile time: the compiler sees only the declaration and generates no code. The linker then finds no instantiation to link against and reports an undefined reference. The fix is either to put the full implementation in the header, or use explicit instantiation in the `.cpp` for each type you want to support.
+
+> [!question]- What goes wrong if you instantiate a template with a type that doesn't satisfy the operations the template body uses?
+> The compiler attempts to substitute the type and generates code for the template body. If the type lacks a required operator or method (e.g., `operator>` for a `max<T>` template), the compiler emits a cryptic error deep inside the template instantiation chain. The error message shows the full expansion, making it hard to read. C++20 Concepts address this by letting you declare preconditions (`requires`), so the error appears at the call site with a clear message about which constraint was violated.
+
+> [!question]- In LDS, `Dispatcher<Msg>` is a template while `ICommand` uses virtual functions. What would go wrong if you tried to store different `Dispatcher<X>` specializations in a single container?
+> `Dispatcher<DriverData>` and `Dispatcher<std::string>` are completely unrelated types — the template generates separate classes with no common base. A `std::vector<Dispatcher<?>>` has no valid element type without a common base or a type-erasing wrapper like `std::any` or a virtual interface. The design in LDS deliberately keeps each `Dispatcher` specialization separate because each subscriber type is known at registration time, so no runtime heterogeneous container is needed — templates give zero overhead here.
+
+> [!question]- What is SFINAE and what goes wrong if the compiler encounters a hard error (not a substitution failure) inside a template?
+> SFINAE (Substitution Failure Is Not An Error) means that if a template's type substitution produces an ill-formed expression *in the immediate context* (e.g., the return type), that candidate is silently dropped from overload resolution instead of causing an error. A hard error — a failure *inside the function body* after substitution succeeds — is not covered by SFINAE and does cause a compile error. This distinction matters when writing SFINAE-based dispatch: you must move the constraint into the function signature (return type, parameter type, or `enable_if` default template argument), not the body.
+
+> [!question]- What goes wrong at runtime if a `max<const char*>` is instantiated and used to compare C-string literals?
+> `operator>` on `const char*` compares pointer addresses, not string content. Two string literals with the same content may have different addresses depending on the compiler's string pooling. `max("abc", "xyz")` returns whichever pointer is numerically larger — this is neither the lexicographically greater string nor deterministic. The function compiles without error because `const char*` has `operator>`, making this a silent logic bug. The fix is a specialization for `const char*` using `strcmp`, or a constraint requiring a proper ordering type.

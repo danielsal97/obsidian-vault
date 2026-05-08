@@ -181,3 +181,22 @@ public:
 | Observer subscription | `ICallBack` destructor | `m_disp->UnRegister(this)` |
 | Heap buffer | `std::vector<char>` in `LocalStorage` | freed by vector destructor |
 | Mutex | `std::lock_guard` in `LocalStorage` | unlocked at scope exit |
+
+---
+
+## Understanding Check
+
+> [!question]- Why must the RAII destructor never throw an exception?
+> If a destructor throws while the stack is already unwinding due to another exception, `std::terminate()` is called and the program aborts. Since destructors are the cleanup mechanism, a throwing destructor means resources are left unreleased with no recovery path. Mark all destructors `noexcept` — log the error instead.
+
+> [!question]- What goes wrong if you forget to set `other.m_fd = -1` in the move constructor of `SocketGuard`?
+> Both the source (`other`) and the destination objects will hold the same file descriptor. When the source is destroyed (e.g., at end of scope after `std::move`), its destructor calls `close(m_fd)`. The destination now owns a closed (or reallocated) fd — any subsequent `read`/`write` through it is operating on the wrong file or returns errors silently. The second `close` in the destination's destructor is also a double-close.
+
+> [!question]- Why does the `FileGuard` in LDS delete the copy constructor instead of implementing it?
+> A file descriptor is an OS-level token — duplicating it requires `dup()` and both copies must be independently closed. A naive copy that shares the raw integer means whichever object destructs first closes the fd, leaving the other with a dangling descriptor. Deleting copy forces all callers to be explicit (use `std::move` or pass by reference), making ownership unambiguous at compile time.
+
+> [!question]- RAII guarantees cleanup on exception, but what happens if the *constructor itself* throws before the resource is acquired?
+> The destructor is only called for *fully constructed* objects. If the constructor throws (e.g., `socket()` fails and you throw before assigning `m_fd`), the destructor is never invoked — but that is safe because no resource was acquired. The invariant holds: the destructor runs if and only if the constructor completed, which is exactly when the resource exists.
+
+> [!question]- In LDS the `Reactor` and `NBDDriverComm` both hold file descriptors managed by their destructors. Why is it important that these objects are non-copyable, and what real bug could arise from accidental copying?
+> If `NBDDriverComm` were copied (before `= delete` on the copy constructor), both the original and the copy would store the same `m_nbdFd` integer. The first to destruct closes the NBD socket; the second's destructor then calls `close()` on the already-closed (or reallocated) file descriptor number. In a running server this could silently close an unrelated fd that the OS recycled to the same number — corrupting an active client connection or plugin handle with no compiler warning.

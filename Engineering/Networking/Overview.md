@@ -369,3 +369,22 @@ ip route show                  # routing table
 - [[IPC Overview]] — local IPC: pipes, socketpair, unix sockets, shared memory
 - [[../C/Serialization]] — binary wire protocol design and byte ordering
 - [[../Linux/Signals]] — SIGPIPE when writing to a closed socket
+
+---
+
+## Understanding Check
+
+> [!question]- Why does TCP require a RecvAll loop but UDP does not, and what breaks in LDS if you forget this on the TCP client path?
+> TCP is a byte stream — the kernel can split a single logical message across multiple recv() calls. There are no message boundaries at the transport level, so you must loop until you've received the exact number of bytes your protocol header specifies. UDP preserves message boundaries: one sendto = one recvfrom, so the entire datagram arrives atomically or not at all. In LDS's planned TCP bridge (Phase 2A), forgetting the RecvAll loop means the Mac client could parse a partial header as a complete one — reading the wrong op code or a truncated offset, causing silent data corruption or crashes rather than a clean error.
+
+> [!question]- Why must multi-byte integers be converted with htonl/htons before sending, even between two little-endian machines?
+> Both sides agreeing to use network byte order (big-endian) is the contract that makes the wire protocol machine-independent. If both sides are little-endian and both skip the conversion, it accidentally works — until you add a big-endian ARM server or an IoT device. More importantly, network byte order is the documented standard for fields like port numbers; OS APIs such as bind() expect sin_port to already be in network order, so skipping htons() will silently bind to the wrong port on any machine where host and network byte order differ.
+
+> [!question]- What goes wrong if you send a UDP payload of 2000 bytes between LDS master and minion on a standard Ethernet LAN?
+> The IP layer fragments the datagram into two fragments (one of ~1480 bytes, one of ~520 bytes) because each must fit within the 1500-byte MTU. If either fragment is lost in transit, the entire datagram is silently dropped — neither fragment is usable alone. Because UDP provides no retransmission, the master's MSG_ID never gets a response. The scheduler's deadline fires, triggering exponential backoff retries. The workaround is to cap UDP payloads at 1472 bytes and split larger data at the application level, as the LDS protocol does.
+
+> [!question]- Why does TTL exist at Layer 3, and what symptom would you see in LDS if a routing loop caused TTL exhaustion?
+> TTL (Time To Live) is decremented at each router hop. When it reaches zero the packet is dropped and the router sends an ICMP "Time Exceeded" back to the source. It exists to prevent packets from circulating forever in a routing loop. In LDS, if a routing misconfiguration created a loop between the master and a minion, every UDP block-operation request would be silently discarded once TTL hit zero. The symptom would be identical to packet loss: repeated timeouts, exponential backoff retries exhausting the retry count, and ultimately an I/O error propagated up through the NBD driver to the filesystem layer.
+
+> [!question]- What is the purpose of the TIME_WAIT state and why does SO_REUSEADDR not bypass it for security reasons?
+> TIME_WAIT keeps a TCP connection entry alive for 2×MSL (Maximum Segment Lifetime, typically 60–120 seconds) after the active closer sends the final ACK. This ensures any delayed duplicate segments from the old connection are absorbed before a new connection on the same 5-tuple is accepted, preventing data corruption of a new connection by stale packets. SO_REUSEADDR does not bypass TIME_WAIT in the sense of making the OS ignore old segments — it only allows a new socket to bind to the same port, relying on the sequence number space to distinguish old from new connections. True bypass would risk old duplicates being interpreted as valid data in the new session.

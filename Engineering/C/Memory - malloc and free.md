@@ -176,3 +176,22 @@ Detects: use-after-free, buffer overflow, leaks. Fast (2x).
 
 **Electric Fence / libefence:**
 Places a protected page after every allocation — immediate segfault on overflow.
+
+---
+
+## Understanding Check
+
+> [!question]- Why doesn't `free` need a size argument, and what can go wrong with the hidden metadata it relies on?
+> `malloc` stores the block size in a small header just before the pointer it returns. When you call `free(p)`, the implementation steps back a few bytes to read that header and learn the block size. This is why writing before the start of an allocation (`p[-1] = 0`) or overflowing the end (`p[n] = 0` for an n-element array) corrupts the heap metadata. The next `malloc` or `free` reads that corrupted header, misinterprets the block size or free-list pointers, and the heap becomes inconsistent — typically producing a delayed crash or silent memory corruption far from the original bad write.
+
+> [!question]- What goes wrong if you use the pattern `p = realloc(p, new_size)` and realloc fails?
+> If `realloc` returns NULL on failure, you've overwritten `p` with NULL while the original allocation is still live and unreachable — a memory leak on top of the failure. The correct pattern is `void* tmp = realloc(p, new_size); if (!tmp) { /* handle error, p is still valid */ } else { p = tmp; }`. Only assign the result back to `p` after confirming it is non-NULL.
+
+> [!question]- Why might an arena allocator be a better fit than `malloc`/`free` for handling a single LDS request, and what does "free" mean in that context?
+> Each LDS request involves multiple small allocations (header buffers, response structs, temporary strings) that all share the same lifetime — they're all needed until the response is sent, then all discarded. With `malloc`/`free` each allocation is independent, requiring careful tracking to avoid leaks. An arena allocator pre-allocates one large block at request start; each sub-allocation is just a pointer bump (O(1), no fragmentation). At request end, the entire arena is discarded in one operation. "Free" for an arena means resetting a pointer to the start of the pool — no individual bookkeeping needed.
+
+> [!question]- What is the difference between external and internal fragmentation, and which one does a fixed-size allocator (FSA) eliminate entirely?
+> External fragmentation is free memory that exists in too many small scattered chunks to satisfy a large request. Internal fragmentation is allocated memory that is larger than the request (the surplus is wasted inside the block). An FSA eliminates external fragmentation entirely: because every slot is the same size, any free slot can satisfy any request — there are no "wrong size" chunks. However, if the actual data is smaller than the slot size, you have internal fragmentation for every allocation. FSAs trade away flexibility to guarantee that free memory is always usable.
+
+> [!question]- `calloc(n, size)` zeroes its memory while `malloc` does not. Beyond convenience, why might calloc be semantically important rather than just a shortcut for malloc + memset?
+> `calloc` can be more efficient than `malloc` + `memset` because the OS already delivers freshly-mapped pages zeroed (for security — no previous process's data should leak). A smart `calloc` implementation can detect that a block came directly from the OS and skip the memset. More importantly, uninitialized memory from `malloc` contains whatever bytes were in that location before — reading it is undefined behavior. Using `calloc` is a correctness guarantee: every byte is a defined zero, so code that reads fields before writing them (e.g., a struct with only some fields initialized) doesn't invoke UB through an uninitialized read.

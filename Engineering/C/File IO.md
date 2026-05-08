@@ -213,3 +213,22 @@ void atomic_write(const char* path, const void* data, size_t len) {
 ```
 
 `rename()` is atomic — the reader either sees the old file or the new file, never a partial write.
+
+---
+
+## Understanding Check
+
+> [!question]- `read()` can return fewer bytes than requested even with no error and no EOF. Why does this happen, and what does correct handling look like?
+> The kernel delivers whatever data is currently available — a single `read()` is not guaranteed to fill your buffer. On a socket, it returns what arrived in the current TCP segment. On a file, a signal (EINTR) can interrupt the call mid-read. The correct pattern is a loop: keep calling `read()` into `buf + total_read`, accumulating the count, until you've read the full expected length or hit EOF/error. This is what `recv_all`/`read_all` wrappers do in the LDS codebase. A single `read()` that happens to work in testing can silently truncate messages in production.
+
+> [!question]- What goes wrong if you mix `FILE*` buffered I/O (`fwrite`) and raw POSIX `write()` on the same underlying file descriptor?
+> The `FILE*` buffer holds bytes that have been logically written but not yet flushed to the OS. If you also call `write(fileno(f), ...)` directly, those bytes go to the kernel immediately, ahead of the data still sitting in the stdio buffer. The result is data written in the wrong order. Similarly, `fread` may have buffered bytes ahead of the OS read position, so a raw `read()` call skips bytes that are already in the stdio buffer. Always choose one interface per fd: either use `FILE*` exclusively (with `fflush` before any fd-level operations) or use raw POSIX fd operations.
+
+> [!question]- What goes wrong if you skip `fsync` in the atomic write pattern before calling `rename`?
+> Without `fsync`, the file data may still be in the OS page cache, not on disk. If the system crashes or loses power after `rename` returns but before the cache is flushed, the new file path exists but the inode contains zero or garbage bytes — exactly the partial-write scenario the pattern was meant to prevent. `fsync(fd)` forces the kernel to flush all dirty pages for that file descriptor to durable storage before you proceed. For LDS storage nodes writing blocks, skipping `fsync` means "crash-safe" is an illusion — the atomic rename is only as durable as the flush that precedes it.
+
+> [!question]- `errno` must be checked immediately after a failing syscall. Why can it change before you read it?
+> `errno` is thread-local but not "sticky" — any subsequent successful or failing syscall will overwrite it. If your error handling path calls `malloc`, `close`, `fprintf`, or any other function that makes a syscall, `errno` may be changed by those calls before you read it. The pattern is: check the return value, then immediately save `errno` into a local variable (`int saved_errno = errno`), then do your cleanup and reporting using the saved value. Functions like `perror` and `strerror` read `errno` internally, so they must also be called before any other syscall.
+
+> [!question]- `lseek(fd, 0, SEEK_END)` is used in LDS to find a file's size. What is the subtle bug in the pattern `size = lseek(fd, 0, SEEK_END); buf = malloc(size); read(fd, buf, size)`?
+> The file can grow between the `lseek` and the `read`. Another process or thread appending to the file means `read` returns more bytes than `size` — but the buffer is only `size` bytes, so the read overflows. The fix is to use `fstat(fd, &st)` to get `st.st_size` (also a snapshot, but from the already-opened fd, slightly safer), and then pass `size` as the maximum to `read`, not an exact count. Alternatively, read in a loop resizing the buffer as needed. Also: `lseek` does not reposition the fd before the `read`, so the code above always reads 0 bytes because the seek left the position at the end — you need `lseek(fd, 0, SEEK_SET)` before `read`.

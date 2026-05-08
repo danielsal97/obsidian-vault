@@ -152,3 +152,22 @@ Messages are ordered and bounded. Supports `select`/`epoll` via the `mqd_t` fd.
 - [[Sockets TCP]] — full TCP socket API
 - [[UDP Sockets]] — UDP socket API
 - [[../Linux/File Descriptors]] — fd-based IPC, `socketpair`, `dup`
+
+---
+
+## Understanding Check
+
+> [!question]- Why does LDS use socketpair instead of a regular pipe for NBD kernel↔userspace communication?
+> pipe() creates two unidirectional fds — one read end and one write end. For NBD, the kernel sends requests and receives responses on the same channel, requiring bidirectional communication. socketpair() creates two fully connected bidirectional socket fds: writing to fds[0] is readable on fds[1] and vice versa. The other critical advantage is that socketpair fds are actual sockets — they work natively with select/poll/epoll, whereas Linux pipes before kernel 2.6.17 did not support poll correctly in all configurations. The Reactor's epoll_wait can watch a socketpair fd directly without special handling.
+
+> [!question]- What goes wrong if you use shared memory between LDS master and minion processes without any synchronization?
+> Shared memory provides the address space mapping but zero ordering guarantees. If the master writes a block offset and the minion reads it concurrently, the minion could see a torn write — half the old value and half the new — on 64-bit integers that are not naturally atomic on the bus. Even without tearing, the compiler or CPU can reorder writes so the minion sees the length field updated before the offset field, reading an inconsistent state. Shared memory requires an explicit synchronization layer — typically a POSIX semaphore or a mutex in shared memory — to guarantee that a complete message is visible before the reader consumes it.
+
+> [!question]- Why can UNIX domain sockets pass an open file descriptor between processes, and what security use case does this enable?
+> UNIX domain sockets transmit ancillary data alongside the normal byte stream via sendmsg()/recvmsg() with a cmsg of type SCM_RIGHTS. The kernel duplicates the fd into the receiving process's fd table — the receiver gets its own copy that refers to the same underlying file description, including its position, flags, and access rights. The key security use case is privilege separation: a privileged root process opens a raw socket or a device file that an unprivileged worker is not allowed to open, then passes the open fd to the worker over a UNIX socket. The worker can now use the fd without ever having the permission to open it directly.
+
+> [!question]- When would you choose a POSIX message queue over a socketpair for IPC between two processes on the same host?
+> POSIX message queues are a better fit when you need message priorities — the kernel delivers higher-priority messages before lower ones regardless of arrival order, which is hard to implement correctly over a socketpair. They also impose a configurable max-message-size and max-depth at creation time, providing natural backpressure without the producer having to implement its own bounded-queue logic. A socketpair is better when you need to multiplex the channel with other fds in an epoll loop, pass large variable-length data efficiently, or transfer file descriptors — none of which message queues support. For LDS's use case (low-latency block operations), socketpair with epoll is the right choice.
+
+> [!question]- What happens if the LDS NBD userspace process crashes without closing its end of the socketpair?
+> When a process exits or crashes, the OS closes all its open file descriptors. The kernel detects that the last reference to the socketpair endpoint is gone and sends an EOF (or EPOLLHUP) event to the other end — in this case, the NBD kernel module holding the other fd. The NBD driver will treat this as a device disconnection and fail any pending or future block I/O with an I/O error, which propagates up to the filesystem and any application using the NBD block device. From a recovery standpoint, this is correct behavior — it's far better than leaving the kernel waiting indefinitely on an orphaned fd.

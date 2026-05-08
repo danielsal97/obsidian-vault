@@ -209,3 +209,22 @@ LDS uses manual serialization for both TCP and UDP protocols:
 ```
 
 Both use `RecvAll`/`SendAll` loops, big-endian multi-byte integers, and no struct padding.
+
+---
+
+## Understanding Check
+
+> [!question]- Why can't you just `send(fd, &header, sizeof(header), 0)` to serialize a struct, even if you use `__attribute__((packed))`?
+> `packed` removes padding so `sizeof` gives the wire size, but it does not convert multi-byte integer fields to network byte order. A little-endian sender and big-endian receiver will interpret the same bytes as different values. You still need `htonl`/`htobe64` on every multi-byte field. Additionally, dereferencing an unaligned pointer (which `packed` can create) is undefined behavior on ARM and a performance penalty on x86. The only correct approach is to write each field explicitly into a `uint8_t` buffer using `memcpy` after byte-order conversion.
+
+> [!question]- What goes wrong if the receiver trusts the length field in a length-prefix framed message without validating it?
+> A malicious or corrupt sender can set the length field to a huge value. The receiver calls `malloc(len)` or tries to `recv_all(fd, buf, len)` where `len` is e.g. 4GB. This causes either an OOM crash, a failed malloc followed by a null dereference, or an integer overflow if `len` wraps and the actual allocation is tiny but the `recv_all` loop reads gigabytes of data. Validation must happen before acting on `len`: check `len <= MAX_MESSAGE_SIZE` and check that `malloc` succeeded.
+
+> [!question]- In the LDS TCP protocol, the offset field is 8 bytes in big-endian. Why does the serializer use `memcpy` into the buffer rather than casting the buffer pointer to `uint64_t*` and assigning directly?
+> Casting `buf + 1` (a `uint8_t*`) to `uint64_t*` and dereferencing produces a misaligned pointer — the address is offset by 1 byte and `uint64_t` requires 8-byte alignment. On x86 this works by accident but is undefined behavior; on ARM it causes a bus error or silent misread. `memcpy` has no alignment requirement — it copies bytes regardless of the source and destination alignment. The compiler also optimizes `memcpy` of small fixed sizes (4, 8 bytes) into a single load/store instruction on aligned platforms, so there is no performance cost.
+
+> [!question]- What goes wrong if you use a null-terminated string in a protocol message instead of a length-prefix, and the string data itself contains a null byte?
+> A null-terminated string cannot represent data containing `'\0'` because the first zero byte is treated as the end of the string. Any bytes after it are silently dropped by `strlen`, `strcpy`, or any function that reads until `'\0'`. Filenames on some systems, binary keys, or encrypted data can all contain embedded zeros. Length-prefix framing treats the payload as opaque bytes and relies on the explicit length — it handles any byte value, including zero. The LDS protocol uses the length-prefix approach in its wire format for exactly this reason.
+
+> [!question]- A CRC32 checksum detects corruption. Why is XOR checksum inadequate for a protocol that must detect single-bit errors in all positions?
+> XOR checksum is simply all bytes XORed together. Any even number of errors in the same bit position cancel out — two bytes with bit 3 flipped produce the same XOR as if neither was flipped. It also cannot detect reordered bytes: the XOR of a message is the same regardless of byte order. CRC32 uses a polynomial division that produces a checksum sensitive to the position of each bit, not just its presence. A single-bit error in any position produces a different CRC32, and burst errors (consecutive corrupted bits) are detected with very high probability. For LDS storage blocks, CRC32 is the minimum acceptable integrity check.

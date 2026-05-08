@@ -207,3 +207,22 @@ The `LocalStorage` mutex pattern:
 std::lock_guard<std::mutex> lk(m_mutex);
 // ... access m_storage ...
 ```
+
+---
+
+## Understanding Check
+
+> [!question]- Why must pthread_cond_wait always be called inside a while loop, not an if statement?
+> POSIX allows spurious wakeups — pthread_cond_wait can return even when no thread called pthread_cond_signal or pthread_cond_broadcast. This is permitted by the standard to allow efficient implementation on certain hardware. If you use an if, you proceed with the assumption the condition is true when it may not be. The while loop re-checks the predicate after every wakeup and goes back to sleep if it is still false, making the code correct regardless of spurious wakeups.
+
+> [!question]- What goes wrong if two threads always acquire the same two mutexes in opposite orders?
+> This creates a classic circular-wait deadlock. Thread A holds mutex 1 and waits for mutex 2; Thread B holds mutex 2 and waits for mutex 1. Neither can proceed. The system does not detect or resolve this — both threads are blocked forever. The fix is a strict global lock ordering: every thread must acquire mutex 1 before mutex 2, always. Alternatively, use std::scoped_lock (C++17) which acquires multiple mutexes deadlock-free using a consistent internal ordering algorithm.
+
+> [!question]- In LDS, LocalStorage was initially implemented with a static mutex — why was that a bug?
+> A static mutex is shared across all instances of a class. If the ThreadPool creates multiple LocalStorage objects (or if LocalStorage is used in multiple contexts), all of them serialize on the same lock even when accessing completely independent storage. This creates unnecessary contention and, more critically, was Bug #10: the static mutex was initialized once but could be destroyed and re-initialized across test runs, causing undefined behavior. The fix is an instance-level mutex (a member variable) so each LocalStorage object has its own lock.
+
+> [!question]- Why does holding a mutex while performing blocking I/O cause starvation, and how would this affect LDS worker threads?
+> If a thread holds a mutex and then blocks on a read() or network call, it holds the lock for the entire I/O duration — potentially milliseconds or seconds. Every other thread that needs the same lock is completely blocked during that time, even if their work is unrelated to the I/O. In LDS's thread pool, if a worker held m_mutex on LocalStorage while waiting for a slow disk read, all other workers trying to read/write storage would be serialized behind that one I/O, eliminating any concurrency benefit from the thread pool.
+
+> [!question]- What is the difference between a detached thread and a joined thread, and what leak occurs if you neither join nor detach?
+> A joined thread's resources (stack, thread-local storage, thread descriptor) are released by the joining thread when pthread_join returns. A detached thread releases its own resources when it exits. If you neither join nor detach a thread, its resources are never freed — they accumulate as a memory leak similar to zombie processes. The thread descriptor stays allocated until the process exits. In a long-running server that spawns many short-lived threads, this eventually exhausts system thread limits.

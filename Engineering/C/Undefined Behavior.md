@@ -132,3 +132,22 @@ f(i++, i++);   // order of argument evaluation is unspecified
 ```
 
 **Undefined:** no valid behavior exists. Compiler can do anything.
+
+---
+
+## Understanding Check
+
+> [!question]- Why does UB code often appear to work correctly at `-O0` (debug) but silently break at `-O2` (release)?
+> At `-O0` the compiler does the minimum — it generates straightforward code that roughly mirrors the source, so many UB cases happen to produce the "expected" result. At `-O2` the compiler applies aggressive optimizations that are only valid assuming no UB exists. It may eliminate branches it proves are unreachable (because reaching them would require UB that it assumed cannot happen), reorder operations across what looked like a sequence point, or assume a value fits in a range. The bug was always there; the optimized build just exposed it by removing the "accidentally correct" scaffolding.
+
+> [!question]- What goes wrong if you rely on signed integer overflow to detect an overflow condition, such as `if (a + b < a)`?
+> The compiler sees that signed overflow is UB, therefore it assumes it never happens, therefore it treats `a + b` as always greater than or equal to `a` when `b >= 0`. The entire check gets optimized away — the very condition you wrote to catch the overflow is the thing the compiler removes. The correct approach is to check before the operation: `if (b > INT_MAX - a)` for addition, or use unsigned arithmetic (which wraps predictably), or use `__builtin_add_overflow` which checks without invoking UB.
+
+> [!question]- The strict aliasing rule says you can't access an `int` through a `float*`. Why does C have this rule, and what is the one type that is always allowed to alias anything?
+> Strict aliasing lets the compiler assume that two pointers of different types don't point to the same memory. This enables load/store reordering and caching values in registers — if `float* fp` and `int* ip` can't alias, a write through `fp` can't invalidate the cached value in `ip`. Without this rule, every pointer dereference would require re-reading from memory. The exception is `char*` (and `unsigned char*`): the standard explicitly allows `char*` to alias any type, which is how `memcpy`, serialization, and any byte-level inspection must be done.
+
+> [!question]- In the LDS codebase, two threads access a shared `LocalStorage` map. Without a mutex, why is the data race not just a "wrong value" problem — why is it full undefined behavior?
+> The C and C++ memory models define a data race as two concurrent accesses to the same variable where at least one is a write, with no synchronization. The standard declares this undefined behavior — not "returns a stale value" but truly UB with no guaranteed outcome. The compiler and CPU are free to reorder memory operations, cache values in registers, tear writes (write a 64-bit value in two non-atomic 32-bit stores), or speculate in ways that produce values that never existed in the source. A mutex doesn't just prevent wrong values — it establishes a happens-before relationship that makes the memory model's guarantees apply at all.
+
+> [!question]- How can you use UBSan and ASan together in the same build, and what important class of bug does each catch that the other misses?
+> You can combine them: `g++ -fsanitize=address,undefined -g`. ASan instruments memory accesses at runtime to catch spatial errors (buffer overflows, use-after-free, heap metadata corruption) and temporal errors (accessing freed memory). UBSan inserts checks for language-rule violations that aren't necessarily bad memory accesses: signed integer overflow, null pointer dereference, misaligned access, invalid enum value, and shift-count-out-of-range. A signed overflow that stays within mapped memory is invisible to ASan but caught by UBSan; a heap buffer overflow that doesn't corrupt anything dangerous is invisible to UBSan but caught by ASan. Running both gives much broader coverage.

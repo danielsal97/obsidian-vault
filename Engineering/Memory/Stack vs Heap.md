@@ -142,3 +142,22 @@ pthread_attr_init(&attr);
 pthread_attr_setstacksize(&attr, 16 * 1024 * 1024);  // 16MB per thread
 pthread_create(&thread, &attr, fn, arg);
 ```
+
+---
+
+## Understanding Check
+
+> [!question]- Why is stack allocation O(1) while heap allocation can be O(n) in the worst case?
+> Stack allocation is a single instruction: decrement the stack pointer register by the total size of local variables. The compiler calculates the frame size at compile time, so at runtime it is just rsp -= N. Heap allocation requires malloc to search its free list for a block large enough to satisfy the request — in the worst case, it scans the entire free list before finding a fit or requesting more memory from the OS. Modern allocators use size-class bins to make typical allocations fast, but they are never as deterministic as a register decrement.
+
+> [!question]- What goes wrong if you return a pointer to a local variable from a function, and why does it sometimes appear to work?
+> The local variable lives in the function's stack frame. When the function returns, the stack pointer moves back up — the frame is "freed" but the bytes are not erased. If you dereference the returned pointer before any other function is called, the bytes may still contain the old value, making the bug invisible. But the next function call overwrites that stack region with its own frame, corrupting whatever the pointer points to. This is undefined behavior: it may silently work for years and then break when the calling code is refactored to add an intermediate function call.
+
+> [!question]- In LDS's thread pool, each worker thread has its own stack — what happens if a worker thread's handler function processes an oversized request that creates a large local buffer?
+> Each thread's stack is a fixed-size region (default ~8MB). If a worker function allocates a large local array — say, a 2MB read buffer declared as char buf[2097152] — it consumes a significant portion of that thread's stack. With 8 worker threads each holding such a frame, that is 16MB of stack just for those buffers, and a deep call chain could overflow one thread's stack entirely. The correct approach is to allocate large I/O buffers on the heap (malloc/std::vector) and pass a pointer, keeping the stack frame small.
+
+> [!question]- Why does C++ RAII with std::vector give you "heap capacity with stack lifetime management," and why does this matter for exception safety?
+> A std::vector object (the metadata: pointer, size, capacity) lives on the stack and is fixed-size. Its destructor is guaranteed to run when the enclosing scope exits — whether by normal return, early return, or exception. The destructor calls delete[] on the heap-allocated element array, so the heap memory is freed regardless of how the scope exits. Without RAII, a heap allocation paired with a manual free at the end of the function leaks memory whenever an exception or early return skips the free. RAII makes the lifetime of heap memory deterministic and exception-safe by tying it to a stack object's destructor.
+
+> [!question]- What is heap fragmentation, and why does a long-running LDS storage server need to be more careful about it than a short-lived command-line tool?
+> Fragmentation occurs when freed blocks are scattered throughout the heap in sizes that don't match future allocation requests. For example, alternating allocations of 100B and 1000B objects, then freeing all the 1000B ones, leaves many 1000B holes — but a request for 1001B cannot use any of them and must grow the heap. A short-lived tool exits before fragmentation accumulates. A long-running server that processes millions of requests, each with slightly different allocation patterns, can slowly increase its RSS (resident memory) over hours or days even with no logical memory leak. Mitigations include using size-class allocators (tcmalloc, jemalloc), reusing fixed-size buffers from a pool, and avoiding many small short-lived heap allocations on hot paths.

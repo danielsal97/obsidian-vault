@@ -113,3 +113,22 @@ This allows unit tests to pass a mock `IStorage` instead of the real file-backed
 - [[Factory]] — creates objects without the caller knowing the concrete type
 - [[../C++/RAII]] — singleton destructor should clean up resources
 - [[../C++/Smart Pointers]] — `shared_ptr` for reference-counted shared objects (not singleton, but related)
+
+---
+
+## Understanding Check
+
+> [!question]- Why is the local-static Singleton pattern (C++11) thread-safe for construction but NOT thread-safe for the object's methods?
+> The C++11 standard specifically mandates that static local variable initialization is performed exactly once, with concurrent threads blocked until it completes — the compiler emits an internal lock around the first-time initialization. This guarantees only one Logger object is ever constructed, even if multiple threads call instance() simultaneously. However, the standard says nothing about thread safety of the object's own operations. Once the singleton exists, Logger::log() accesses std::cout and potentially shared internal state; two threads calling log() concurrently can interleave their output or corrupt state without a mutex guarding the method body.
+
+> [!question]- What goes wrong if you rely on a Singleton's destructor to flush a log file, and the program uses other global objects whose destructors also run at exit?
+> Global and static-local objects are destroyed in reverse order of construction after main() returns. If the Logger singleton is destroyed before another global object that still wants to log in its destructor, the Logger's underlying file or buffer is gone — the log call hits a destroyed object, causing undefined behavior or a silent drop. This is a manifestation of the static destruction order fiasco. The safe fix is to either ensure the logger outlives all users (by controlling initialization order), or use an explicit shutdown method called from main() before any destructors fire.
+
+> [!question]- Why does LDS choose dependency injection over a Singleton for IStorage, and what specific test scenario becomes possible because of this choice?
+> A Singleton makes the concrete class globally reachable but impossible to swap out — unit tests would write to the real file on disk, making tests slow, order-dependent, and destructive. Dependency injection passes IStorage* as a constructor argument to InputMediator. A test can construct InputMediator with a MockStorage that records calls, returns canned data, and simulates errors without touching the filesystem. This means you can test LDS's read/write dispatch logic, error handling, and retry paths entirely in memory, in milliseconds, with no setup or teardown of real files.
+
+> [!question]- What is the "static initialization order fiasco" and why does the local-static pattern not suffer from it even though an eager global-variable singleton does?
+> The fiasco occurs because the order in which global objects across different .cpp files are initialized before main() is unspecified by the C++ standard. If Singleton A's constructor uses Singleton B, B might not be initialized yet, reading garbage. The local-static pattern defers initialization to the first call to instance(), which happens inside main() — after all global constructors have completed. There is no ordering dependency because the trigger is explicit (the function call) rather than implicit (translation unit load order). The eager global-variable singleton is susceptible because its constructor runs at program startup in an uncontrolled order relative to other globals.
+
+> [!question]- If two threads call Logger::instance() simultaneously for the very first time on a C++11 compiler, walk through exactly what happens to ensure only one Logger is constructed.
+> The compiler emits a flag variable alongside the static Logger inst. Thread A enters instance() first and checks the flag (not initialized). Before it completes construction, Thread B also enters instance() and checks the same flag. The C++11 runtime uses an internal lock (often a compare-and-swap on the flag) to ensure Thread B blocks at this point while Thread A runs the Logger constructor and sets the flag to "initialized." Thread B then wakes, checks the flag (now initialized), and returns the already-constructed inst without calling the constructor again. Both threads receive references to the same single Logger object.

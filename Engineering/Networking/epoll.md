@@ -196,3 +196,22 @@ In Phase 2A it adds:
 - Each client fd (added dynamically by OnAccept) → fires `tcp_server.OnClientData(fd)`
 
 All handled by the same `epoll_wait` loop.
+
+---
+
+## Understanding Check
+
+> [!question]- Why does edge-triggered mode require reading until EAGAIN, and what happens in LDS if you forget this and use EPOLLET?
+> Edge-triggered epoll fires only on state transitions — when data newly arrives on an fd that had no data. If you read only part of the available data and return from the handler, epoll will not fire again until more data arrives. Any bytes left in the kernel buffer are stranded indefinitely. In LDS, this would mean a partially-received NBD request sits in the buffer forever: the Reactor loop never re-dispatches that fd until the NBD driver sends additional bytes, which may never happen since the driver is waiting for the response to the request it already sent. The connection deadlocks. LDS uses level-triggered precisely to avoid this complexity.
+
+> [!question]- Why is epoll O(1) per event while select and poll are O(n) in the number of registered file descriptors?
+> select and poll require the application to pass the entire set of watched fds on every call, and the kernel must scan the whole set to find which ones are ready. With 10,000 fds and only 10 active, the kernel does 10,000 checks per call. epoll maintains an internal ready list in the kernel — when an fd becomes ready, the kernel appends it to the list. epoll_wait only copies out the ready entries, so with 10,000 fds and 10 active you get back exactly 10 entries regardless of total fd count. Registration is a one-time O(1) epoll_ctl call per fd.
+
+> [!question]- What goes wrong if a handler called from the epoll_wait loop blocks for 200ms waiting for a response from a slow minion?
+> The entire Reactor loop is blocked for those 200ms. During that time, no other fd in the epoll set is serviced: new TCP clients cannot be accepted, other NBD requests pile up in the kernel buffer, and the signalfd for SIGTERM is not processed — preventing clean shutdown. The single-threaded Reactor model requires handlers to be non-blocking and fast. The correct design is for the handler to submit work to the ThreadPool/WPQ and return immediately, letting the worker thread wait for the minion response asynchronously while the Reactor loop stays responsive.
+
+> [!question]- Why must you close a client fd with close() AND remove it from epoll with EPOLL_CTL_DEL before closing, or does close() handle the epoll cleanup automatically?
+> In most cases, close() on a file descriptor automatically removes it from all epoll interest lists — the kernel cleans up the epoll registration when the fd is destroyed. However, if the fd was duplicated (via dup() or fork()), close() only decrements the reference count; the underlying file description survives and remains in epoll until all copies are closed. In that case, epoll keeps firing on an fd you think you've closed, and m_handlers[fd] may now point to a different connection reusing the same fd number. Best practice is to explicitly call EPOLL_CTL_DEL before close() to avoid subtle bugs with dup'd fds.
+
+> [!question]- In the LDS Phase 2A design, why is it correct to add the per-client fd to the same epoll instance that watches the NBD socketpair, rather than creating a separate epoll fd for TCP clients?
+> epoll can multiplex heterogeneous fd types — regular files, sockets, pipes, signalfd — in a single instance. Using one epoll fd for all of LDS's I/O sources means one thread, one blocking point, and one dispatch loop handles all events. Adding a separate epoll fd for TCP clients would require either a second thread (adding synchronization complexity) or polling both epoll instances in sequence (creating latency for whichever is checked second). The Reactor's handler map scales cleanly: each fd has its own handler pointer, so the NBD handler and the TCP client handlers coexist without interfering.

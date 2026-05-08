@@ -136,3 +136,22 @@ struct Foo { int x; };
 ## Connection to Other Stages
 
 → [[2 - Compiler]] — the compiler receives the fully preprocessed translation unit. It never sees `#include` or `#define`.
+
+---
+
+## Understanding Check
+
+> [!question]- Why must C++ templates be defined in headers, and what does this have to do with how the preprocessor works?
+> Template instantiation happens at compile time, per translation unit. When the compiler sees std::vector<int> in main.cpp, it must generate the full vector<int> class body right there and then — it cannot defer to another translation unit. The preprocessor's job is to inline the header contents so that the compiler sees the complete template definition. If the template body were in a .cpp file instead, the compiler for main.cpp would only see the declaration, have no body to instantiate from, and emit an "undefined reference" error at link time. Headers make this work because the preprocessor copies the full template body into every translation unit that needs it.
+
+> [!question]- What goes wrong if you define a non-inline function in a header file that is included by two .cpp files?
+> The preprocessor copies the function body verbatim into both translation units. Each .cpp compiles it independently, producing a GLOBAL symbol with that function's name in both .o files. When the linker combines them it finds two definitions of the same symbol and errors with "multiple definition of 'foo'". The fix is to mark the function inline (which tells the linker to accept multiple identical copies and keep one) or to move the definition to a single .cpp file and keep only the declaration in the header.
+
+> [!question]- Why is #define MAX(a,b) dangerous when called with MAX(i++, j++), and how does constexpr avoid this?
+> The preprocessor is pure text substitution with no knowledge of C++ semantics. MAX(i++, j++) expands to ((i++) > (j++) ? (i++) : (j++)) — each operand is evaluated twice, so either i or j gets incremented twice depending on the comparison result. This is undefined behavior when the same variable is modified and read between sequence points. A constexpr function or template is a real function: arguments are evaluated exactly once before the call, subject to normal C++ evaluation rules, and the result is computed at compile time if all inputs are constant expressions.
+
+> [!question]- What is the "static initialization order fiasco" and how does the local-static Singleton pattern avoid it?
+> Global objects in different translation units are initialized before main() runs, but the C++ standard does not define the order of initialization across .cpp files. If global object A (in a.cpp) depends on global object B (in b.cpp) during its constructor, B may not yet be initialized — the constructor reads garbage. The local-static pattern (static Foo& instance() { static Foo f; return f; }) avoids this because initialization is triggered by the first call to instance(), which happens inside main() after all global constructors have run. The C++11 guarantee of thread-safe magic-static initialization makes this safe even from multiple threads.
+
+> [!question]- In the LDS codebase, why would putting a platform-detection macro like #if defined(__linux__) in a header shared between the Mac client and the Linux server be preferable to duplicating the code in two separate .cpp files?
+> Keeping platform-specific branches in one shared header means there is a single place to update when the interface changes — adding a new field, renaming a function, or fixing a bug touches one file instead of two. The preprocessor selects the right branch per translation unit at compile time with zero runtime overhead. Duplicating the code in two .cpp files risks the two copies diverging silently (different bug fixes, different struct layouts), and the Mac and Linux builds would compile successfully but behave differently at the protocol level. The header approach makes the divergence explicit and co-located.

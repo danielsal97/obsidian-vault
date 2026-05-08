@@ -178,3 +178,22 @@ socketpair(AF_UNIX, SOCK_STREAM, 0, sv);
 | signalfd | signal notifications | Reactor |
 | listen_fd | TCP listen socket | TCPServer (Phase 2A) |
 | client_fd | TCP client connection | TCPServer (Phase 2A, dynamic) |
+
+---
+
+## Understanding Check
+
+> [!question]- What goes wrong if a server leaks one file descriptor per accepted client connection?
+> Each leaked fd occupies a slot in the process's fd table. Once the per-process limit (typically 1024 or 65535) is reached, accept(), open(), and socket() all fail with EMFILE ("too many open files"). The server stops accepting new connections entirely, even though existing ones may still work. The bug can be silent for hours under low load, then cause a sudden outage under traffic. Detection: watch lsof -p PID output growing without bound, or monitor /proc/PID/fd/.
+
+> [!question]- Why is FD_CLOEXEC important in a server that uses fork+exec to spawn subprocesses?
+> Without FD_CLOEXEC, every fd open at the time of fork is inherited by the child and survives exec into the new program. A child may then unknowingly hold open the parent's listen socket, client connections, or epoll instance. This prevents those resources from being properly closed (the kernel only closes an fd when the last reference is gone), can cause ports to remain bound when the parent tries to restart, and leaks connection state to processes that shouldn't have it. Setting SOCK_CLOEXEC / EPOLL_CLOEXEC at creation is the safest default.
+
+> [!question]- Why does dup2() close new_fd first if it is already open, and what subtle bug can arise from this?
+> dup2(old_fd, new_fd) atomically closes new_fd and makes it point to old_fd's open file. The atomicity prevents a race window where new_fd is briefly unoccupied. The subtle bug: if old_fd == new_fd, dup2 is supposed to be a no-op — but some older implementations would close new_fd first (closing the only reference to that file) before the duplication, silently destroying it. Always check old_fd != new_fd before calling dup2 defensively.
+
+> [!question]- In LDS, NBDDriverComm uses a socketpair rather than a regular pipe — why does bidirectional communication matter here?
+> The NBD protocol requires both reading requests from the kernel and writing responses back to it over the same "channel." A pipe is unidirectional — you would need two pipes (one for each direction), creating four fds and more complexity. A socketpair gives a full-duplex byte stream over two fds: the kernel driver writes NBD requests to socketpair[0], and NBDDriverComm reads requests from socketpair[1] and writes responses back on the same fd. One pair cleanly models the request-response channel.
+
+> [!question]- After close(fd), the fd number can be immediately reused by the next open(). Why does this make double-close a silent and particularly dangerous bug?
+> After the first close, the fd number is returned to the free pool. If another thread or function calls open()/accept()/socket() before the second close, it may receive the same fd number pointing to a completely unrelated resource. The second close() then silently closes that new, unrelated file — the caller has no idea, and neither does the code that opened it. This can close a client's socket mid-transfer, or close the epoll fd causing the event loop to crash. Unlike use-after-free, there is no immediate crash signal — the damage appears later and far from the bug site.

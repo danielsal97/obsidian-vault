@@ -115,3 +115,22 @@ LDS uses UDP for master↔minion (different machines) and NBD kernel socket for 
 - [[mmap]] — full mmap API and file-backed mappings
 - [[Semaphores]] — synchronization for shared memory
 - [[IPC Overview]] — all IPC mechanisms compared
+
+---
+
+## Understanding Check
+
+> [!question]- What goes wrong if two processes write to shared memory simultaneously without synchronization?
+> Without synchronization, both processes can interleave writes at the byte or word level, producing corrupted data that neither process wrote intentionally. For example, if a writer is updating a struct field-by-field, a reader can observe a partially-updated struct with some old fields and some new ones — a torn read. On x86-64, even a single 8-byte write is only atomic if naturally aligned; anything larger is not. The shared memory mechanism itself provides no protection — you must place a process-shared mutex or semaphore inside or alongside the shared region.
+
+> [!question]- Why does shm_unlink not immediately free the shared memory if another process still has it mapped?
+> shm_unlink removes the name from /dev/shm so no new process can open it by name — analogous to unlinking a file. But the underlying memory object uses reference counting: it stays alive as long as at least one process has an active mmap mapping to it. The physical pages are freed only when the last munmap call drops the last reference. This matches Unix file semantics (unlink removes the directory entry, inode persists until last file descriptor is closed).
+
+> [!question]- Anonymous MAP_SHARED memory works between a parent and its children after fork — why can't two unrelated processes share it this way?
+> MAP_ANONYMOUS | MAP_SHARED creates a mapping backed by physical pages that are shared between processes sharing the same memory object. After fork, the child inherits the parent's page table mappings, so both point to the same physical pages. Two unrelated processes have entirely separate address spaces and separate page tables — there is no inherited mapping to share. They must use a named mechanism (shm_open with a path, or a file-backed mmap) so the kernel can identify that both processes intend to share the same underlying object.
+
+> [!question]- Why is shared memory described as having ~50ns latency compared to ~5–20µs for TCP loopback, even though both paths stay on one machine?
+> TCP loopback still goes through the full kernel network stack: the sender copies data into a kernel socket buffer, the kernel processes protocol headers, schedules delivery, and the receiver copies data back out to userspace — multiple context switches and memory copies. Shared memory involves no copying at all: both processes directly access the same physical cache lines. The 50ns figure represents the cost of a cache-to-cache transfer between CPU cores plus any synchronization overhead. The bottleneck becomes CPU cache coherency, not kernel overhead.
+
+> [!question]- In LDS, shared memory is not used — what is the architectural reason, and when would it become relevant?
+> LDS is designed for distributed storage across multiple machines (master + minions over UDP). Shared memory only works within a single machine — processes on different hosts cannot share physical memory pages. It would become relevant only if LDS added an optimization where two processes on the same host (e.g., two minion instances, or a minion and a local cache daemon) needed high-throughput data exchange without network overhead. The current design uses UDP and the NBD kernel socket interface, which are appropriate for the cross-machine and kernel-to-userspace communication paths LDS actually needs.

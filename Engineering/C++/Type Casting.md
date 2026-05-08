@@ -147,4 +147,23 @@ void f(MyInt x);
 f(5);                // ERROR — implicit conversion not allowed
 f(MyInt(5));         // OK — explicit
 f(static_cast<MyInt>(5)); // OK — explicit cast
+
+---
+
+## Understanding Check
+
+> [!question]- What goes wrong if you use `static_cast` to downcast a `Base*` that actually points to a sibling type, and why does `dynamic_cast` prevent this?
+> `static_cast` performs the cast unconditionally at compile time with no runtime check. If `Base* b` actually points to a `Cat` but you `static_cast<Dog*>(b)`, the resulting pointer is offset and typed as `Dog`. Accessing `Dog`-specific fields reads from the wrong memory region — undefined behavior that typically produces garbage values or a crash with no clear error message. `dynamic_cast` uses RTTI to verify the actual runtime type before adjusting the pointer; if the type is wrong it returns `nullptr` (pointer form) or throws `std::bad_cast` (reference form), giving you a controlled failure point.
+
+> [!question]- Why is `const_cast` to remove `const` from a pointer undefined behavior if the original object was declared `const`, even if you never write through the pointer in this particular code path?
+> The C++ standard allows the compiler to place `const`-declared objects in read-only memory (e.g., `.rodata` section) or to cache their values in registers because they are promised immutable. `const_cast` strips the type-level restriction but does not change the memory's actual protection. A write through the resulting pointer on a truly-`const` object may fault (write to ROM), silently do nothing (write to a cached register copy), or corrupt the optimizer's assumptions. The behavior is undefined regardless of whether the write "actually" happens — the compiler may transform surrounding code in ways that assume the value never changes.
+
+> [!question]- What goes wrong if you use `reinterpret_cast` for type-punning (reading a `float`'s bits as an `int`) instead of `memcpy` or a union?
+> Dereferencing a pointer of a different type than the object's actual type violates strict aliasing rules. The compiler assumes pointers of unrelated types cannot alias the same memory, and uses this to reorder and optimize reads/writes. `*reinterpret_cast<int*>(&f)` may be reordered past the float write, reading stale data — or the compiler may eliminate it entirely as dead code. `memcpy` is the standards-compliant way to type-pun: it is treated as a special operation that copies raw bytes without aliasing implications, and compilers optimize it to a register move anyway.
+
+> [!question]- In LDS, `Loader` uses `dlsym` which returns `void*`, and the result must be cast to a function pointer. Why is `reinterpret_cast` the only option here, and what precaution should be taken?
+> POSIX `dlsym` returns `void*` because C historically predates `void*`-to-function-pointer conversion rules, and the standard does not define this conversion. `static_cast` cannot convert `void*` to a function pointer. `reinterpret_cast` is the only tool. The precaution: the cast is only safe if the actual symbol is *exactly* the function type you cast to — argument types, return type, and calling convention must all match. Any mismatch causes undefined behavior at the call site. Documenting the expected symbol signature and validating it (e.g., via a versioned plugin API) is the defense.
+
+> [!question]- Why should you avoid C-style casts in C++ even though they are terser, and how does using named casts help in a code review?
+> A C-style cast silently tries `static_cast`, `const_cast`, and `reinterpret_cast` in order and performs whichever compiles first — including stripping `const` or reinterpreting bits when the programmer likely intended only a numeric conversion. In a code review or audit, you cannot grep for `(int)` without matching every legitimate cast as well as dangerous ones. Named casts are self-documenting: seeing `const_cast` in a review immediately signals "const is being stripped here — verify this is intentional." They also fail at compile time if the cast is not appropriate for the category (e.g., `static_cast` cannot strip `const`), providing earlier feedback.
 ```

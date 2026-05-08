@@ -209,3 +209,22 @@ f.write = 1;
 ```
 
 Used in hardware registers, protocol headers, flag sets. Layout is implementation-defined — not portable across compilers for serialization.
+
+---
+
+## Understanding Check
+
+> [!question]- Why does the compiler insert padding between struct fields, and why does reordering fields (largest to smallest) reduce struct size?
+> Every field must be stored at an address that is a multiple of its own size — this is natural alignment, required for efficient (or even correct) CPU load/store instructions. When a small field (e.g., `char`) precedes a larger one (e.g., `int`), the compiler inserts padding bytes to push the `int` to the next 4-byte boundary. Placing the largest fields first means no padding is needed between them; smaller fields that follow can pack together in the leftover space. This matters for structs stored in large arrays where each wasted padding byte is multiplied by the element count.
+
+> [!question]- What goes wrong if you use a union and read from a field you didn't most recently write?
+> Reading a union field other than the last-written one is type punning. In C, this is technically allowed for reading the underlying byte representation, but the value you read is whatever bits the last write put there, interpreted as a completely different type. Reading `float f` after writing `int i` gives you the float whose bit pattern happens to equal that integer — not a meaningful floating-point number. In C++, reading any union member other than the active one is undefined behavior. The safe pattern is to always use a tag (tagged union) so you know which member is active.
+
+> [!question]- What goes wrong if you `memcpy` an opaque struct pointer across a network boundary instead of serializing each field?
+> The receiving side gets the raw in-memory bytes, which includes compiler-inserted padding, host-byte-order integers, and possibly pointer values that are meaningless on another machine. Even between two identical machines running the same binary, padding bytes have indeterminate values — so the comparison `memcmp(a, b, sizeof(Struct))` can return non-zero even when all logical fields are equal, because the padding differs. For the LDS wire protocol, each field must be written explicitly in network byte order with no padding.
+
+> [!question]- The LDS protocol uses a flexible array member pattern (`uint8_t data[]`) for variable-length packets. What is the one invariant you must maintain when allocating one, and what happens if you violate it?
+> You must allocate `sizeof(struct Packet) + data_len` bytes — never just `sizeof(struct Packet)`. The flexible array member contributes zero bytes to `sizeof`, so allocating only the struct size leaves no space for the data. Writing into `p->data[]` then immediately overflows into adjacent heap metadata or stack memory, corrupting the allocator's free list or causing a segfault. The length field must also faithfully reflect how many bytes were allocated for `data`, so any code reading the struct knows how far it can safely access.
+
+> [!question]- An opaque struct hides its fields behind a forward declaration. What does this guarantee at the callsite, and when does it break down?
+> The compiler only sees the pointer type, not the struct contents, so callers cannot access fields directly — this enforces the API boundary and lets you change the implementation without recompiling callers. It breaks down in two ways: (1) if you expose the struct definition in a public header (accidentally or for inline performance), the encapsulation is gone; (2) if a caller casts the pointer to `void*` or `char*` and interprets the raw bytes, they've bypassed the abstraction. The guarantee is only as strong as the discipline not to cast around it.

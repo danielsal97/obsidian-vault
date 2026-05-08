@@ -154,3 +154,22 @@ int* p = new int[100];  // 400 bytes on heap
 /proc/PID/smaps     # detailed per-region breakdown
 valgrind ./prog     # track heap allocations
 ```
+
+---
+
+## Understanding Check
+
+> [!question]- Why is the BSS segment described as taking "no space in the binary" even though it can represent megabytes of data at runtime?
+> BSS contains uninitialized global and static variables, which are guaranteed by C to be zero at program start. The binary only needs to record the total size of the BSS region — the actual zeros are never stored in the executable file. At load time, the OS allocates physical pages for BSS and zero-fills them (the kernel provides zero pages efficiently via copy-on-write from a shared zero page). A 4MB global array adds only a few bytes to the binary (a size record in the ELF header) rather than 4MB of zeroes.
+
+> [!question]- What goes wrong if you store a pointer to a stack variable in a global or heap-allocated struct, then access it after the function returns?
+> The stack frame of the function is "freed" the moment the function returns — the stack pointer moves back up, and subsequent function calls will overwrite those bytes with their own frames and local variables. The pointer in the struct now points to memory that belongs to a different, future stack frame. Reading it gives garbage values; writing through it silently corrupts a different function's local variables or return address. This is undefined behavior and the resulting bug is notoriously hard to reproduce because it depends on what functions are called after the fact.
+
+> [!question]- Why do multiple instances of the same program share one physical copy of the text segment in RAM?
+> The text segment contains read-only machine code — every running instance of /usr/bin/ls executes exactly the same instructions. Since no process can modify the text segment (SIGSEGV on any write attempt), the kernel can safely map the same physical pages into every process's virtual address space. Only one copy of the code ever resides in RAM regardless of how many instances are running. The same applies to shared libraries: libstdc++.so is physically loaded once and mapped into every process that uses it, saving potentially hundreds of MB of RAM on a busy system.
+
+> [!question]- How does ASLR affect a developer's ability to debug crashes from /proc/PID/maps or a core dump, and how do you work around it?
+> ASLR randomizes the base addresses of the stack, heap, and shared library mappings on every run. A stack address printed in one run is useless for understanding another run's crash — the addresses change. Core dumps and /proc/PID/maps reflect the addresses for that specific run, which is fine for post-mortem debugging of that exact crash. For interactive debugging, disable ASLR per-process with setarch $(uname -m) -R ./program or globally with echo 0 > /proc/sys/kernel/randomize_va_space. GDB also reads the maps from the core dump and adjusts symbol addresses automatically, so ASLR is less of a problem with a proper debugger.
+
+> [!question]- In LDS, the Reactor, ThreadPool, and NBDDriverComm all live in the same process — what memory region does each primarily use, and what would a memory map of the LDS process look like?
+> The compiled LDS machine code lives in the text segment (read-only, shared if multiple instances run). Global state (e.g., static members) lives in data/BSS. The Reactor's epoll fd, ThreadPool's worker threads (each with its own stack in the mmap region), and the WPQ's heap-allocated queue nodes all reside on the heap or in thread stacks in the mmap region. The NBD socketpair fds are kernel objects referenced by the fd table, not in the address space directly. /proc/PID/maps would show: the LDS binary text/data/BSS, heap region, one mmap-region stack per worker thread, and multiple shared library mappings (libstdc++, libc, etc.).

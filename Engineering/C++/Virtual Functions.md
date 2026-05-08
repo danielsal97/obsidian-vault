@@ -196,3 +196,22 @@ Use templates (static polymorphism) when the type is known at compile time and y
 | `IDriverComm` | `NBDDriverComm` | InputMediator uses `IDriverComm*` |
 | `ICommand` | `ReadCommand`, `WriteCommand` | ThreadPool executes via `ICommand*` |
 | `ICallBack<Msg>` | `CallBack<Msg,Sub>` | Dispatcher stores `vector<ICallBack*>` |
+
+---
+
+## Understanding Check
+
+> [!question]- What goes wrong if you delete a derived object through a base pointer and the base class has no virtual destructor?
+> The compiler sees a `Base*` and calls `~Base()` directly — there is no virtual dispatch because the destructor is not in the vtable. `~Derived()` never runs, so any resources the derived class owns (heap buffers, file descriptors, mutexes) are never released. In LDS, if `IStorage` lacked a virtual destructor, deleting a `LocalStorage*` through an `IStorage*` would leak the internal `m_buf` vector and leave the mutex in an undefined state.
+
+> [!question]- Why does object slicing silently break polymorphism, and how does using a reference or pointer prevent it?
+> When you assign a derived object to a base *value*, the compiler copies only the base subobject — the derived fields are truncated and, critically, the `vptr` is overwritten with the base class's vtable pointer. There is no dynamic dispatch on a value type. A pointer or reference stores the address of the original derived object and its `vptr` unchanged, so vtable lookup still reaches the derived override.
+
+> [!question]- How does the vtable dispatch work mechanically, and what is its cost compared to a direct function call?
+> Each object with virtual functions carries a hidden `vptr` pointing to its class's vtable (an array of function pointers). A virtual call loads the `vptr` (one memory read), indexes into the table (one pointer-sized offset), and calls through the function pointer (one indirect branch). A direct call is a single branch to a known address. The indirect call prevents inlining and can miss the branch predictor and instruction cache, which is why tight loops over large heterogeneous polymorphic containers can be slower than template-based approaches.
+
+> [!question]- Why does calling a virtual function inside a constructor not dispatch to the derived override, and what real bug can this cause?
+> During construction of `Base`, the object's dynamic type *is* `Base` — the derived part has not been constructed yet. The `vptr` points to `Base`'s vtable. If you call a virtual `init()` inside `Base`'s constructor hoping to reach `Derived::init()`, you instead call `Base::init()`. If `Derived::init()` would have accessed derived members (not yet constructed), the call would be UB. In LDS, a base class that calls a virtual `onConnect()` from its constructor would silently run the base no-op, not the derived handler, every time.
+
+> [!question]- In LDS the `ICommand` interface is used with a factory that creates `ReadCommand` or `WriteCommand` at runtime. Why can templates not replace this runtime polymorphism here, and when would templates be the better choice?
+> The factory receives the command type as a runtime value (the NBD request type from the kernel driver). Templates resolve types at compile time — you would need one factory instantiation per command type, which is impossible when the type is not known until the program runs. Templates are the better choice in `Dispatcher<Msg>`, where the message type is fixed per subscriber at registration time: you get zero-overhead dispatch with no vtable and the compiler can inline the callback entirely.

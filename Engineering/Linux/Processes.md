@@ -163,3 +163,22 @@ The C Watchdog (`ds/src/wd.c`) uses `fork()` + `execv()` to spawn the guardian p
 ```c
 waitpid(child_pid, &status, WNOHANG);   // returns 0 if child still running
 ```
+
+---
+
+## Understanding Check
+
+> [!question]- Why does fork() use copy-on-write instead of immediately copying all memory pages?
+> Copying the entire address space on every fork would be prohibitively expensive for large processes — the child often just calls exec() immediately anyway, discarding the copied memory. Copy-on-write defers the copy until a page is actually written, so only modified pages are ever duplicated. This makes the fork+exec pattern fast even for a 500MB process.
+
+> [!question]- What goes wrong if a parent process never calls wait() on its children?
+> Each exited child becomes a zombie — its process table entry stays allocated holding just its PID and exit status. The PID remains occupied and cannot be reused. If the parent spawns many short-lived children without ever reaping them, the process table fills up and the system can no longer create new processes. The fix is to call waitpid() or handle SIGCHLD to reap children promptly.
+
+> [!question]- Why should you use _exit() instead of exit() in the child after a fork, when not calling exec?
+> exit() flushes stdio buffers and runs atexit() handlers registered by the parent before the fork. If the parent has buffered data in stdout (e.g., printf output not yet flushed), _exit() in the child would prevent that data from being written twice. exit() in the child can flush and close the parent's file streams, corrupting output or causing double-writes. _exit() skips all that cleanup and exits immediately.
+
+> [!question]- In the LDS watchdog, the guardian uses WNOHANG in a polling loop rather than blocking waitpid — why?
+> The guardian must simultaneously listen for SIGUSR1 heartbeat signals and check whether the main process is alive. A blocking waitpid would prevent the guardian from receiving signals (signals can interrupt it, but the code structure would be more complex). WNOHANG lets the guardian poll for child exit in its main loop without getting stuck, keeping it responsive to the SIGUSR1/SIGUSR2 ping-pong timing logic.
+
+> [!question]- What is the difference between SIGTERM and SIGKILL, and when would you use each?
+> SIGTERM is a polite termination request — the process can catch it, perform cleanup (flush buffers, release shared memory, remove temp files), and exit gracefully. SIGKILL cannot be caught, blocked, or ignored; the kernel forcibly removes the process immediately with no cleanup. Use SIGTERM first and give the process time to shut down cleanly. Only escalate to SIGKILL if the process doesn't respond — because SIGKILL leaves shared resources (sockets, shared memory, lock files) in an inconsistent state.

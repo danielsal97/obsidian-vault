@@ -239,3 +239,22 @@ Status:   0x00=OK,   0x01=ERROR
 ```
 
 RecvAll(13 bytes) → parse → if WRITE: RecvAll(length bytes) → process → send response.
+
+---
+
+## Understanding Check
+
+> [!question]- Why does accept() return a brand-new file descriptor instead of reusing the listening socket fd?
+> The listening socket's job is to accept new connections — it must remain open and bound to the port for future clients. The per-client fd represents the actual connected byte stream for that one client. If accept() reused the listening fd, you could only serve one client at a time; you'd have to close the listening socket after every conversation. The two-fd design lets a server hold thousands of concurrent client fds while the single listening fd remains available for new connections.
+
+> [!question]- What goes wrong if the LDS TCP server reads recv(fd, buf, 13) without the RecvAll loop and the network delivers the 13-byte header in two separate TCP segments?
+> recv() returns however many bytes are available — potentially only 6 bytes of the 13-byte header on the first call. Without the loop, the server would try to parse an incomplete header: the op field might read correctly but the offset and length fields would contain garbage from uninitialized buffer memory. The server would then attempt a Read or Write with a corrupt offset and wrong length, causing silent data corruption or an out-of-bounds access on the storage layer. The bug is intermittent and latency-dependent, making it hard to reproduce locally but likely to appear under real network conditions.
+
+> [!question]- Why does TCP_NODELAY matter for LDS block operations, and when would you specifically NOT want it?
+> Nagle's algorithm coalesces small writes into a larger TCP segment to reduce packet count overhead. For LDS block operations, where a request is a small 13-byte header followed immediately by a large data payload, Nagle would delay the header until the data arrives or a timeout fires — adding up to 200ms of unnecessary latency to every operation. TCP_NODELAY disables this and sends segments immediately. You would NOT want TCP_NODELAY in a chatty interactive protocol where you send dozens of tiny messages per second and bandwidth efficiency matters more than per-message latency, such as a terminal multiplexer or a telemetry stream.
+
+> [!question]- Why must both Mac (ARM64) and Linux (x86-64) call htons/htonl even when talking to each other?
+> Both architectures are natively little-endian, so bytes would happen to match without conversion when both skip it. However, the socket API requires sin_port in network (big-endian) byte order regardless of the host architecture — the kernel interprets it directly without conversion. Skipping htons() for the port will bind or connect to a numerically different port on any little-endian machine. More broadly, hard-coding "both sides are little-endian" is a fragile assumption that breaks the moment a big-endian device joins the network or an OS layer expects standard wire format.
+
+> [!question]- What is the difference between recv() returning 0 and returning -1 with errno == EAGAIN, and how should the LDS TCP server handle each case?
+> recv() returning 0 means the remote peer cleanly closed its side of the connection (sent TCP FIN). The connection is half-closed; no more data will arrive. The server should close(fd) and remove the fd from epoll — it's a normal and expected event. recv() returning -1 with EAGAIN on a non-blocking socket means there is simply no data available right now, not an error. The server should return from the handler and let epoll_wait fire again when data arrives. Treating EAGAIN as a fatal error would close the connection prematurely and lose all in-flight requests whenever the event-driven loop is slightly ahead of incoming data.

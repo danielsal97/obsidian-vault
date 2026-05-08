@@ -141,3 +141,22 @@ See [[../Build Process/Overview]] for where this fits in the pipeline.
 
 ← [[3 - Assembler]] — receives `.o` object files  
 → Executable loaded by the OS dynamic linker (`/lib64/ld-linux-x86-64.so.2`) at runtime
+
+---
+
+## Understanding Check
+
+> [!question]- Why does linker argument order matter for static libraries but not for object files?
+> Object files are always fully included — the linker takes every symbol from every .o listed. Static libraries (.a archives) are treated differently: the linker only extracts .o members from a .a that satisfy an UNDEF symbol it has already encountered. If -lfoo appears before main.o, the linker scans libfoo.a before it knows main.o needs anything from it, extracts nothing, and moves on. When it later processes main.o and discovers the UNDEF references, libfoo.a has already been scanned and won't be revisited. The fix is to list .o files before the libraries they depend on, so the UNDEFs are registered first.
+
+> [!question]- What goes wrong if LDS is built as a dynamically linked binary and the deployment Linux machine doesn't have the matching libc.so version?
+> At load time, the dynamic linker (/lib64/ld-linux-x86-64.so.2) reads the binary's NEEDED list and searches for each .so by SONAME. If the required libc.so.6 version is not present or is a different ABI-incompatible version, the dynamic linker fails with "version 'GLIBC_2.34' not found" and the program refuses to start — not just crash on the first missing call, but fail immediately before main() even runs. This is why LDS could be built statically for deployment on minimal containers, or why Docker images pin to a specific base image with known library versions.
+
+> [!question]- Why can inline functions be defined in headers and included in multiple .cpp files without causing "multiple definition" linker errors, while regular functions cannot?
+> The C++ standard grants inline functions special linkage rules: each translation unit may have its own copy of an inline function's definition, and the linker is required to merge all identical copies into one. The compiler marks inline functions with COMDAT (or "weak") linkage in the .o, signaling to the linker that duplicate definitions are expected and acceptable. A regular (non-inline) function has GLOBAL strong linkage — the linker treats two GLOBAL definitions as a hard error. This is why header-only libraries work: every included method marked inline can appear in many .o files without conflict.
+
+> [!question]- What is the PLT and why is there a performance cost on the first call to a dynamically linked function like malloc?
+> The PLT (Procedure Linkage Table) is a set of small trampolines in the executable. When you call malloc for the first time, execution jumps to the PLT stub for malloc, which calls the dynamic linker's resolver. The resolver finds the actual address of malloc in libc.so, writes it into the GOT (Global Offset Table) entry for malloc, and jumps to it. All subsequent calls to malloc jump through the PLT stub, read the now-populated GOT entry, and jump directly to malloc — one extra indirection but no resolver overhead. The first-call cost is the dynamic linker walking the symbol table of libc.so, which can take microseconds in a large library.
+
+> [!question]- In LDS's Makefile, if LocalStorage.cpp changes but InputMediator.cpp does not, why is it correct to only recompile LocalStorage.cpp and re-run the link step?
+> Each .cpp file produces an independent .o via its own compile rule. Only the changed file and its dependents need recompilation — Make tracks this via timestamps. LocalStorage.o is regenerated from the changed LocalStorage.cpp. InputMediator.o is unchanged because InputMediator.cpp and its included headers have not changed. The link step must re-run because it combines all .o files and the new LocalStorage.o has different content (new code, potentially different symbol offsets). The linker produces a fresh executable from the mix of old and new .o files. This incremental build model is why separating code into multiple .cpp files and headers is worth the organizational effort.

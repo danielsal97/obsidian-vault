@@ -184,3 +184,22 @@ Minion → Master response:
 ```
 
 MSG_ID allows ResponseManager to match responses to pending requests even when they arrive out of order.
+
+---
+
+## Understanding Check
+
+> [!question]- Why does calling connect() on a UDP socket not establish a connection, and what concrete benefit does it give the LDS master when talking to a known minion?
+> UDP is connectionless — connect() on a UDP socket only sets the kernel's default destination address and filters incoming packets to that source. No handshake occurs, no SYN is sent, and the minion doesn't know anything happened. The benefit for LDS is twofold: the master can use send()/recv() instead of sendto()/recvfrom(), and the socket will silently discard UDP datagrams from any source other than that minion's address, reducing the risk of rogue or stale packets from a different minion being interpreted as responses to the current request.
+
+> [!question]- What goes wrong if the LDS ResponseManager's receive buffer is smaller than the actual datagram the minion sent?
+> UDP truncates silently. recvfrom() returns at most buf_size bytes and discards the rest — there is no error, no EAGAIN, and no way to retrieve the truncated portion. If the response header fits but the data payload is cut off, the ResponseManager would parse a valid-looking header but act on incomplete block data — partial writes or incorrect reads. The fix is to size receive buffers to at least the maximum possible datagram the protocol can produce, which for LDS is bounded by the block size plus header overhead.
+
+> [!question]- Why does LDS use application-level retry with exponential backoff over UDP rather than just switching to TCP for master↔minion communication?
+> TCP's reliability comes at a cost: per-connection state, head-of-line blocking, congestion control, and a full handshake before any data flows. For block storage operations where the master talks to many minions simultaneously and a single slow minion should not delay others, UDP's model fits better. Application-level retry with MSG_ID tracking lets the master pipeline many in-flight requests, retry only the specific lost ones, and apply custom timeout policies (exponential backoff, max retries, then error propagation). TCP would force a retry of all in-flight data for that connection if a segment is lost, and the 3-way handshake cost per connection adds latency that matters when operations are frequent and small.
+
+> [!question]- Why is UDP broadcast unsuitable for LDS AutoDiscovery once the cluster spans multiple network subnets?
+> Broadcast (255.255.255.255 or the subnet broadcast address) is confined to a single Layer 2 network segment. Routers do not forward broadcast packets between subnets by design, to prevent broadcast storms. If LDS minions and the master are on different VLANs or subnets — as would happen in a datacenter or across a Tailscale VPN — the broadcast "Hello I'm here" from a new minion would never reach the master. The solution is either multicast (routers can be configured to forward specific multicast groups) or a unicast registration mechanism where minions send a directed UDP packet to a known master address.
+
+> [!question]- If two UDP datagrams are sent back-to-back from a minion to the master, can the master's recvfrom() calls receive them in reverse order, and how does LDS handle this?
+> Yes. UDP makes no ordering guarantees — datagrams are routed independently at the IP layer and can arrive in any order or not at all. The master's recvfrom() calls would return them in whichever order the OS received them. LDS handles this via the MSG_ID field in every response header: the ResponseManager matches each incoming response to its pending request by MSG_ID rather than assuming sequential arrival. The Scheduler can therefore process out-of-order responses correctly, retiring whichever request completed first regardless of submission order.

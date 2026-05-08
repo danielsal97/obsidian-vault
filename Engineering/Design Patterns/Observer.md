@@ -166,3 +166,22 @@ UDP recv → ResponseManager::on_response()
 - [[../C++/Virtual Functions]] — observer interface uses virtual functions
 - [[../C++/Smart Pointers]] — weak_ptr for safe observer references
 - [[../C++/STL Containers]] — vector of observers
+
+---
+
+## Understanding Check
+
+> [!question]- Why does the thread-safe trigger() implementation copy the observer list before iterating, rather than holding the mutex during on_event() calls?
+> Holding the mutex during on_event() creates a potential deadlock: if an observer's callback calls subscribe() or unsubscribe() on the same subject, it will try to acquire the mutex that the calling thread already holds — a classic self-deadlock. Copying the list under the lock and then releasing it before iterating means the lock is held only long enough to snapshot the state. The tradeoff is that an observer added or removed while notifications are in flight may not see the current event (missed notification) or may receive a final notification after removal — acceptable in most cases and far better than deadlock.
+
+> [!question]- What goes wrong if an observer is destroyed while the subject still holds a raw IObserver* to it in m_observers?
+> The raw pointer becomes dangling. The next time trigger() is called, it iterates m_observers and calls obs->on_event() on a pointer to freed memory — undefined behavior that typically manifests as a crash or silent data corruption. The weak_ptr<IObserver> pattern solves this: expired() returns true once the observer's owning shared_ptr is destroyed, and lock() returns nullptr. The trigger() loop can safely skip expired observers and optionally prune them from the list, without ever dereferencing a dangling pointer.
+
+> [!question]- In LDS, the ResponseManager matches incoming UDP responses to pending requests by MSG_ID. Is this observer pattern, and where does the analogy hold or break?
+> It is a form of observer pattern, but more targeted. A generic observer pattern broadcasts to all subscribers regardless of content. LDS's ResponseManager is closer to a promise/callback model: when a request is submitted with MSG_ID=42, a specific callback is registered for that MSG_ID only, not for all events. When the UDP response with MSG_ID=42 arrives, only that one callback fires. The analogy holds in that the UDP socket is the "subject" emitting events, and pending-request callbacks are "observers" — but the subject selects the specific observer by MSG_ID rather than broadcasting to all, which is a key design difference from classic Observer.
+
+> [!question]- Why is unsubscribing a lambda harder than unsubscribing a pointer-based IObserver, and what are the practical implications?
+> std::function objects have no identity — you cannot compare two functions for equality or store a "handle" that uniquely identifies a lambda after registration. To unsubscribe a raw IObserver*, you search m_observers for the matching pointer and erase it. To unsubscribe a lambda, you have no comparable search key. The practical workaround is to return an integer "subscription ID" at subscribe time and store a map<int, std::function> instead of a vector — unsubscribing by ID. In LDS, if ResponseManager used lambdas per MSG_ID stored in a map<MSG_ID, callback>, cancellation (e.g., on timeout) would erase by MSG_ID, which is clean and efficient.
+
+> [!question]- What is the "lapsed listener" problem and when would it affect LDS's observer chain?
+> The lapsed listener problem occurs when an observer forgets to unsubscribe before being destroyed, leaving a dangling reference in the subject's list. In LDS, if a pending-request callback captures a reference to a Scheduler object that has been shut down and destroyed, the ResponseManager's trigger will call into freed memory when the next UDP response arrives — even for an in-flight request from before shutdown. The fix is a strict shutdown order (ResponseManager stopped before Scheduler) and/or using weak_ptr callbacks so that expired observers are silently skipped rather than called.

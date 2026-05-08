@@ -119,3 +119,22 @@ Useful for understanding what the optimizer does to your code.
 
 ← [[1 - Preprocessor]] — sends the fully expanded translation unit  
 → [[3 - Assembler]] — receives the `.s` assembly file
+
+---
+
+## Understanding Check
+
+> [!question]- Why can the compiler catch a type mismatch between a function call and its definition, but not a missing definition in another translation unit?
+> The compiler processes one translation unit at a time and has no visibility into other .cpp files. It does see the declaration (from the header) and uses it to type-check the call site — argument types, return type, const-correctness. But the actual function body lives in another translation unit that the compiler hasn't read. It leaves a placeholder (an UNDEF relocation entry) and trusts that the linker will supply the address later. A missing definition only becomes an error at link time when the linker scans all .o files and cannot find a GLOBAL symbol to satisfy the UNDEF reference.
+
+> [!question]- What goes wrong if you compile LDS with -O3 but forget to mark a shared-memory flag as std::atomic or volatile?
+> At -O3 the compiler aggressively assumes single-threaded semantics within a translation unit. It may hoist a loop condition check (while (!ready)) out of the loop entirely — if ready is a plain bool, the compiler proves it was false on entry and concludes it can never change within that thread's code, generating an infinite loop or eliminating the check entirely. Even without hoisting, it may cache the value in a register and never re-read from memory. std::atomic or at minimum volatile tells the compiler the variable can change externally and forces a memory read on every access.
+
+> [!question]- Why does -fPIC (position-independent code) exist, and when does LDS need it?
+> Position-independent code uses relative addressing — instructions reference other symbols as offsets from the current program counter rather than absolute addresses. This is required for shared libraries (.so files) because the dynamic linker loads them at an address determined at runtime, which varies per process and per run (ASLR). An absolute-addressed library would need to be relocated to a fixed address in every process, eliminating the memory-sharing benefit. LDS uses -fPIC when building any component that will be linked as a shared library. Executables themselves can use absolute addresses and don't require -fPIC unless they also serve as shared libraries (unusual).
+
+> [!question]- How does the compiler handle a virtual function call differently from a regular function call, and why can't it always inline virtual calls even at -O3?
+> A regular function call resolves at compile time to a direct jump instruction with a fixed target address (or a relocation that the linker fills in). A virtual call goes through the vtable: the compiler emits code to load the vtable pointer from the object, index to the correct slot, and call through the pointer — an indirect call whose target is only known at runtime. Inlining requires knowing the exact callee at compile time. If the compiler can prove via devirtualization (knowing the concrete type from context, e.g., a local variable declared as a concrete class) it may inline the virtual call. Without that proof — a polymorphic pointer or reference — it cannot inline it because the actual type and target function are unknown until runtime.
+
+> [!question]- What does the compiler's semantic analysis phase do that the preprocessor and lexer do not, and why does this matter for LDS's use of const-correctness?
+> The preprocessor does pure text substitution with no understanding of types or scoping. The lexer splits text into tokens (identifiers, keywords, literals) but applies no meaning. Semantic analysis resolves names to their declarations, checks type compatibility, enforces access specifiers, and verifies const-correctness — ensuring you don't pass a const T* where T* is expected, don't modify a const member through a non-const method, and don't call non-const methods on const objects. For LDS, marking storage accessors const ensures the compiler catches accidental mutations in read paths; without semantic analysis these would silently compile and produce subtle data corruption bugs only visible at runtime.

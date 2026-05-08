@@ -175,3 +175,22 @@ See [[Signals]] — `signalfd` makes signal handling safe to mix with `epoll`.
 - [[Signals]] — signalfd for signal handling in Reactor
 - [[../Linux/File Descriptors]] — fd lifecycle and non-blocking mode
 - [[Command]] — handlers often create Command objects and push to a queue
+
+---
+
+## Understanding Check
+
+> [!question]- Why must Reactor handlers be non-blocking, and what is the exact failure mode if NBDHandler::handle_event() calls a blocking recv() that waits 500ms?
+> The Reactor loop is single-threaded. epoll_wait returns a batch of ready fds, and the loop dispatches them sequentially. If handle_event() on one fd blocks for 500ms, all other ready fds in the current batch wait. Worse, new events accumulate in the kernel's epoll ready list but are never dequeued until the current handler returns. In LDS, this would mean the signalfd SIGTERM event is not processed (no clean shutdown), new NBD requests pile up in the socketpair buffer, and the kernel may throttle further NBD I/O. The correct design is for handlers to read available data (non-blocking), create a Command, push it to WPQ, and return immediately.
+
+> [!question]- How does LDS use signalfd to make SIGTERM handling safe in a Reactor loop, and what would go wrong with a traditional signal handler?
+> A traditional signal handler runs asynchronously and can interrupt any instruction — including a malloc, a container operation, or an epoll_wait call. Writing to a mutex or calling non-async-signal-safe functions inside a signal handler is undefined behavior. signalfd converts SIGTERM into a file descriptor event: the OS blocks actual delivery of the signal and instead makes the signalfd readable. The Reactor registers the signalfd with epoll, and when SIGTERM arrives, epoll_wait returns the signalfd as a ready fd. The SignalHandler::handle_event() runs in the normal event loop, safely calling m_reactor.stop() — no async interruption, no race conditions.
+
+> [!question]- What goes wrong if the Reactor's m_handlers map is modified (fd added or removed) from a worker thread while the Reactor loop is iterating it on the main thread?
+> The Reactor's dispatch table (m_handlers) is an unordered_map modified by register_fd() and unregister_fd(). The Reactor loop reads from it on every epoll_wait iteration. Concurrent read-modify from two threads without synchronization is a data race — undefined behavior. The map's internal structure could be partially modified mid-traversal: iterator invalidation, use-after-free on nodes, or a lookup returning a garbage handler pointer, leading to a crash or wrong handler being called. The LDS design avoids this by keeping all fd registration and deregistration on the Reactor thread itself (done inside event handlers), so the map is only ever modified and read by the same thread.
+
+> [!question]- In Phase 2A, when a TCP client connects and the TCPServer handler calls register_fd() for the new client fd, how does this fit into the single-threaded Reactor model without creating a race?
+> The TCPServer's handle_event() is called from within the Reactor's event loop iteration — it runs on the Reactor thread. Calling reactor.register_fd() from inside a handler is safe because the Reactor loop has already fetched the current batch of events from epoll_wait; the new fd won't appear until the next epoll_wait call. By the time register_fd() returns and the handler returns to the loop, the next iteration of epoll_wait will include the newly registered client fd. There is no race because the handler and the loop iteration are sequential — the loop can't be in epoll_wait while the handler is running.
+
+> [!question]- Why is the io_uring model fundamentally different from the epoll Reactor, and for what LDS workload would io_uring be a meaningful improvement?
+> epoll is readiness-based: it tells you when an fd is ready so you can issue a syscall (recv, send, read, write) without blocking. You still make syscalls, each of which crosses the user/kernel boundary. io_uring is completion-based: you submit I/O operations to a ring buffer in shared memory, and the kernel processes them asynchronously, placing results in a completion ring — zero per-operation syscalls after the initial setup. For LDS's storage layer (reading/writing blocks to a local file via LocalStorage), io_uring would reduce syscall overhead for high-throughput sequential block operations, where the epoll model adds a round-trip per operation (epoll_wait to know the fd is ready, then a separate pread/pwrite syscall).

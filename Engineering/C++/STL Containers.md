@@ -207,4 +207,23 @@ std::unique(v.begin(), v.end());      // remove consecutive duplicates
 auto it = std::find_if(v.begin(), v.end(), [](int x){ return x > 5; });
 
 std::for_each(v.begin(), v.end(), [](int& x){ x *= 2; });
+
+---
+
+## Understanding Check
+
+> [!question]- Why does `vector` invalidate *all* iterators on a `push_back` that triggers reallocation, and what is the typical bug this causes in a loop?
+> When `size == capacity`, `vector` allocates a new larger buffer, moves all elements, and frees the old buffer. Any pointer, reference, or iterator into the old buffer now points to freed memory. The common bug: iterating with a `for (auto it = v.begin(); it != v.end(); ++it)` loop and calling `v.push_back(x)` inside — after reallocation, `it` and `v.end()` point into the old buffer. Incrementing `it` or comparing to `end()` is undefined behavior. The fix is to `reserve` enough capacity before the loop, or collect values separately and insert after.
+
+> [!question]- What goes wrong if you use `unordered_map` with a type that has `operator==` but no `std::hash` specialization?
+> The compiler cannot find a hash function for the key type, and the `unordered_map` template instantiation fails with a compile error (typically something like "call to deleted function" or "no matching function for hash"). You must either specialize `std::hash<YourType>` or provide a custom hasher as the third template parameter. A poor hash (e.g., always returning 0) compiles fine but degrades all operations to O(n) — every key falls into the same bucket and lookups become linear scans.
+
+> [!question]- Why is `list` rarely the right container despite having O(1) insert and erase, and when is it actually justified?
+> `list` nodes are heap-allocated individually and scattered across memory. Traversal loads a new cache line per node — for 1000 elements that can be 1000 cache misses versus ~16 cache lines for a `vector`. The O(1) insert/erase advantage only materializes when you already hold an iterator to the target position, which itself required a prior O(n) traversal. Justified when: elements are large and frequently moved/inserted mid-sequence, or when iterator/reference stability across insertions is a hard requirement (e.g., the container is concurrently iterated by one thread while another inserts).
+
+> [!question]- In LDS the work queue for the thread pool passes `DriverData` requests between threads. What container properties matter here, and why would `vector` be a poor choice?
+> A thread-pool work queue needs O(1) enqueue at the back and O(1) dequeue from the front. `vector` has O(1) amortized push_back but O(n) pop_front (shifts all elements). `deque` provides O(1) at both ends. `std::queue` (backed by `deque`) is the semantic fit. Additionally, iterator stability is irrelevant here — what matters is thread-safety: the container must be guarded by a mutex (or use a lock-free queue) and a condition variable for blocking dequeue when the queue is empty.
+
+> [!question]- What is the difference between `map::operator[]` and `map::at()`, and what silent bug can `operator[]` introduce?
+> `operator[]` inserts a default-constructed value if the key is absent, then returns a reference to it. `at()` throws `std::out_of_range` if the key is absent. The silent bug: calling `m[key]` to *check* whether a key exists actually inserts a zero/empty entry for that key, changing `m.size()`, potentially triggering rehash in `unordered_map`, and corrupting iteration. Use `find()` or `count()` to query existence, and `at()` when you know the key must exist and want a clear exception on violation.
 ```

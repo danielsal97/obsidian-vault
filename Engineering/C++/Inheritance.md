@@ -246,4 +246,23 @@ class Logger {
 public:
     void log(const std::string& msg) { m_writer.write(msg); }
 };
+
+---
+
+## Understanding Check
+
+> [!question]- Why does base class construction always happen before derived construction, and what would go wrong if it were the other way around?
+> Base class members are part of the derived object's memory layout — they must exist before the derived constructor can use them. If derived were constructed first, any base method called from the derived constructor would access uninitialized base fields. Destruction follows the reverse order for the same reason: the derived destructor may call base methods, so the base must still be valid. Reverse construction order would mean the base's destructor runs while derived fields still exist, creating a window where derived's destructor could access an already-destroyed base.
+
+> [!question]- What goes wrong if you use `private` inheritance when you actually need the `is-a` relationship for polymorphism?
+> With `private` inheritance, public members of the base become private in the derived class and — critically — a `Derived*` cannot be implicitly converted to a `Base*`. Code that expects a `Base*` (e.g., a factory storing `IStorage*`) will not accept a `Derived` object. `private` inheritance means "implemented-in-terms-of", not "is-a" — it provides the base's implementation without exposing the interface. For polymorphic use through base pointers, you always need `public` inheritance.
+
+> [!question]- What is the diamond problem in multiple inheritance and why does `virtual` inheritance solve it?
+> Without `virtual` inheritance, `DogCat : Dog, Cat` where both inherit from `Animal` results in two separate `Animal` subobjects embedded in `DogCat`. Accessing `dc.m_age` is ambiguous: which `Animal`'s field? With `virtual` inheritance, `Dog` and `Cat` each carry a virtual base pointer instead of an embedded `Animal`; the actual `Animal` subobject is shared and constructed once by the most-derived class. The overhead is a pointer indirection per base access, which is why virtual inheritance should only be used when the diamond is genuinely intentional.
+
+> [!question]- In LDS, `LocalStorage` publicly inherits `IStorage`. What would break if someone accidentally passed a `LocalStorage` object by value to a function taking `IStorage`?
+> Object slicing would occur: only the `IStorage` base subobject is copied, losing all of `LocalStorage`'s data members (`m_buf`, the mutex, etc.). The `vptr` is set to `IStorage`'s vtable, so `Read()` and `Write()` would dispatch to the pure-virtual base — calling them is undefined behavior (or an immediate abort if the vtable slot is a null thunk). The LDS `InputMediator` correctly stores `IStorage*` (pointer), avoiding slicing entirely.
+
+> [!question]- Why is "prefer composition over inheritance" advice for the `has-a` case, and how do you decide between the two in practice?
+> Inheritance couples the derived class to the base's entire interface and implementation — changes to the base ripple into all subclasses. Composition couples only to the member's public interface, which you can also replace or mock independently. The decision rule: if you need polymorphic substitutability (caller holds a `Base*` and must be able to substitute `Derived`), use inheritance. If you just need the behavior of another class internally and don't need external callers to treat your object as that type, use composition. For example, `Reactor` uses a socket — it "has a" socket, not "is a" socket — so composition is correct.
 ```

@@ -190,3 +190,22 @@ Mark move constructor and move assignment `noexcept`. `std::vector` uses move on
 ```cpp
 Buffer(Buffer&&) noexcept { ... }    // vector will move, not copy
 ```
+
+---
+
+## Understanding Check
+
+> [!question]- Why does `std::move` not actually move anything, and when can calling it on an object cause a subtle bug?
+> `std::move` is purely a cast — it converts an lvalue to an rvalue reference, signalling to the compiler that the move constructor or move assignment may be called. The actual transfer happens in whichever constructor or assignment is selected. The bug: if you `std::move(x)` and then continue reading `x`, you're reading from a "valid but unspecified" state. For example, `std::move`-ing a string into a function and then calling `.size()` on the original is not necessarily 0 — it depends on the implementation. Treat a moved-from object as write-only.
+
+> [!question]- What goes wrong if you forget to null out the source pointer (`other.m_data = nullptr`) in the move constructor?
+> Both objects now hold the same pointer. When the source is destroyed, its destructor calls `delete[] m_data` — the memory is freed. The destination still holds the pointer, but it now points to freed memory. Any subsequent access is a use-after-free. The second destructor (destination) then calls `delete[]` on already-freed memory — a double-free, which is undefined behavior and typically crashes or silently corrupts the heap.
+
+> [!question]- Why does `std::vector` fall back to copying instead of moving during reallocation when the move constructor is not marked `noexcept`?
+> During reallocation, the vector moves (or copies) elements to a new buffer. If a move constructor throws halfway through, some elements are in the new buffer (already moved, source is now in unspecified state) and some are still in the old buffer. There is no way to undo the already-moved elements — the strong exception guarantee is violated. By contrast, copying leaves the original intact; if a copy throws, the old buffer is still valid and can be kept. So `vector` copies unless it can prove (via `noexcept`) that the move will not throw.
+
+> [!question]- In LDS, `NBDDriverComm` and `InputMediator` own OS resources. Why is it important that their move constructors set the source's fd to `-1`, and what real failure would occur without it?
+> After a move, the source object still has its destructor called when it goes out of scope. If the source's `m_fd` still holds the real file descriptor, the destructor will `close()` it — invalidating the fd that the destination object is actively using for NBD communication. The NBD kernel driver will see an unexpected close on its socket pair, likely reporting an I/O error to the guest OS. Setting `m_fd = -1` in the move makes the source's destructor a safe no-op (guarded by `if (m_fd >= 0)`).
+
+> [!question]- What is the difference between `std::forward` and `std::move`, and why is using `std::move` inside a forwarding function the wrong choice?
+> `std::move` unconditionally casts to rvalue — it always enables moving. `std::forward<T>` is a conditional cast: if `T` deduced as an lvalue reference (`T = Foo&`) it does nothing; if `T` deduced as a non-reference (`T = Foo`) it casts to rvalue. In a generic wrapper `void wrap(T&& arg)`, if the caller passed an lvalue, `T` deduces as `Foo&` and you must forward it as an lvalue — using `std::move(arg)` would incorrectly move from the caller's variable, leaving it in an unspecified state the caller did not consent to.

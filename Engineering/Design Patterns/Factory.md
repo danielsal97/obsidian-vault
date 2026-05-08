@@ -145,3 +145,22 @@ A factory function could wrap this to allow different storage backends based on 
 - [[Observer]] — factory often creates observers
 - [[../C++/Inheritance]] — factory returns base pointer to derived object
 - [[../C++/Smart Pointers]] — unique_ptr for factory ownership
+
+---
+
+## Understanding Check
+
+> [!question]- Why does the factory return std::unique_ptr<IStorage> rather than IStorage*, and what specific memory safety problem does this solve?
+> Returning a raw IStorage* transfers ownership without any mechanism to enforce deletion. Every call site must remember to delete the returned pointer, and exceptions between the factory call and the delete will leak the object. unique_ptr encodes ownership in the type system: the destructor automatically deletes the object when it goes out of scope, and unique_ptr cannot be copied — only moved — preventing accidental double-frees. The caller can always move it into a shared_ptr if shared ownership is later needed, but the factory's contract is unambiguous: you own this, and you cannot forget to clean it up.
+
+> [!question]- What is the difference between a simple factory function and the Factory Method pattern, and when would LDS benefit from the Factory Method approach?
+> A simple factory function (CreateStorage("local")) is a free function that switches on a type string — the entire creation decision lives in one place. The Factory Method pattern adds a level of indirection: a StorageFactory base class with a virtual create() method, overridden by LocalStorageFactory and RemoteStorageFactory. The Factory Method is useful when the factory itself needs to be swappable at runtime — a test framework injects MockStorageFactory, while production uses LinuxStorageFactory. LDS would benefit from this if integration tests needed to swap the entire driver stack (storage + comm) atomically, which the Abstract Factory variant enables cleanly.
+
+> [!question]- What goes wrong if a caller caches the raw pointer returned by CreateStorage("local") and the unique_ptr it came from is destroyed?
+> unique_ptr owns the allocated object — when it is destroyed (goes out of scope), it calls delete on the managed pointer. Any raw pointer to that object becomes a dangling pointer. Subsequent accesses through the raw pointer are undefined behavior: the memory may have been reallocated for something else, producing silent data corruption, or the OS may have reclaimed the page, causing a segfault. This is exactly why the factory should return unique_ptr and callers should store and extend lifetime via the smart pointer — the ownership chain remains clear and the raw pointer (if needed) is only obtained from a live unique_ptr.
+
+> [!question]- How does the factory pattern enforce the Dependency Inversion Principle in LDS, and what would violate it?
+> Dependency Inversion says high-level modules should depend on abstractions, not concrete implementations. InputMediator depends on IStorage* — it has no #include of LocalStorage.h and no knowledge of how LocalStorage works. The factory (in LDS.cpp or main) is the single point that knows about LocalStorage and creates it. This is correct. Violation would be InputMediator directly constructing auto storage = std::make_unique<LocalStorage>(path, size) inside its constructor — now the mediator is coupled to LocalStorage, its constructor parameters, and its header, making it impossible to unit test without the real filesystem.
+
+> [!question]- If LDS adds a new NetworkStorage backend, what changes and what does NOT change with the factory pattern in place?
+> What changes: the factory function gains a new branch (if (type == "network") return make_unique<NetworkStorage>(...)), and NetworkStorage.h/cpp are added to the build. What does NOT change: InputMediator, the Reactor, the ThreadPool, any tests that use MockStorage, and any code that calls storage->Read() or storage->Write(). None of those callers need to be recompiled or modified because they depend only on IStorage. This is the key benefit — adding a new implementation extends the factory in one place without touching any consumers.

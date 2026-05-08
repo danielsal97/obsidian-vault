@@ -159,3 +159,22 @@ int* raw = sp.get();
 sp.reset();          // object deleted
 *raw = 5;            // use-after-free
 ```
+
+---
+
+## Understanding Check
+
+> [!question]- Why is `unique_ptr` truly zero-overhead while `shared_ptr` has a measurable cost, even though both call `delete` in their destructor?
+> `unique_ptr` stores only the raw pointer; its destructor is a direct `delete` call that inlines to nothing in release builds — identical to manual memory management. `shared_ptr` carries a second pointer to a separately-allocated control block containing an *atomic* reference count. Every copy, reset, or destruction must atomically increment or decrement this count, which requires a full memory barrier — expensive on multi-core systems under contention. In LDS the `DriverData` shared_ptr crosses thread boundaries, so every handoff between the driver thread and the worker thread pays this atomic cost.
+
+> [!question]- What goes wrong if you construct two separate `unique_ptr`s from the same raw pointer?
+> Both will believe they are the sole owner. When the first goes out of scope it calls `delete` on the address. The second's destructor later calls `delete` on the same address — a double-free, which is undefined behavior. It typically corrupts the heap allocator's free list and causes a crash or silent data corruption elsewhere. The fix is to never construct a smart pointer from a raw pointer you don't own outright; use `make_unique`/`make_shared` exclusively.
+
+> [!question]- Why must you call `wp.lock()` before using a `weak_ptr`, and what would happen if you dereferenced it directly?
+> `weak_ptr` does not own the object; the object can be destroyed by the last `shared_ptr` owner at any moment, even between the check and the use. `lock()` atomically elevates the `weak_ptr` to a `shared_ptr` — if the object is still alive the ref count is incremented, guaranteeing it stays alive for the duration of your use. Without `lock()` there is no such guarantee, so direct dereference would be a use-after-free race condition. In LDS, any observer pattern that holds a `weak_ptr` to a subscriber must `lock()` before dispatching.
+
+> [!question]- What goes wrong if two `shared_ptr` objects form a reference cycle and you never use `weak_ptr`?
+> Each object keeps the other's ref count at ≥ 1. When all *external* owners release their handles, both ref counts drop to 1 (not 0). Neither destructor is ever called — the objects live forever, leaking memory for the process lifetime. In LDS, if a subscriber held a `shared_ptr` back to the `Dispatcher`, and the `Dispatcher` held a `shared_ptr` to the subscriber, neither would destruct on shutdown. The fix is for the non-owning side to use `weak_ptr`.
+
+> [!question]- Why does `make_shared` outperform `shared_ptr<T>(new T(...))` in both allocation count and exception safety?
+> `shared_ptr<T>(new T(...))` performs two heap allocations: one for `T` and one for the control block. `make_shared` fuses them into a single allocation. On exception safety: in an expression like `f(shared_ptr<T>(new T()), g())`, if `g()` throws after `new T()` runs but before the `shared_ptr` constructor completes, `T` leaks — there is no smart pointer yet to clean it up. `make_shared` is a single expression with no such gap.

@@ -197,3 +197,22 @@ __builtin_bswap64(x)     // byte swap 64-bit
 ```
 
 These compile to a single CPU instruction on modern hardware.
+
+---
+
+## Understanding Check
+
+> [!question]- Why must you always use unsigned integers for bit manipulation, and what goes wrong with signed right shift in particular?
+> Right shift on a signed negative integer is implementation-defined in C — the compiler can fill the vacated high bits with the sign bit (arithmetic shift) or with zeros (logical shift). Most compilers do arithmetic shift, but you cannot rely on it portably. Left shift of a signed integer where the result overflows is outright undefined behavior. Unsigned right shift is always logical (fills with zeros) and left shift is always defined for values that fit. Stick to `uint8_t`, `uint16_t`, `uint32_t`, `uint64_t` for any bitwise work.
+
+> [!question]- What goes wrong if you define a flag with `1 << 31` using a plain `int` literal?
+> `1` is a signed `int`. On a 32-bit `int` system, `1 << 31` would set the sign bit of a signed integer, which is undefined behavior (signed overflow). Even on systems where it "works" and produces `0x80000000`, that value is `INT_MIN` — a negative number — so comparisons like `if (flags & FLAG_X) > 0` break silently. The fix is `1u << 31` or `(uint32_t)1 << 31` — an unsigned literal guarantees the shift is well-defined and the result is a positive bitmask.
+
+> [!question]- The LDS UDP protocol packs a 32-bit message ID and an 8-bit opcode into a fixed header. When you extract fields with shifts and masks, why must you apply the mask AFTER the shift, not before?
+> If you mask before shifting, you risk zeroing bits that, after the shift, would have landed in your target byte position — you lose data. The correct order is shift first to move your target bits to position 0, then mask with `0xFF` (or whatever width) to isolate them and discard higher bits that were shifted in. For example, to extract byte 1 of a 32-bit value: `(val >> 8) & 0xFF` — shift byte 1 down to position 0, then mask to drop the upper 3 bytes.
+
+> [!question]- `n & (n - 1)` removes the lowest set bit. Why does this trick work, and what goes wrong if `n == 0`?
+> Subtracting 1 from `n` flips all bits from the lowest set bit downward: the lowest 1 becomes 0, and all the 0s below it become 1s. ANDing with the original `n` zeroes out exactly that lowest bit (the only position where `n` and `n-1` both have a 1 is above the lowest set bit). When `n == 0`, `n - 1` underflows to `0xFFFFFFFF` for unsigned types, and `0 & 0xFFFFFFFF == 0` — the loop terminates immediately. The `is_power_of_2` check guards with `n &&` specifically to handle this: 0 is not a power of 2, and `n & (n-1)` alone returns 0 for n=0, which would incorrectly pass.
+
+> [!question]- `bswap32` is used to convert between host and network byte order. Why can't you just use a cast or union field access to swap bytes, and when is `htonl` a no-op?
+> A cast changes how you interpret bytes, not their order — `(uint32_t)(uint8_t*)&x` reads one byte, not all four swapped. A union trick (write as `uint32_t`, read as `uint8_t[4]`) gives you the individual bytes in host order but doesn't reorder them; you'd still have to manually reassemble in reversed order. `htonl` is a no-op on big-endian systems (network byte order IS big-endian), which is why code using `htonl`/`ntohl` is portable — on little-endian x86 it calls the swap, on big-endian SPARC/PowerPC it compiles away to nothing.
