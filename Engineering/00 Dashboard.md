@@ -38,15 +38,17 @@ General knowledge that carries across every project and every job.
 - [[Linux/Processes]] — fork, exec, wait, zombies, daemon
 - [[Linux/Signals]] — sigaction, async-signal-safety, signalfd, SIGPIPE, SIGUSR1/2
 - [[Linux/File Descriptors]] — everything is a file, fd lifecycle, dup, pipe, socketpair
-- [[Linux/epoll]] — select vs poll vs epoll, level vs edge triggered, Reactor pattern
-- [[Linux/Networking]] — bottom-up: physical → IP → TCP/UDP → TLS → HTTP/DNS; byte ordering, tools, LDS map
-- [[Linux/Sockets TCP]] — TCP socket API in depth, RecvAll, byte ordering, disconnect
-- [[Linux/UDP Sockets]] — UDP vs TCP, message boundaries, MTU, broadcast, LDS protocol
 - [[Linux/Threads - pthreads]] — create, mutex, condition variable, rwlock, TLS, pitfalls
 - [[Linux/Shared Memory]] — shm_open, mmap MAP_SHARED, POSIX shm, sync requirements
 - [[Linux/Semaphores]] — sem_init, named semaphores, counting semaphores, producer/consumer
 - [[Linux/mmap]] — file-backed mapping, anonymous mapping, msync, madvise, MAP_SHARED
-- [[Linux/IPC Overview]] — all IPC mechanisms compared: pipes, sockets, shm, signals, mq
+
+## Networking
+- [[Networking/Overview]] — bottom-up: physical → Ethernet → IP → TCP/UDP → TLS → HTTP/DNS
+- [[Networking/Sockets TCP]] — TCP socket API, RecvAll loop, wire protocol, byte ordering
+- [[Networking/UDP Sockets]] — UDP vs TCP, message boundaries, MTU, broadcast, multicast
+- [[Networking/epoll]] — select vs poll vs epoll, level vs edge triggered, Reactor pattern
+- [[Networking/IPC Overview]] — all IPC: pipes, socketpair, unix sockets, shared memory, mq
 
 ## Memory Management
 - [[Memory/Process Memory Layout]] — text, data, BSS, heap, stack, virtual memory

@@ -118,7 +118,7 @@ while (true) {
 }
 ```
 
-See [[epoll]] for full detail.
+See [[../Networking/epoll]] for full detail.
 
 ---
 
@@ -171,7 +171,7 @@ See [[Signals]] — `signalfd` makes signal handling safe to mix with `epoll`.
 
 ## Related Notes
 
-- [[epoll]] — the underlying Linux mechanism
+- [[../Networking/epoll]] — the underlying Linux mechanism
 - [[Signals]] — signalfd for signal handling in Reactor
 - [[../Linux/File Descriptors]] — fd lifecycle and non-blocking mode
 - [[Command]] — handlers often create Command objects and push to a queue

@@ -368,4 +368,4 @@ ip route show                  # routing table
 - [[epoll]] — multiplexing many connections, Reactor pattern
 - [[IPC Overview]] — local IPC: pipes, socketpair, unix sockets, shared memory
 - [[../C/Serialization]] — binary wire protocol design and byte ordering
-- [[Signals]] — SIGPIPE when writing to a closed socket
+- [[../Linux/Signals]] — SIGPIPE when writing to a closed socket
