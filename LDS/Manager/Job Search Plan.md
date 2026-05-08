@@ -2,7 +2,8 @@
 
 **Goal:** First C++ systems/backend job  
 **Start date:** 2026-05-08  
-**Target:** First offer within 8–12 weeks
+**Target:** First offer within 8–12 weeks  
+**Last updated:** 2026-05-08
 
 ---
 
@@ -24,17 +25,15 @@ These are quick wins that dramatically improve how your GitHub looks to an inter
 
 ### GitHub Polish Checklist
 
-- [ ] **README** — the single most important thing
-  - What is LDS? (1 paragraph)
-  - Architecture diagram (copy from [[System Overview]])
-  - How to build and run (both NBD and TCP modes)
-  - Technologies: C++20, epoll, inotify, NBD, TCP sockets, pthreads, dlopen
-  - Link to the Obsidian notes or architecture decisions
+- [x] **README** — ✅ Done (2026-05-08)
+  - Architecture diagram, dual NBD/TCP mode, build/run commands, wire protocol, component table, design pattern rationale, roadmap
+
+- [x] **Fix the diverged branches** — ✅ Done (2026-05-08) — rebased local onto origin/main
 
 - [ ] **2–3 gtest unit tests** — signals professional, not student
   - `test_local_storage.cpp` — write/read round-trip
   - `test_input_mediator.cpp` — dispatch to correct handler
-  - `test_tcp_driver.cpp` — already exists on GitHub ✓
+  - `test_tcp_driver.cpp` — already exists but not gtest, convert it
 
 - [ ] **GitHub Actions CI** — green checkmark on every commit
   ```yaml
@@ -47,10 +46,8 @@ These are quick wins that dramatically improve how your GitHub looks to an inter
         - uses: actions/checkout@v3
         - run: sudo apt-get install -y g++ make libgtest-dev
         - run: make
-        - run: make test
+        - run: make run_tests
   ```
-
-- [ ] **Fix the diverged branches** — local has 1 commit, GitHub has 1 different commit; reconcile with `git rebase` or `git merge`
 
 - [ ] **Pin the repo** on GitHub profile — make it your featured project
 
@@ -155,7 +152,10 @@ Hit these words: **epoll, RAID01, TCP, UDP, async, plugin system, C++20.**
 
 ## Milestones
 
-- [ ] README + CI done
+- [x] README done — 2026-05-08
+- [x] Diverged branches fixed — 2026-05-08
+- [ ] gtest + GitHub Actions CI
+- [ ] Pin repo on GitHub profile
 - [ ] CV updated with LDS
 - [ ] First 10 applications sent
 - [ ] First technical screen scheduled
