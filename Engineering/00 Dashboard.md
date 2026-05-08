@@ -74,6 +74,15 @@ General knowledge that carries across every project and every job.
 - [[Concurrency/Multithreading Patterns]] — thread pool, producer/consumer, lock hierarchy, futures
 - [[Concurrency/Memory Ordering]] — happens-before, std::atomic, acquire/release, CAS, false sharing
 
+## Algorithms
+- [[Algorithms/Data Structures]] — array, linked list, hash table, BST, heap/priority queue — complexity + C++ STL type for each
+- [[Algorithms/Big-O and Complexity]] — time/space complexity, recognising O(n log n) vs O(n²), binary search, interview patterns
+
+## DevOps & Tools
+- [[DevOps/Docker]] — images, containers, Dockerfile, volumes, docker-compose — LDS Docker setup
+- [[Linux/gdb Debugging]] — breakpoints, watchpoints, backtrace, core dumps, multi-thread debugging
+- [[Kernel]] — syscalls, scheduler, virtual memory, kernel modules — the OS layer your code runs on
+
 ## Interview Prep
 *Stored in LDS vault (LDS context is the interview story):*
 - [[LDS/Engineering/Interview Guide]] — 3-min pitch, cold Q&A, bugs to mention

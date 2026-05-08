@@ -4,7 +4,7 @@ True bottom-up order. Each topic builds on the previous.
 Never move to the next layer until the current one is solid.
 Every line is a link — no content here, just the path.
 
-**Total:** 46 topics + 1 overview file (~35 hrs)
+**Total:** 57 topics (~42 hrs)
 
 ---
 
@@ -19,6 +19,7 @@ Every line is a link — no content here, just the path.
 | 2 | [[Engineering/Build Process/2 - Compiler\|Compiler]] | 45 min | Parsing, type checking, optimization levels, why templates must be in headers |
 | 3 | [[Engineering/Build Process/3 - Assembler\|Assembler]] | 30 min | `.o` files, ELF format, symbol table — what the linker sees |
 | 4 | [[Engineering/Build Process/4 - Linker\|Linker]] | 45 min | Symbol resolution, static vs dynamic linking, PLT/GOT, undefined reference errors |
+| 5 | [[Engineering/Build Process/Make and CMake\|Make and CMake]] | 45 min | Makefile rules, variables, `-MMD` dependency tracking, CMakeLists.txt, out-of-source builds |
 
 ---
 
@@ -48,18 +49,26 @@ Every line is a link — no content here, just the path.
 | 13 | [[Engineering/C/Serialization\|Serialization]] | 1 hr | Big-endian vs little-endian, `htonl`/`ntohl`, `memcpy` for misalignment safety, length-prefix framing — the LDS wire protocol |
 | 14 | [[Engineering/C/Undefined Behavior\|Undefined Behavior]] | 1 hr | What UB is, why `-O2` exposes bugs `-O0` hides, strict aliasing, data races as UB — not just wrong values |
 
+### Algorithms (study alongside C — you need arrays and structs first)
+| # | Topic | Est. | What you learn |
+|---|---|---|---|
+| 15 | [[Engineering/Algorithms/Big-O and Complexity\|Big-O and Complexity]] | 45 min | How to measure algorithmic efficiency, drop constants, recognise O(n²) vs O(n log n) in code |
+| 16 | [[Engineering/Algorithms/Data Structures\|Data Structures]] | 1.5 hrs | Array, linked list, hash table, BST, heap/priority queue — complexity + C++ STL type for each |
+
 ---
 
-## Layer 3 — Linux: How the OS Runs Your Program (Week 2–3, ~3 hrs)
+## Layer 3 — Linux: How the OS Runs Your Program (Week 2–3, ~4 hrs)
 
 *Your program doesn't run in a vacuum. The OS gives it fds, a process, signals, and memory pages. Know this before writing C++ that touches any of it.*
 
 | # | Topic | Est. | What you learn |
 |---|---|---|---|
-| 15 | [[Engineering/Linux/File Descriptors\|File Descriptors]] | 45 min | Everything is a file. fd lifecycle, dup, socketpair, `FD_CLOEXEC`, fd leak consequences |
-| 16 | [[Engineering/Linux/Processes\|Processes]] | 45 min | `fork`/`exec`/`wait`, copy-on-write, zombies, daemon pattern, `WNOHANG` in watchdog |
-| 17 | [[Engineering/Linux/Signals\|Signals]] | 45 min | `sigaction`, async-signal-safe functions, `signalfd`, why LDS Reactor uses signalfd not sigaction |
-| 18 | [[Engineering/Memory/Memory Errors and Tools\|Memory Errors and Tools]] | 45 min | Use-after-free, double-free, leak, overflow — and how ASan/Valgrind/UBSan catch each one |
+| 17 | [[Engineering/Linux/File Descriptors\|File Descriptors]] | 45 min | Everything is a file. fd lifecycle, dup, socketpair, `FD_CLOEXEC`, fd leak consequences |
+| 18 | [[Engineering/Linux/Processes\|Processes]] | 45 min | `fork`/`exec`/`wait`, copy-on-write, zombies, daemon pattern, `WNOHANG` in watchdog |
+| 19 | [[Engineering/Linux/Signals\|Signals]] | 45 min | `sigaction`, async-signal-safe functions, `signalfd`, why LDS Reactor uses signalfd not sigaction |
+| 20 | [[Engineering/Memory/Memory Errors and Tools\|Memory Errors and Tools]] | 45 min | Use-after-free, double-free, leak, overflow — and how ASan/Valgrind/UBSan catch each one |
+| 21 | [[Engineering/Kernel\|Kernel Concepts]] | 45 min | What the kernel does: syscalls, scheduler, virtual memory, kernel modules — the OS layer your code runs on |
+| 22 | [[Engineering/Linux/gdb Debugging\|gdb Debugging]] | 1 hr | Breakpoints, watchpoints, backtrace, core dumps, multi-thread debugging — how to actually debug a crash |
 
 ---
 
@@ -85,6 +94,15 @@ Every line is a link — no content here, just the path.
 | 27 | [[Engineering/C++/Operator Overloading\|Operator Overloading]] | 30 min | Canonical forms, copy-and-swap, `operator+=` as the primitive |
 | 28 | [[Engineering/C++/Type Casting\|Type Casting]] | 45 min | `static_cast`, `dynamic_cast`, `const_cast`, `reinterpret_cast` — when each is correct |
 | 29 | [[Engineering/C++/Effective C++ - Meyers\|Effective C++ — Meyers]] | 1 hr | Synthesis: all the non-obvious rules that senior devs follow automatically |
+
+### C++ Versions (study after the core — now you know what was missing before each standard)
+| # | Topic | Est. | What you learn |
+|---|---|---|---|
+| 30 | [[Engineering/C++/Version Comparison\|C++ Version Comparison]] | 30 min | Feature timeline table — what landed in which standard, what to target |
+| 31 | [[Engineering/C++/C++11/Overview\|C++11]] | 30 min | auto, lambdas, move semantics, smart pointers, threads, nullptr, constexpr, range-for |
+| 32 | [[Engineering/C++/C++14/Overview\|C++14]] | 15 min | make_unique, generic lambdas, move capture, return type deduction |
+| 33 | [[Engineering/C++/C++17/Overview\|C++17]] | 30 min | Structured bindings, if constexpr, optional, variant, string_view, filesystem |
+| 34 | [[Engineering/C++/C++20/Overview\|C++20]] | 30 min | Concepts, ranges, span, format, coroutines, jthread, spaceship operator — LDS uses C++20 |
 
 ---
 
@@ -129,6 +147,16 @@ Every line is a link — no content here, just the path.
 | 44 | [[Engineering/Design Patterns/Factory\|Factory]] | 45 min | Create objects via interface — `CommandFactory` eliminates if/else chains |
 | 45 | [[Engineering/Design Patterns/Strategy\|Strategy]] | 45 min | Swappable behaviour at runtime — `IDriverComm` lets you swap NBD ↔ TCP without touching mediator |
 | 46 | [[Engineering/Design Patterns/Singleton\|Singleton]] | 30 min | One instance, thread-safe construction via C++11 magic statics — Logger in LDS |
+
+---
+
+## Layer 8 — DevOps & Tools (Week 8, ~1 hr)
+
+*Practical skills that come up in any systems role. Docker is already used in LDS.*
+
+| # | Topic | Est. | What you learn |
+|---|---|---|---|
+| 57 | [[Engineering/DevOps/Docker\|Docker]] | 1 hr | Images, containers, Dockerfile, volumes, port mapping, docker-compose — LDS Docker setup |
 
 ---
 

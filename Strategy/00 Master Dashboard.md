@@ -7,11 +7,11 @@
 ## Today's Focus
 > Replace these each morning — one item per row
 
-| # | Type | Task | Link |
-|---|---|---|---|
-| 1 | Study (1–2 hrs) | [[Engineering/C++/RAII\|RAII]] | Engineering |
-| 2 | Build (2–3 hrs) | MinionProxy skeleton | [[LDS/Manager/Phase 2 Execution Plan\|LDS Phase 2]] |
-| 3 | Apply (30 min) | Send 2–3 applications | [[LDS/Manager/Job Search Plan\|Job Search Plan]] |
+| #   | Type            | Task                           | Link                                                |
+| --- | --------------- | ------------------------------ | --------------------------------------------------- |
+| 1   | Study (1–2 hrs) | [[Engineering/C++/RAII\|RAII]] | Engineering                                         |
+| 2   | Build (2–3 hrs) | MinionProxy skeleton           | [[LDS/Manager/Phase 2 Execution Plan\|LDS Phase 2]] |
+| 3   | Apply (30 min)  | Send 2–3 applications          | [[LDS/Manager/Job Search Plan\|Job Search Plan]]    |
 
 ---
 

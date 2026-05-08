@@ -1,4 +1,4 @@
-# Known Bugs — Senior Engineering Analysis
+2# Known Bugs — Senior Engineering Analysis
 
 These are real bugs in the current Phase 1 implementation. Understanding them deeply is what separates junior from senior level. Each one has a root cause, consequence, and correct fix.
 
