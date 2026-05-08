@@ -126,8 +126,8 @@ Reactor ✅
 - [[Why signalfd not sigaction]]
 
 ### Manager
-- [[Phase 2A Execution Plan]] ← active sprint
-- [[Phase 2 Execution Plan]]
+- **[[Manager/Job Search Plan]] ← START HERE**
+- [[Phase 2 Execution Plan]] ← active sprint
 - [[Timeline & Milestones]]
 - [[Project Status & Metrics]]
 - [[Risk Register]]
