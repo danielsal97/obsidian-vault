@@ -1,5 +1,7 @@
 # C Language Fundamentals
 
+*Quick reference — condensed summaries only. For full coverage with examples, edge cases, and Understanding Check Q&A, see the [[C/]] topic files linked in [[00 Dashboard]].*
+
 ---
 
 ## Pointers

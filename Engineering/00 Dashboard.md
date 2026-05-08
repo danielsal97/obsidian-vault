@@ -56,7 +56,7 @@ General knowledge that carries across every project and every job.
 - [[Memory/Memory Errors and Tools]] — leak, use-after-free, double free, overflow, ASan, Valgrind
 
 ## Build Process
-- [[Build Process/Overview]] — full pipeline diagram, commands, stage-by-stage summary
+- [[Build Process]] — pipeline overview, static vs shared libs, dlopen, compiler flags, Make, tools
 - [[Build Process/1 - Preprocessor]] — #include, #define, header guards, conditional compilation
 - [[Build Process/2 - Compiler]] — parsing, type checking, optimization levels, template instantiation
 - [[Build Process/3 - Assembler]] — assembly → object file, ELF format, symbol table, relocations
@@ -75,8 +75,9 @@ General knowledge that carries across every project and every job.
 - [[Concurrency/Memory Ordering]] — happens-before, std::atomic, acquire/release, CAS, false sharing
 
 ## Interview Prep
-- [[Interview/Interview Guide]] — 3-min pitch, cold Q&A, bugs to mention
-- [[Interview/C++ Language]] — interview-focused Q&A on C++ fundamentals
-- [[Interview/Concurrency]] — mutex, race conditions, deadlock, condition variables
-- [[Interview/Linux & Networking]] — fork/exec, signals, epoll, TCP, byte ordering
-- [[Interview/Data Structures]] — Big-O, heap PQ, hash table, trie, UID design
+*Stored in LDS vault (LDS context is the interview story):*
+- [[LDS/Engineering/Interview Guide]] — 3-min pitch, cold Q&A, bugs to mention
+- [[LDS/Engineering/Interview - C++ Language]] — interview-focused Q&A on C++ fundamentals
+- [[LDS/Engineering/Interview - Concurrency]] — mutex, race conditions, deadlock, condition variables
+- [[LDS/Engineering/Interview - Linux & Networking]] — fork/exec, signals, epoll, TCP, byte ordering
+- [[LDS/Engineering/Interview - Data Structures]] — Big-O, heap PQ, hash table, trie, UID design

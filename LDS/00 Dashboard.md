@@ -126,7 +126,8 @@ Reactor ✅
 - [[Why signalfd not sigaction]]
 
 ### Manager
-- **[[Manager/Job Search Plan]] ← START HERE**
+- **[[Strategy/00 Master Dashboard]] ← START HERE (daily entry point)**
+- **[[Manager/Job Search Plan]] ← job search checklist**
 - [[Phase 2 Execution Plan]] ← active sprint
 - [[Timeline & Milestones]]
 - [[Project Status & Metrics]]

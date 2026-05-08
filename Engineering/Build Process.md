@@ -192,3 +192,13 @@ size ./program         # show segment sizes (text, data, bss)
 strings ./program      # extract readable strings
 strace ./program       # trace syscalls at runtime
 ```
+
+---
+
+## Deep Dives
+
+For internals of each stage (symbol tables, ELF format, optimization passes, relocation entries):
+- [[Build Process/1 - Preprocessor]] — #include expansion, #define, header guards, conditional compilation
+- [[Build Process/2 - Compiler]] — parsing, type checking, optimization levels, template instantiation
+- [[Build Process/3 - Assembler]] — ELF format, symbol table, relocation entries
+- [[Build Process/4 - Linker]] — symbol resolution, PLT/GOT, static vs dynamic, common errors
