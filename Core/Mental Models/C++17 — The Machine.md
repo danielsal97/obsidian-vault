@@ -89,3 +89,9 @@ auto& [key, handler] = *m_handlers.find(fd);
 1. `for (auto [fd, handler] : m_handlers)` vs `for (const auto& [fd, handler] : m_handlers)`. What's the difference? Which is correct for read-only iteration?
 2. `std::optional<int>` vs returning `-1` as "not found" — what specific bug does `optional` prevent?
 3. `std::string_view` returned from a function that creates a `std::string` locally. The caller stores the `string_view`. What happens after the function returns?
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/C++17]]  
+**Mental Models:** [[Templates — The Machine]], [[STL Containers — The Machine]], [[Undefined Behavior — The Machine]], [[Serialization — The Machine]]  
+**LDS Implementation:** [[LDS/Infrastructure/Reactor]] — structured bindings for fd→handler iteration; [[LDS/Application/LocalStorage]] — string_view for zero-allocation log messages

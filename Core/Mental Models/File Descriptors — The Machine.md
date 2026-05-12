@@ -85,3 +85,11 @@ m_signal_fd = signalfd(-1, &mask, SFD_CLOEXEC);
 1. LDS calls `socketpair()` and gets back `sp[0]` and `sp[1]`. Both are 5 and 6. Then `open("/dev/nbd0")` returns 7. What integer does the next `open()` call return if nothing else has run? Trace through the fd table.
 2. Why does the `Reactor` destructor close `m_signal_fd` before `m_epoll_fd`, and does the order matter? What happens if you close `m_epoll_fd` first while `m_signal_fd` is still registered in it?
 3. `NBDDriverComm::Disconnect()` sets `m_nbdFd = -1` after closing it. Why is the assignment to -1 necessary? What happens on the next call to `Disconnect()` if you skip it?
+
+## Connections
+
+**Theory:** [[Core/Theory/Linux/File Descriptors]]  
+**Mental Models:** [[epoll — The Machine]], [[TCP Sockets — The Machine]], [[Processes — The Machine]], [[RAII — The Machine]], [[File IO — The Machine]]  
+**LDS Implementation:** [[LDS/Linux Integration/NBDDriverComm]] — socketpair fd lifecycle; [[LDS/Infrastructure/Reactor]] — epoll fd  
+**Runtime Machines:** [[LDS/Runtime Machines/NBDDriverComm — The Machine]]  
+**Glossary:** [[epoll]], [[socketpair]]

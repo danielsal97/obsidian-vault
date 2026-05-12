@@ -64,3 +64,10 @@ The NBD protocol uses a packed request structure. The request type field (`NBD_C
 1. The NBD header has `flags` in bits 16–31 and `type` in bits 0–15 of a 32-bit word. Write the expression to extract `type`.
 2. You want to test if `FLAG_WRITE` is set in `flags` without disturbing other bits. Write the expression.
 3. `1 << 0` is 1, `1 << 1` is 2, `1 << 2` is 4. Why does this doubling pattern mean bit flags never collide?
+
+## Connections
+
+**Theory:** [[Core/Theory/C/Bitwise Operations]]  
+**Mental Models:** [[Serialization — The Machine]], [[Structs and Unions — The Machine]]  
+**LDS Implementation:** [[LDS/Architecture/Wire Protocol Spec]] — flags and type field extraction  
+**Runtime Machines:** [[LDS/Runtime Machines/NBDDriverComm — The Machine]]

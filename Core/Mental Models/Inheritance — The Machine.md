@@ -67,3 +67,10 @@ Both `NBDDriverComm` and `TCPDriverComm` inherit from `IDriverComm`. This is the
 1. `IDriverComm* p = new TCPDriverComm()`. You call `delete p`. `IDriverComm` has no virtual destructor. `TCPDriverComm` owns a socket. What happens?
 2. A function takes `IDriverComm driver` by value (not pointer or reference). You pass a `TCPDriverComm`. What is `driver` inside the function?
 3. `NBDDriverComm` has `m_fd` (4 bytes). `IDriverComm` has only `vptr` (8 bytes). What is `sizeof(NBDDriverComm)`? (assume no padding)
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/Inheritance]]  
+**Mental Models:** [[Virtual Functions — The Machine]], [[Strategy Pattern — The Machine]], [[Templates — The Machine]]  
+**LDS Implementation:** [[LDS/Runtime Machines/InputMediator — The Machine]] — NBDDriverComm/TCPDriverComm via IDriverComm  
+**Glossary:** [[shared_ptr]]

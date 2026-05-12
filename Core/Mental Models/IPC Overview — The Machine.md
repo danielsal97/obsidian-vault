@@ -64,3 +64,10 @@ LDS chose TCP sockets for both the NBD-replacement interface and minion communic
 1. LDS manager and a local minion are on the same machine. You switch from TCP to Unix domain sockets. What changes in the code? What gets faster?
 2. A pipe has 64KB kernel buffer. LDS writes 128KB in one write. What happens?
 3. You use shared memory for manager-minion communication. Manager writes 512 bytes, then sets a flag. Minion polls the flag, then reads 512 bytes. What synchronization guarantee do you need and why?
+
+## Connections
+
+**Theory:** [[Core/Theory/Networking/IPC Overview]]  
+**Mental Models:** [[TCP Sockets — The Machine]], [[UDP Sockets — The Machine]], [[Shared Memory — The Machine]], [[Semaphores — The Machine]], [[File Descriptors — The Machine]]  
+**LDS Implementation:** [[LDS/Architecture/Concurrency Model]], [[LDS/Linux Integration/TCPServer]]  
+**Glossary:** [[TCP]], [[UDP]], [[socketpair]]

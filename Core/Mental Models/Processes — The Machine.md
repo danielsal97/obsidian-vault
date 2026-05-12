@@ -68,3 +68,10 @@ LDS does not fork — it uses a single-process multi-threaded architecture. But 
 1. `fork()` returns twice. How does the child know it's the child?
 2. LDS opens fd=7 (a TCP socket). It forks to launch a subprocess. The subprocess doesn't use TCP. What problem does fd inheritance cause, and how do you prevent it?
 3. Parent calls `fork()` when its vector has 1000 elements. The child modifies element[0]. Parent reads element[0]. What does the parent see? What physical memory event happened?
+
+## Connections
+
+**Theory:** [[Core/Theory/Linux/Processes]]  
+**Mental Models:** [[File Descriptors — The Machine]], [[Process Memory Layout — The Machine]], [[Signals — The Machine]], [[Shared Memory — The Machine]]  
+**LDS Implementation:** [[LDS/Linux Integration/NBDDriverComm]] — fork/exec for nbd-client subprocess  
+**Glossary:** [[pthreads]], [[VFS]]

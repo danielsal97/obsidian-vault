@@ -71,3 +71,10 @@ The LDS WorkPriorityQueue is a heap. `push()` is O(log n), `top()` is O(1), `pop
 1. The LDS WPQ holds 1000 pending tasks. A new task arrives. How many comparisons does the heap perform to insert it?
 2. An interviewer asks you to find if a value exists in a sorted vector. What's your approach and complexity? What if the vector is unsorted?
 3. Two solutions: one does two O(n) passes over the data, one does one O(n log n) pass. Which is faster? Does it depend on n?
+
+## Connections
+
+**Theory:** [[Core/Theory/Algorithms/Big-O and Complexity]]  
+**Mental Models:** [[Data Structures — The Machine]], [[STL Containers — The Machine]]  
+**LDS Implementation:** [[LDS/Infrastructure/Utilities Framework]] — WPQ heap: push O(log n), top O(1); [[LDS/Infrastructure/Reactor]] — unordered_map O(1) fd→handler lookup  
+**Glossary:** [[WPQ]]

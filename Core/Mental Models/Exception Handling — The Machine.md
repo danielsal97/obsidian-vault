@@ -68,3 +68,10 @@ NBDDriverComm(NBDDriverComm&& o) noexcept : m_fd(o.m_fd) { o.m_fd = -1; }
 1. `LocalStorage::Read` holds a `shared_lock` and throws. Does the mutex get released? Who releases it and when?
 2. A destructor in LDS throws. Simultaneously, another exception is being unwound. What happens to the LDS process?
 3. The Reactor's event loop has `catch (...)`. `LocalStorage::Read` throws. `InputMediator::Notify` doesn't catch it. What is the exception's exact path through the call stack before the Reactor catches it?
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/Exception Handling]]  
+**Mental Models:** [[RAII — The Machine]], [[Undefined Behavior — The Machine]], [[Threads and pthreads — The Machine]]  
+**LDS Implementation:** [[LDS/Application/LocalStorage]] — bounds check via out_of_range  
+**Runtime Machines:** [[LDS/Runtime Machines/Reactor — The Machine]]

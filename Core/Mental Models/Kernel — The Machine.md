@@ -58,3 +58,10 @@ The entire LDS event loop revolves around `epoll_wait` — a single syscall that
 1. LDS calls `epoll_wait(epfd, events, 64, -1)`. The timeout is -1 (infinite). What is the kernel doing while LDS waits? Is it burning CPU?
 2. `malloc(1MB)` inside LDS — does this involve a syscall? What if you call `malloc(100MB)`?
 3. Two LDS worker threads access the same `LocalStorage` object simultaneously. They have different virtual addresses for their stacks. Do they share the `LocalStorage` object's physical memory? How does the kernel enforce this?
+
+## Connections
+
+**Theory:** [[Core/Theory/Linux/Kernel]]  
+**Mental Models:** [[Processes — The Machine]], [[File Descriptors — The Machine]], [[Signals — The Machine]], [[mmap — The Machine]], [[Process Memory Layout — The Machine]]  
+**LDS Implementation:** [[LDS/Infrastructure/Reactor]] — syscall batching via epoll_wait  
+**Glossary:** [[epoll]], [[VFS]], [[socketpair]]

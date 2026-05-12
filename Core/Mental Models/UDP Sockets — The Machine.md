@@ -83,3 +83,12 @@ The interface's `SendReply` and `RecvRequest` are designed for a request-respons
 1. LDS sends a WRITE command to a minion via UDP. The minion is offline. What does `sendto` return? When does LDS discover the failure?
 2. LDS receives a UDP datagram with `recvfrom(fd, buf, 64, ...)` but the datagram was 128 bytes. What does `recvfrom` return, and what happened to the other 64 bytes?
 3. The minion receives the same WRITE command twice (duplicate due to retry). How does MSG_ID prevent the block from being written twice?
+
+## Connections
+
+**Theory:** [[Core/Theory/Networking/UDP Sockets]]  
+**Mental Models:** [[TCP Sockets — The Machine]], [[IPC Overview — The Machine]], [[Serialization — The Machine]]  
+**Tradeoffs:** [[Why UDP vs TCP]]  
+**LDS Implementation:** [[LDS/Linux Integration/BlockClient]], [[LDS/Decisions/Why UDP not TCP]]  
+**Runtime Machines:** [[LDS/Runtime Machines/TCPDriverComm — The Machine]]  
+**Glossary:** [[UDP]], [[MSG_ID]], [[Fire and Forget]], [[Exponential Backoff]]

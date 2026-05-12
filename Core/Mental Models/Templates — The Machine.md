@@ -68,3 +68,11 @@ max("a", 1);   // clear error: types don't satisfy totally_ordered
 1. You define `template<typename T> T add(T a, T b)` in a `.cpp` file and instantiate it in a different `.cpp`. What error appears and at which build station?
 2. `CallBack<Request>` and `CallBack<Response>` are two instantiations of the same template. Do they share any code in the final binary?
 3. A template function calls `a.size()`. You instantiate it with `int`. What happens and why doesn't it produce an error at template definition time?
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/Templates]]  
+**Mental Models:** [[Observer Pattern — The Machine]], [[Factory Pattern — The Machine]], [[Strategy Pattern — The Machine]], [[STL Containers — The Machine]]  
+**Tradeoffs:** [[LDS/Decisions/Why Templates not Virtual Functions]]  
+**LDS Implementation:** [[LDS/Infrastructure/Observer Pattern Internals]] — CallBack<T>; [[LDS/Infrastructure/Utilities Framework]] — WPQ template  
+**Glossary:** [[Templates]]

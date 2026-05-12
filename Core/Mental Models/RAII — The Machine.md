@@ -84,3 +84,11 @@ These `lock` objects are RAII. When `Read` returns — whether normally or via e
 1. `LocalStorage::Read` acquires a `shared_lock`. It calls a function that throws. What happens to the lock? Who releases it?
 2. You have a function that opens a file, reads data, and closes it. Rewrite it so it cannot leak the file descriptor even if an exception is thrown.
 3. The LDS ThreadPool destructor must join all worker threads before the pool is destroyed. Why is this a RAII responsibility, and what happens if you forget it?
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/RAII]]  
+**Mental Models:** [[Smart Pointers — The Machine]], [[Exception Handling — The Machine]], [[Threads and pthreads — The Machine]], [[Stack vs Heap — The Machine]]  
+**LDS Implementation:** [[LDS/Decisions/Why RAII]], [[LDS/Application/LocalStorage]] — shared_mutex RAII  
+**Runtime Machines:** [[LDS/Runtime Machines/ThreadPool and WPQ — The Machine]]  
+**Glossary:** [[RAII]], [[shared_ptr]]

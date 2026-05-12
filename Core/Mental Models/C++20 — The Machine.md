@@ -69,3 +69,10 @@ LDS is declared `-std=c++20` in the build. The ThreadPool workers currently use 
 1. LDS uses `std::atomic<bool> m_running` to stop the ThreadPool. How would `std::jthread` + `stop_token` replace this pattern?
 2. `NBDDriverComm::RecvRequest` takes `char* buf, size_t len`. Rewrite the signature using `std::span<std::byte>`. What specific bug does this prevent?
 3. LDS is compiled with `-std=c++20`. Can you use C++11 features like `std::thread` and `make_shared` in the same codebase?
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/C++20]]  
+**Mental Models:** [[Threads and pthreads — The Machine]], [[RAII — The Machine]], [[Templates — The Machine]], [[Serialization — The Machine]]  
+**LDS Implementation:** [[LDS/Infrastructure/Utilities Framework]] — jthread would replace std::thread + atomic<bool> in ThreadPool; [[LDS/Linux Integration/NBDDriverComm]] — std::span would replace (char* buf, size_t len) pairs  
+**Runtime Machines:** [[LDS/Runtime Machines/ThreadPool and WPQ — The Machine]]

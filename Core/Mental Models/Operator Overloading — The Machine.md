@@ -64,3 +64,9 @@ The WPQ stores tasks ordered by priority. To work with `std::priority_queue`, th
 1. `std::priority_queue<Task>` uses `operator<`. You want WRITE tasks at the top (highest priority). Should `operator<` return `true` when left has LOWER or HIGHER priority than right?
 2. You define `operator==` for `Request` but not `operator!=`. C++20 code writes `req1 != req2`. Does it compile? Why?
 3. `request[5]` — `Request` doesn't define `operator[]`. What is the compile error, and could you add `operator[]` to make it work for accessing the 5th byte of the serialized request?
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/Operator Overloading]]  
+**Mental Models:** [[STL Containers — The Machine]], [[Smart Pointers — The Machine]]  
+**LDS Implementation:** [[LDS/Infrastructure/Utilities Framework]] — WPQ task ordering via operator<

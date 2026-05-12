@@ -58,3 +58,10 @@ LDS currently uses TCP sockets for inter-process communication (manager ↔ mini
 1. Process A writes `42` to offset 0 of a `MAP_SHARED` region. Process B reads offset 0 one millisecond later. Is the read guaranteed to see `42`? What could go wrong?
 2. Two processes both call `mmap` with `MAP_PRIVATE` on the same file. Process A writes to offset 0. Does process B see the write? Why?
 3. The LDS manager and a local minion share a 64MB data region via `shm_open`. Both can read simultaneously. Only the manager writes. What synchronization mechanism do you need, and why is a regular `std::mutex` not sufficient?
+
+## Connections
+
+**Theory:** [[Core/Theory/Linux/Shared Memory]]  
+**Mental Models:** [[Semaphores — The Machine]], [[IPC Overview — The Machine]], [[mmap — The Machine]], [[Processes — The Machine]]  
+**LDS Implementation:** [[LDS/Architecture/Concurrency Model]] — potential optimization path  
+**Glossary:** [[pthreads]]

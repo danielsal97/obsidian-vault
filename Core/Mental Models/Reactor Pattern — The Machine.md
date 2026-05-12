@@ -75,3 +75,12 @@ When an event fires, the handler creates a task (Command object) and submits it 
 1. 500 clients are connected. 3 send requests simultaneously. `epoll_wait` returns 3 events. How many threads handle these 3 requests, and what thread does the dispatching?
 2. A handler calls `LocalStorage::Read(0, 512)` directly (not via ThreadPool). Client 2 sends a request while Read is running. What happens to client 2's request?
 3. LDS is shutting down. `m_running = false`. The Reactor is in `epoll_wait` with no events. How long does it take to notice the shutdown?
+
+## Connections
+
+**Theory:** [[Core/Theory/Design Patterns/Reactor]]  
+**Mental Models:** [[epoll — The Machine]], [[Threads and pthreads — The Machine]], [[Multithreading Patterns — The Machine]], [[Signals — The Machine]], [[File Descriptors — The Machine]]  
+**Tradeoffs:** [[Why epoll over select and poll]], [[Why ThreadPool over inline execution]]  
+**LDS Implementation:** [[LDS/Infrastructure/Reactor]], [[LDS/Infrastructure/Reactor — Component]]  
+**Runtime Machines:** [[LDS/Runtime Machines/Reactor — The Machine]]  
+**Glossary:** [[epoll]], [[pthreads]]

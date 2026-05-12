@@ -54,3 +54,9 @@ This is the linker invocation. `-shared` = produce a `.so`. At this moment, the 
 1. You add a new `.cpp` file to LDS but forget to add it to `SRC_CPP` in the Makefile. The file defines `NewService::process()`. What exact error message appears and at which build step?
 2. LDS uses `-shared` to build a `.so`. If you changed it to build a static `.a` and linked tests against it, what would change in RAM when 3 test processes run simultaneously?
 3. `IDriverComm` is a pure virtual interface. `NBDDriverComm` and `TCPDriverComm` both implement it. At link time, which one "wins"? How does the linker know which to use at runtime?
+
+## Connections
+
+**Theory:** [[Core/Theory/Build Process/4 - Linker]]  
+**Mental Models:** [[Build Process — The Machine]], [[Assembler — The Machine]], [[Processes — The Machine]]  
+**LDS Implementation:** [[LDS/DevOps/Build System]]

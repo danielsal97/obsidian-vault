@@ -59,3 +59,9 @@ When compiled with `g++ -c InputMediator.cpp`, the compiler processes the call t
 1. You compile `InputMediator.cpp` alone with `-c`. It calls `LocalStorage::Read`. The build succeeds. Why didn't the compiler complain about `LocalStorage::Read` not being defined?
 2. What does `-O2` actually do to your `for` loop that iterates over a known-size array?
 3. You add `-g` to the build flags. The binary grows. Where does the extra data go, and does it affect runtime performance?
+
+## Connections
+
+**Theory:** [[Core/Theory/Build Process/2 - Compiler]]  
+**Mental Models:** [[Build Process — The Machine]], [[Assembler — The Machine]], [[Preprocessor — The Machine]], [[Undefined Behavior — The Machine]]  
+**LDS Implementation:** [[LDS/DevOps/Build System]]

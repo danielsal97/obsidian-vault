@@ -37,7 +37,9 @@ The kernel writes `nbd_request` structs to `m_clientFd`. Our process reads from 
 
 The socketpair is local — kernel to userspace on the same machine. No TCP/IP overhead, no port binding, no network stack traversal. It behaves exactly like a socket API but goes through kernel memory.
 
-## Related
-- [[NBD Layer]] — full NBD protocol
-- [[NBD Protocol Deep Dive]] — struct layouts and handle matching
-- [[Reactor]] — epoll watches the m_serverFd end
+## Connections
+
+**Mental Models:** [[File Descriptors — The Machine]], [[IPC Overview — The Machine]], [[epoll — The Machine]]  
+**LDS Implementation:** [[NBD Layer]] — full NBD protocol; [[LDS/Linux Integration/NBDDriverComm]]; [[NBD Protocol Deep Dive]]  
+**Runtime Machines:** [[NBDDriverComm — The Machine]]  
+**Related Glossary:** [[epoll]], [[VFS]]

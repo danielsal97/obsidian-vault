@@ -51,3 +51,10 @@ The LDS WorkPriorityQueue IS a heap. Tasks have three priority levels: `WRITE > 
 1. The Reactor maps fd→handler with `unordered_map`. Why not `map`? What would change in performance and behavior?
 2. The WPQ must always serve the highest-priority task. Which property of the heap makes this O(1) instead of O(n)?
 3. A `vector` holds 1000 handler objects. You store a pointer to `handlers[500]`. Then you `push_back` a new handler. Is the pointer still valid? Why?
+
+## Connections
+
+**Theory:** [[Core/Theory/Algorithms/Data Structures]]  
+**Mental Models:** [[Big-O and Complexity — The Machine]], [[STL Containers — The Machine]]  
+**LDS Implementation:** [[LDS/Infrastructure/Reactor]] — unordered_map<fd, handler>; [[LDS/Infrastructure/Utilities Framework]] — WPQ heap  
+**Glossary:** [[WPQ]]

@@ -64,3 +64,9 @@ Tasks submitted to the WPQ are `std::function<void()>` objects. When pushing to 
 1. `std::move(driver)` is called when injecting `IDriverComm` into `InputMediator`. After the call, is `driver` still usable? What is its state?
 2. A worker task is a lambda capturing a `std::vector<char> data(1MB)`. You push it to the WPQ with `std::move(task)`. How much data is copied during the push?
 3. `LocalStorage` is stored in a `std::vector<LocalStorage>`. The vector resizes (doubles capacity). Does it copy or move each `LocalStorage`? What determines which one it uses?
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/Move Semantics]]  
+**Mental Models:** [[RAII — The Machine]], [[Smart Pointers — The Machine]], [[STL Containers — The Machine]]  
+**LDS Implementation:** [[LDS/Infrastructure/Utilities Framework]] — lambda moves into WPQ

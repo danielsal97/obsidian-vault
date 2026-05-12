@@ -78,3 +78,10 @@ v.reserve(1000);   // pre-allocate 1000 slots — push_back never reallocates be
 1. The Reactor holds 100 registered fds in `unordered_map`. An event fires on fd=47. How many comparisons does the lookup perform on average?
 2. The WPQ has 1000 pending tasks. A WRITE task arrives. How many heap swaps occur during insertion, and what is the complexity?
 3. You store pointers into a `vector<LocalStorage>`. The vector `reserve(10)` then you add 11 elements. What happens to your stored pointers?
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/STL Containers]]  
+**Mental Models:** [[Data Structures — The Machine]], [[Move Semantics — The Machine]], [[Templates — The Machine]]  
+**LDS Implementation:** [[LDS/Infrastructure/Utilities Framework]] — WPQ priority_queue; [[LDS/Infrastructure/Reactor]] — unordered_map<fd, handler>  
+**Glossary:** [[WPQ]]

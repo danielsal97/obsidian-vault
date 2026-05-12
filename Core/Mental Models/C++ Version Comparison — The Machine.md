@@ -67,3 +67,9 @@ C++23  ← ongoing
 1. An interviewer asks "what does LDS use from C++20?" What's your honest answer, and what are the concrete upgrade opportunities?
 2. You're joining a team using C++14. You want to use `std::optional`. Is it available?
 3. `std::mutex` was introduced in C++11. Before that, how did C++ programmers handle mutual exclusion?
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/C++11]], [[Core/Theory/C++/C++14]], [[Core/Theory/C++/C++17]], [[Core/Theory/C++/C++20]]  
+**Mental Models:** [[C++11 — The Machine]], [[C++14 — The Machine]], [[C++17 — The Machine]], [[C++20 — The Machine]], [[Move Semantics — The Machine]], [[Smart Pointers — The Machine]], [[Templates — The Machine]]  
+**LDS Implementation:** [[LDS/DevOps/Build System]] — -std=c++20 flag; actual LDS usage is mostly C++11/14 patterns with C++20 upgrade opportunities

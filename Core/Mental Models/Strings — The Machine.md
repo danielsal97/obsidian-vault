@@ -57,3 +57,9 @@ TCP data arrives as raw bytes. The `RecvAll` loop reads into a `char` buffer usi
 1. `char buf[16]; memcpy(buf, data, 16);` — then you pass `buf` to `strlen`. What's the result if none of the 16 bytes is `\0`?
 2. The NBD request header is 28 bytes of binary data. Why is it wrong to use `strcmp` to compare two NBD headers?
 3. `std::string` in LDS: `std::string msg = "read request";` — where is the `std::string` object? Where is the character data `"read request"`?
+
+## Connections
+
+**Theory:** [[Core/Theory/C/Strings]]  
+**Mental Models:** [[Serialization — The Machine]], [[Pointers — The Machine]], [[Stack vs Heap — The Machine]]  
+**LDS Implementation:** [[LDS/Linux Integration/TCPServer]] — binary protocol, not string-based

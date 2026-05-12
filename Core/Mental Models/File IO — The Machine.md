@@ -74,3 +74,10 @@ while (total < n) {
 1. LDS calls `recv(fd, buf, 28, 0)` to read an NBD header. The kernel has only 10 bytes ready. What does `recv` return, and what is `RecvAll`'s next action?
 2. You use `fprintf` to log every request in LDS. The process crashes. Some log entries are missing. Why, and how do you fix it?
 3. `open()` returns fd=7 for a socket. Your process spawns a child with `fork()`. The child also has fd=7. They both call `close(7)`. What happens?
+
+## Connections
+
+**Theory:** [[Core/Theory/C/File IO]]  
+**Mental Models:** [[File Descriptors — The Machine]], [[mmap — The Machine]], [[RAII — The Machine]], [[Kernel — The Machine]]  
+**LDS Implementation:** [[LDS/Linux Integration/TCPServer]] — RecvAll loop  
+**Runtime Machines:** [[LDS/Runtime Machines/TCPDriverComm — The Machine]]

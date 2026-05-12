@@ -80,3 +80,10 @@ LDS's `Logger` is a Singleton. Every component calls `Logger::getInstance().log(
 1. Two ThreadPool workers call `Logger::getInstance().log(msg)` simultaneously. Does the logger need a mutex? Why isn't the Singleton guarantee (one instance) sufficient?
 2. You want to test `InputMediator` with a mock Logger. The Logger is a Singleton. What is the problem, and how would you redesign to fix it?
 3. `Logger::getInstance()` is called from a static initializer in another translation unit. The Logger's static local hasn't been initialized yet. What happens? (hint: static initialization order fiasco)
+
+## Connections
+
+**Theory:** [[Core/Theory/Design Patterns/Singleton]]  
+**Mental Models:** [[Threads and pthreads — The Machine]], [[Smart Pointers — The Machine]], [[Memory Ordering — The Machine]]  
+**LDS Implementation:** [[LDS/Infrastructure/Singleton]], [[LDS/Infrastructure/Singleton Memory Model]]  
+**Glossary:** [[pthreads]]

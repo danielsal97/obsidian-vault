@@ -64,3 +64,11 @@ public:
 1. `InputMediator` calls `m_driver->SendReply(req)`. How many memory reads does the CPU perform before reaching the first instruction of `TCPDriverComm::SendReply`?
 2. You delete a `NBDDriverComm` via an `IDriverComm*`. `IDriverComm` has no virtual destructor. `NBDDriverComm` has `m_fd` (a socket). What leaks?
 3. You try to instantiate `IDriverComm comm;`. What happens and why?
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/Virtual Functions]]  
+**Mental Models:** [[Inheritance — The Machine]], [[Templates — The Machine]], [[Strategy Pattern — The Machine]], [[Smart Pointers — The Machine]]  
+**Tradeoffs:** [[LDS/Decisions/Why Templates not Virtual Functions]]  
+**LDS Implementation:** [[LDS/Runtime Machines/InputMediator — The Machine]] — IDriverComm vtable dispatch  
+**Glossary:** [[shared_ptr]], [[Templates]]

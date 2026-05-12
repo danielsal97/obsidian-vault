@@ -42,7 +42,8 @@ LDS registers itself as a **block driver** via the NBD kernel module. The VFS an
 
 From the VFS's perspective, `/dev/nbd0` is just another block device — identical to an SSD. The ext4 layer sends read/write block requests; the NBD driver forwards them to LDS; LDS distributes them across RPi minions.
 
-## Related
-- [[NBD Layer]] — how LDS registers as a block device
-- [[Block Device]] — what a block device is
-- [[Request Lifecycle]] — the full path from VFS to minion
+## Connections
+
+**Mental Models:** [[Kernel — The Machine]], [[File Descriptors — The Machine]], [[File IO — The Machine]]  
+**LDS Implementation:** [[NBD Layer]] — how LDS plugs into the block layer; [[Request Lifecycle]] — VFS → minion  
+**Related Glossary:** [[Block Device]], [[socketpair]], [[epoll]]

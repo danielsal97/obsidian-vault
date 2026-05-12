@@ -55,3 +55,11 @@ The NBD request and reply structs are wire-format: `nbd_request` and `nbd_reply`
 1. You receive an NBD request. `ntohl(raw.len)` returns `67108864` (64MB). The sender sent `len = 4`. What went wrong?
 2. A struct has `uint8_t a; uint32_t b;`. Without `__attribute__((packed))`, what is `sizeof(struct)`? Where did the extra bytes come from?
 3. `TCPDriverComm` sends an NBD reply. The client is on a big-endian SPARC machine. You forgot `htonl` on the error code. The client reads error code `0x01000000` instead of `0x00000001`. Describe exactly what happened at the byte level.
+
+## Connections
+
+**Theory:** [[Core/Theory/C/Serialization]]  
+**Mental Models:** [[TCP Sockets — The Machine]], [[UDP Sockets — The Machine]], [[Strings — The Machine]], [[Pointers — The Machine]], [[Bitwise Operations — The Machine]]  
+**LDS Implementation:** [[LDS/Architecture/Wire Protocol Spec]] — NBD request/reply wire format  
+**Runtime Machines:** [[LDS/Runtime Machines/NBDDriverComm — The Machine]], [[LDS/Runtime Machines/TCPDriverComm — The Machine]]  
+**Glossary:** [[MSG_ID]]

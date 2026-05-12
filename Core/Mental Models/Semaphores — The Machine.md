@@ -74,3 +74,10 @@ LDS uses `std::mutex` + `std::condition_variable` for the ThreadPool (same-proce
 1. A semaphore is initialized to 0. Thread A calls `sem_wait`. What happens? Thread B then calls `sem_post`. Now what happens?
 2. You use a binary semaphore as a mutex. Thread A calls `sem_wait` to enter a critical section, then crashes. Thread B calls `sem_wait` and blocks forever. Why does a real mutex not have this problem?
 3. LDS has a shared memory buffer shared between manager and minion. Manager writes a 512-byte block, then calls `sem_post`. Minion calls `sem_wait`, then reads. Is there a race condition? What CPU guarantee do you need?
+
+## Connections
+
+**Theory:** [[Core/Theory/Linux/Semaphores]]  
+**Mental Models:** [[Threads and pthreads — The Machine]], [[Shared Memory — The Machine]], [[Memory Ordering — The Machine]]  
+**LDS Implementation:** [[LDS/Architecture/Concurrency Model]] — future shared-memory extension  
+**Glossary:** [[pthreads]]

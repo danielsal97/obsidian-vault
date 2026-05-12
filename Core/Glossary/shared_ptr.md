@@ -53,7 +53,9 @@ WriteCommand::Execute()           ref count = 1 (cmd owns it)
 
 LDS uses `shared_ptr<DriverData>` because ownership transfers from the handler to the command and the command outlives the handler's stack frame.
 
-## Related
-- [[Why RAII]] — the broader principle
-- [[Request Lifecycle]] — how DriverData travels through the system
-- [[Command]] — the object that holds the shared_ptr
+## Connections
+
+**Theory:** [[Core/Theory/C++/Smart Pointers]]  
+**Mental Models:** [[Smart Pointers — The Machine]], [[RAII — The Machine]], [[Move Semantics — The Machine]]  
+**LDS Implementation:** [[Decisions/Why RAII]] — the broader principle; [[Request Lifecycle]] — DriverData zero-copy lifecycle  
+**Related Glossary:** [[RAII]], [[Templates]]

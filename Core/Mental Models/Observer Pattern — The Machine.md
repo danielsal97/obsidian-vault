@@ -61,3 +61,11 @@ LDS uses `ICallBack<T>` (virtual interface) and `CallBack<T>` (template concrete
 1. Three handlers are registered with `InputMediator`. A WRITE request arrives. All three are called. Handler 2 throws. Does Handler 3 execute?
 2. A handler lambda captures `[&storage]`. `storage` is a local variable that goes out of scope while the dispatcher still exists. The next `Notify` call invokes the lambda. What happens?
 3. Why does LDS use `std::function<void(T)>` instead of a virtual `IObserver` base class? What specific capability does this enable that virtual dispatch does not?
+
+## Connections
+
+**Theory:** [[Core/Theory/Design Patterns/Observer]]  
+**Mental Models:** [[Strategy Pattern — The Machine]], [[Templates — The Machine]], [[Factory Pattern — The Machine]]  
+**LDS Implementation:** [[LDS/Infrastructure/Observer Pattern Internals]], [[LDS/Decisions/Why Observer Pattern]]  
+**Runtime Machines:** [[LDS/Runtime Machines/InputMediator — The Machine]]  
+**Glossary:** [[Templates]]

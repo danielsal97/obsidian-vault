@@ -99,3 +99,9 @@ For Phase 2, `docker-compose` would spin up one manager container and N minion c
 1. You change one line in `LocalStorage.cpp`. Which Docker layers are rebuilt on `docker build`? Which are served from cache?
 2. The LDS server writes storage data to `/app/storage/` inside the container. The container is restarted. Is the data still there? What do you need to add to preserve it?
 3. Three minion containers must reach the manager container at `lds-manager:7800`. What Docker feature makes `lds-manager` a valid hostname, and what replaces the need for hardcoded IP addresses?
+
+## Connections
+
+**Theory:** [[Core/Theory/DevOps/Docker]]  
+**Mental Models:** [[Processes — The Machine]], [[File Descriptors — The Machine]], [[Networking Overview — The Machine]], [[Make and CMake — The Machine]]  
+**LDS Implementation:** [[LDS/DevOps/Build System]] — no Dockerfile yet; integration point is the Makefile and main entry binary; docker-compose would orchestrate manager + minion containers for RAID01 testing

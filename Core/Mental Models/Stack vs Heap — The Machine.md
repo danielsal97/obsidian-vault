@@ -58,3 +58,10 @@ Each worker thread in the LDS ThreadPool gets its own stack (OS-allocated at thr
 1. `LocalStorage::Read` has a local `std::string result`. Where does the `std::string` object itself live? Where does the character data inside it live?
 2. A worker thread in the ThreadPool calls a chain: `ThreadPool → WorkFunc → LocalStorage::Read → RecvAll`. How deep is the stack at `RecvAll`? What determines the maximum depth before overflow?
 3. You `new` a `LocalStorage` object and return a raw pointer from a factory function. The caller forgets to `delete` it. What specifically accumulates in which region of memory until the process dies?
+
+## Connections
+
+**Theory:** [[Core/Theory/Memory/Stack vs Heap]]  
+**Mental Models:** [[Process Memory Layout — The Machine]], [[malloc and free — The Machine]], [[RAII — The Machine]], [[Pointers — The Machine]]  
+**LDS Implementation:** [[LDS/Application/LocalStorage]] — vector heap allocation  
+**Runtime Machines:** [[LDS/Runtime Machines/LocalStorage — The Machine]]

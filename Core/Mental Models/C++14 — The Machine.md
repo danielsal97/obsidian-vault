@@ -53,3 +53,9 @@ Any `std::make_unique<ThreadPool>(...)` in LDS requires C++14. The LDS `CMakeLis
 1. C++11 has `make_shared` but not `make_unique`. What was the actual reason? (hint: it's embarrassing)
 2. Generic lambda `[](auto x) { return x * 2; }` — is this a function template? How does the compiler implement it?
 3. LDS uses `-std=c++20`. Does this mean it cannot use C++11 features? What does the standard version flag actually control?
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/C++14]]  
+**Mental Models:** [[Smart Pointers — The Machine]], [[RAII — The Machine]], [[Templates — The Machine]]  
+**LDS Implementation:** [[LDS/Infrastructure/Utilities Framework]] — make_unique for ThreadPool construction; [[LDS/DevOps/Build System]] — -std=c++20 enables all C++11–C++20 features

@@ -72,3 +72,11 @@ auto mediator = std::make_shared<InputMediator>(driver);
 1. `InputMediator` is tested with a mock `IDriverComm`. The test verifies `SendReply` is called with the correct reply. Does the test need to create a socket or open `/dev/nbd0`? Why?
 2. You add `UDPDriverComm`. Which files change, and which files do NOT change?
 3. Two threads share the same `IDriverComm` instance (via `shared_ptr`). `NBDDriverComm::SendReply` writes to a socket fd. Is this thread-safe? What makes it safe or unsafe?
+
+## Connections
+
+**Theory:** [[Core/Theory/Design Patterns/Strategy]]  
+**Mental Models:** [[Factory Pattern — The Machine]], [[Virtual Functions — The Machine]], [[Smart Pointers — The Machine]], [[Observer Pattern — The Machine]]  
+**LDS Implementation:** [[LDS/Decisions/Why Templates not Virtual Functions]]  
+**Runtime Machines:** [[LDS/Runtime Machines/InputMediator — The Machine]]  
+**Glossary:** [[shared_ptr]], [[Templates]]

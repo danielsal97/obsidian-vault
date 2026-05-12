@@ -66,3 +66,12 @@ LDS uses TCP for the client-facing interface because clients need reliable, orde
 1. A client sends a 1MB read request via TCP. IP fragments it into multiple packets. Does TCP need to reassemble them in order? Who actually does the reassembly?
 2. LDS uses UDP for minion commands (not data blocks). Why is UDP acceptable for "hey, write this block" but not for the block data itself?
 3. The LDS client connects to `127.0.0.1:7800`. The packet travels through the Ethernet layer? No — why?
+
+## Connections
+
+**Theory:** [[Core/Theory/Networking/Overview]]  
+**Mental Models:** [[TCP Sockets — The Machine]], [[UDP Sockets — The Machine]], [[IPC Overview — The Machine]], [[File Descriptors — The Machine]]  
+**Tradeoffs:** [[Why UDP vs TCP]]  
+**LDS Implementation:** [[LDS/Linux Integration/TCPServer]] — TCP for clients; [[LDS/Linux Integration/NBDDriverComm]] — kernel block device interface  
+**Runtime Machines:** [[LDS/Runtime Machines/TCPDriverComm — The Machine]], [[LDS/Runtime Machines/NBDDriverComm — The Machine]]  
+**Glossary:** [[TCP]], [[UDP]]

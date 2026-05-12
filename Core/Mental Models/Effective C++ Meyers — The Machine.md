@@ -59,3 +59,11 @@ LocalStorage& operator=(const LocalStorage& rhs) {
 1. `LocalStorage copy = existing_storage;` — if copy constructor is not `= delete`, what does the compiler-generated copy do to `m_mutex`?
 2. `NBDDriverComm::NBDDriverComm(int fd) : m_fd(fd), m_buf()` vs body assignment `m_fd = fd`. For `m_buf` (a `std::vector`), which is faster and why?
 3. You add a virtual method to `IDriverComm`. You have existing code that creates `IDriverComm` objects (not derived) and stores them by value in a vector. What breaks and why?
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/Effective C++ Meyers]]  
+**Mental Models:** [[RAII — The Machine]], [[Smart Pointers — The Machine]], [[Virtual Functions — The Machine]], [[Undefined Behavior — The Machine]], [[Preprocessor — The Machine]], [[Move Semantics — The Machine]]  
+**Tradeoffs:** [[Why RAII over manual cleanup]]  
+**LDS Implementation:** [[LDS/Application/LocalStorage]] — = delete on copy constructor/assignment; [[LDS/Linux Integration/NBDDriverComm]] — member initialization list over assignment body  
+**Glossary:** [[RAII]], [[shared_ptr]]

@@ -70,8 +70,10 @@ Templates check types at compile time. Wrong types are caught before the program
 
 → Full reasoning: [[Why Templates not Virtual Functions]]
 
-## Related
-- [[Observer]] — Dispatcher<T> and CallBack<T, Sub>
-- [[Factory]] — Factory<Base, Key, Args>
-- [[Singleton]] — Singleton<T>
-- [[Command]] — ICommand<Args, Return>
+## Connections
+
+**Theory:** [[Core/Theory/C++/Templates]]  
+**Mental Models:** [[Templates — The Machine]], [[Observer Pattern — The Machine]], [[Factory Pattern — The Machine]], [[Strategy Pattern — The Machine]]  
+**Tradeoffs:** [[LDS/Decisions/Why Templates not Virtual Functions]]  
+**LDS Implementation:** [[LDS/Infrastructure/Observer Pattern Internals]] — Dispatcher<T>; [[LDS/Infrastructure/Singleton]]  
+**Related Glossary:** [[RAII]], [[shared_ptr]]

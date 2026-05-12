@@ -54,3 +54,9 @@ Run `objdump -t services/mediator/InputMediator.o` on any LDS `.o` file to see i
 1. The `.o` file is binary. The `.s` file is text. Can you reconstruct the `.s` from the `.o`? What information is lost?
 2. Two `.cpp` files both define a `helper()` function (static, so no conflict). How does the assembler's output handle this — what prevents the linker from getting confused?
 3. `objdump -d` on an LDS `.o` shows `callq  0x0`. What is that `0x0`, and who will fix it?
+
+## Connections
+
+**Theory:** [[Core/Theory/Build Process/3 - Assembler]]  
+**Mental Models:** [[Build Process — The Machine]], [[Compiler — The Machine]], [[Linker — The Machine]], [[Process Memory Layout — The Machine]]  
+**LDS Implementation:** [[LDS/DevOps/Build System]]

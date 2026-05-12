@@ -71,3 +71,11 @@ if (auto m = observer.lock()) {
 1. `InputMediator` holds `shared_ptr<IDriverComm>`. The test also holds the same `shared_ptr`. The test goes out of scope. Is the `IDriverComm` object destroyed? Why?
 2. You have a `shared_ptr<LocalStorage>` with count=3. You call `.get()` and store the raw pointer. All three `shared_ptr`s go out of scope. `LocalStorage` is destroyed. You use the raw pointer. What happens?
 3. Why should `IDriverComm` have a virtual destructor, given that it's accessed via `shared_ptr<IDriverComm>`?
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/Smart Pointers]]  
+**Mental Models:** [[RAII — The Machine]], [[Move Semantics — The Machine]], [[Strategy Pattern — The Machine]], [[Inheritance — The Machine]]  
+**LDS Implementation:** [[LDS/Application/LocalStorage]] — shared ownership of mediator/driver  
+**Runtime Machines:** [[LDS/Runtime Machines/InputMediator — The Machine]]  
+**Glossary:** [[shared_ptr]], [[RAII]]

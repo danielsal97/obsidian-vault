@@ -109,3 +109,9 @@ Without `__attribute__((packed))`, the compiler would insert 4 bytes of padding 
 1. Given `struct S { char a; double b; char c; }`, what is `sizeof(S)` on a 64-bit system? Now reorder the fields to minimize size. What is the new `sizeof`?
 2. Why does `TCPDriverComm` use `__attribute__((packed))` on `RequestHeader` but `DriverData` has no such attribute? What breaks if you add `__attribute__((packed))` to `DriverData`?
 3. If you `memset` a packed `RequestHeader` to zero and then `ReadAll` fills it from a TCP socket, can you safely take `&header.handle` and pass it to a function expecting `uint64_t*`? Why or why not on ARM vs x86?
+
+## Connections
+
+**Theory:** [[Core/Theory/C/Serialization]] (covers wire-format structs)  
+**Mental Models:** [[Serialization — The Machine]], [[Memory Ordering — The Machine]], [[Bitwise Operations — The Machine]]  
+**LDS Implementation:** [[LDS/Architecture/Wire Protocol Spec]] — RequestHeader packed struct; [[LDS/Linux Integration/TCPServer]]

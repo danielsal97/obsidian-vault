@@ -57,7 +57,9 @@ LDS is multi-threaded. Exceptions on worker threads, plugin load failures, and n
 
 → Full reasoning: [[Why RAII]]
 
-## Related
-- [[shared_ptr]] — RAII for heap-allocated objects
-- [[Observer]] — CallBack uses RAII for observer registration
-- [[Plugin Loading Internals]] — Loader RAII for dlopen handles
+## Connections
+
+**Theory:** [[Core/Theory/C++/RAII]]  
+**Mental Models:** [[RAII — The Machine]], [[Smart Pointers — The Machine]], [[Exception Handling — The Machine]]  
+**LDS Implementation:** [[Decisions/Why RAII]] — design decision; [[Plugin Loading Internals]] — Loader RAII for dlopen  
+**Related Glossary:** [[shared_ptr]], [[Templates]]

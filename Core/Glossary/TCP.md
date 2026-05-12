@@ -27,7 +27,11 @@ TCP is the right choice when:
 - You don't want to write retry logic yourself
 - Latency tolerance is high (WAN links, user-facing services)
 
-## Related
-- [[UDP]] — what LDS uses instead
-- [[Why UDP not TCP]] — full reasoning
-- [[Scheduler]] — the retry logic that replaces TCP's built-in retransmit
+## Connections
+
+**Theory:** [[Core/Theory/Networking/Sockets TCP]]  
+**Mental Models:** [[TCP Sockets — The Machine]], [[IPC Overview — The Machine]], [[File Descriptors — The Machine]]  
+**Tradeoffs:** [[Why UDP vs TCP]]  
+**LDS Implementation:** [[LDS/Linux Integration/TCPServer]] — LDS TCP server; [[Decisions/Why TCP for Client]] — why client uses TCP  
+**Runtime Machines:** [[TCPDriverComm — The Machine]]  
+**Related Glossary:** [[UDP]], [[socketpair]]

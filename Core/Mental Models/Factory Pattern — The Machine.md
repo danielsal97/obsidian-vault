@@ -69,3 +69,11 @@ LDS's plugin system uses `dlopen`/`dlsym` as a factory. The plugin monitor watch
 1. LDS loads a plugin with `dlopen`. The plugin's `IPlugin*` is stored. Before calling `dlclose`, you delete the `IPlugin*`. Why must you delete the object BEFORE `dlclose`?
 2. The factory returns `shared_ptr<IDriverComm>`. The caller stores it. The factory goes out of scope. Is the `IDriverComm` object destroyed? Why?
 3. You add `UDPDriverComm` to LDS. With the factory pattern, which files do you need to modify? Without the factory?
+
+## Connections
+
+**Theory:** [[Core/Theory/Design Patterns/Factory]]  
+**Mental Models:** [[Strategy Pattern — The Machine]], [[Templates — The Machine]], [[Virtual Functions — The Machine]]  
+**LDS Implementation:** [[LDS/Linux Integration/Plugin Loading Internals]] — dlopen plugin factory; [[LDS/Application/Plugins]]  
+**Runtime Machines:** [[LDS/Runtime Machines/Plugin System — The Machine]]  
+**Glossary:** [[Templates]], [[shared_ptr]]

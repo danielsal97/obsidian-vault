@@ -75,3 +75,9 @@ target_link_libraries(test_lds PRIVATE lds GTest::gtest_main)
 1. You change one line in `LocalStorage.hpp`. Which `.o` files does Make recompile, and why?
 2. The Makefile uses `$(CXX) -c $< -o $@`. What are `$<` and `$@` in the context of compiling `InputMediator.cpp`?
 3. CMake `target_link_libraries(test_lds PRIVATE lds)` uses `PRIVATE`. If you changed it to `PUBLIC`, what would change for anything that links against `test_lds`?
+
+## Connections
+
+**Theory:** [[Core/Theory/Build Process/Make and CMake]]  
+**Mental Models:** [[Build Process — The Machine]], [[Compiler — The Machine]], [[Linker — The Machine]], [[Preprocessor — The Machine]]  
+**LDS Implementation:** [[LDS/DevOps/Build System]] — -MMD -MP dependency tracking, pattern rules, shared library link rule

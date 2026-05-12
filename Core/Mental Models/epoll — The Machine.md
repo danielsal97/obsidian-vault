@@ -82,3 +82,12 @@ The LDS Reactor is a direct implementation of the epoll pattern. It maintains `m
 1. LDS has 500 registered fds (multiple clients + NBD device). 3 fds have data ready. `epoll_wait` returns. How many fds does LDS scan to find the 3 ready ones?
 2. A client closes the TCP connection. `EPOLLHUP` fires. The Reactor's handler reads 0 bytes from `recv` (EOF). What must the handler do next to prevent the epoll loop from firing EPOLLHUP on every iteration forever?
 3. A handler calls `LocalStorage::Read(offset, 512MB)` — a slow operation. What happens to other fds with pending data while this runs?
+
+## Connections
+
+**Theory:** [[Core/Theory/Networking/epoll]]  
+**Mental Models:** [[Reactor Pattern — The Machine]], [[File Descriptors — The Machine]], [[TCP Sockets — The Machine]], [[Kernel — The Machine]]  
+**Tradeoffs:** [[Why epoll over select and poll]]  
+**LDS Implementation:** [[LDS/Infrastructure/Reactor]] — epoll is the core; [[LDS/Architecture/Concurrency Model]]  
+**Runtime Machines:** [[LDS/Runtime Machines/Reactor — The Machine]]  
+**Glossary:** [[epoll]], [[File Descriptors]]

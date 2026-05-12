@@ -90,3 +90,9 @@ This is the preprocessor's only defense against double-paste. Every `.cpp` that 
 1. `NBDDriverComm.cpp` includes `<linux/nbd.h>`. Mentally run the robot: what text is physically pasted, and what does the compiler then see as the definition of `struct nbd_request`?
 2. If `DriverData.hpp` had no include guard and was included by both `NBDDriverComm.cpp` and `InputMediator.cpp` during the same compilation unit, what error would the compiler report and why would it be a preprocessor bug, not a C++ bug?
 3. The Makefile's `-I` flags on line 4–19 are preprocessor search paths. If you removed `-Iservices/mediator/include`, which LDS source file would fail to compile first, and at which exact line would the robot halt?
+
+## Connections
+
+**Theory:** [[Core/Theory/Build Process/1 - Preprocessor]]  
+**Mental Models:** [[Build Process — The Machine]], [[Compiler — The Machine]], [[Templates — The Machine]]  
+**LDS Implementation:** [[LDS/DevOps/Build System]]

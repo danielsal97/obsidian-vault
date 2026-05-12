@@ -67,3 +67,10 @@ The LDS Reactor loop runs `while (m_running)`. To stop LDS gracefully (Ctrl+C), 
 1. LDS's Reactor loop is `while (m_running) { epoll_wait(...); }`. The signal handler sets `m_running = false`. Without `volatile`, what might the compiler legally do to this loop?
 2. You write `printf("got signal %d\n", sig)` inside your signal handler. Why is this dangerous? What should you use instead?
 3. `SIGKILL` is sent to the LDS process. The ThreadPool has 50 pending tasks. What happens to them?
+
+## Connections
+
+**Theory:** [[Core/Theory/Linux/Signals]]  
+**Mental Models:** [[Processes — The Machine]], [[File Descriptors — The Machine]], [[Memory Ordering — The Machine]], [[Reactor Pattern — The Machine]]  
+**LDS Implementation:** [[LDS/Infrastructure/Reactor]] — signalfd integration; [[LDS/Decisions/Why signalfd not sigaction]]  
+**Runtime Machines:** [[LDS/Runtime Machines/Reactor — The Machine]]

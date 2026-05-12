@@ -51,7 +51,10 @@ The [[Reactor]] wraps epoll. The master process runs one epoll loop on the main 
 
 When the NBD fd becomes readable, epoll wakes the main thread and dispatches to `InputMediator::HandleEvent`.
 
-## Related
-- [[Reactor]] — the design pattern wrapping epoll
-- [[Why signalfd not sigaction]] — how signals are integrated into epoll
-- [[Concurrency Model]] — how the main thread and workers divide responsibilities
+## Connections
+
+**Theory:** [[Core/Theory/Networking/epoll]]  
+**Mental Models:** [[epoll — The Machine]], [[Reactor Pattern — The Machine]], [[File Descriptors — The Machine]]  
+**Tradeoffs:** [[Why epoll over select and poll]]  
+**LDS Implementation:** [[LDS/Infrastructure/Reactor]] — wraps epoll; [[Decisions/Why signalfd not sigaction]] — signals via epoll  
+**Runtime Machines:** [[LDS/Runtime Machines/Reactor — The Machine]]

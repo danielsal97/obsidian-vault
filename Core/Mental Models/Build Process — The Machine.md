@@ -68,3 +68,9 @@ The `-Wl,-rpath,$(LIB_DIR)` bakes the search path for `libfoo-debug.so` into the
 1. The Makefile rule on line 74 uses `-c`. If you removed `-c`, what would happen and at which station would it happen?
 2. LDS links with `-Wl,-rpath,$(LIB_DIR)`. If you deleted the `.so` file after compilation but before running the binary, at which station in the pipeline does the failure occur, and why is that station different from the linker?
 3. `InputMediator.cpp` calls `m_driver->SendReply(request)` but `SendReply` is declared in `IDriverComm.hpp`. Trace the blank-slot lifecycle: which file creates the blank slot, which `.o` carries it, and which link command fills it?
+
+## Connections
+
+**Theory:** [[Core/Theory/Build Process/1 - Preprocessor]], [[Core/Theory/Build Process/2 - Compiler]], [[Core/Theory/Build Process/3 - Assembler]], [[Core/Theory/Build Process/4 - Linker]]  
+**Mental Models:** [[Preprocessor — The Machine]], [[Compiler — The Machine]], [[Assembler — The Machine]], [[Linker — The Machine]], [[Make and CMake — The Machine]]  
+**LDS Implementation:** [[LDS/DevOps/Build System]]

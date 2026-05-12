@@ -36,10 +36,10 @@ UDP packets can be lost, duplicated, or reordered. LDS handles this with:
 - **Scheduler** — detects lost packets via deadline timeout and retransmits
 - **Replica fallback** — if primary times out after retries, ReadCommand falls back to replica minion
 
-## Related
-- [[Why UDP not TCP]] — full design decision
-- [[MinionProxy]] — sends UDP packets
-- [[ResponseManager]] — receives UDP packets
-- [[Scheduler]] — handles timeouts and retries
-- [[Wire Protocol Spec]] — packet format
-- [[TCP]] — the alternative
+## Connections
+
+**Theory:** [[Core/Theory/Networking/UDP Sockets]]  
+**Mental Models:** [[UDP Sockets — The Machine]], [[IPC Overview — The Machine]]  
+**Tradeoffs:** [[Why UDP vs TCP]]  
+**LDS Implementation:** [[MinionProxy]] — sends UDP packets; [[ResponseManager]] — receives UDP packets; [[Decisions/Why UDP not TCP]]  
+**Related Glossary:** [[TCP]], [[MSG_ID]], [[Fire and Forget]], [[Exponential Backoff]]

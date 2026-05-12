@@ -65,3 +65,11 @@ The NBD block device `/dev/nbd0` is accessed via a file descriptor. LDS's `NBDDr
 1. You `mmap` a 100MB file with `MAP_SHARED`. You write to byte 50MB. Has anything been written to disk yet? What triggers the actual disk write?
 2. `malloc(10MB)` vs `mmap(MAP_ANONYMOUS, 10MB)` — both give you 10MB of memory. What is the difference in how the kernel allocates physical RAM for each?
 3. The LDS storage file is `mmap`ed by the manager process. A minion also `mmap`s the same file with `MAP_SHARED`. Manager writes block 5. Minion reads block 5. Is synchronization needed? Why?
+
+## Connections
+
+**Theory:** [[Core/Theory/Linux/mmap]]  
+**Mental Models:** [[File Descriptors — The Machine]], [[Shared Memory — The Machine]], [[Stack vs Heap — The Machine]], [[malloc and free — The Machine]]  
+**LDS Implementation:** [[LDS/Application/LocalStorage]] — potential mmap optimization for storage file  
+**Runtime Machines:** [[LDS/Runtime Machines/LocalStorage — The Machine]]  
+**Glossary:** [[VFS]]

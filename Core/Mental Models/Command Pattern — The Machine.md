@@ -71,3 +71,11 @@ LDS defines `ICommand` as a pure virtual interface with `execute()`. The `std::f
 1. The Reactor creates a WRITE command capturing `data` by value (a 512-byte vector). It creates a READ command capturing nothing. Which command is more expensive to push to the WPQ and why?
 2. LDS is shutting down. The WPQ has 10 pending commands. Should the ThreadPool execute them all before exiting, or drop them? What are the consequences of each choice?
 3. You want to add a "dry run" mode: commands are logged but not executed. How does the Command pattern make this easy to add?
+
+## Connections
+
+**Theory:** [[Core/Theory/Design Patterns/Command]]  
+**Mental Models:** [[Multithreading Patterns — The Machine]], [[Observer Pattern — The Machine]], [[Reactor Pattern — The Machine]]  
+**LDS Implementation:** [[LDS/Infrastructure/Dispatcher]]  
+**Runtime Machines:** [[LDS/Runtime Machines/Request Lifecycle — The Machine]]  
+**Glossary:** [[WPQ]], [[Templates]]

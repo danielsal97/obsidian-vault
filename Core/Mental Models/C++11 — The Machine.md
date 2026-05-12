@@ -76,3 +76,11 @@ The LDS ThreadPool uses C++11 throughout: `std::thread` for workers, `std::mutex
 1. Before C++11, how did you store a function that captures local variables? Why was it verbose?
 2. `auto task = [&storage]() { storage.Read(0, 10); }; wpq.push(task);` vs `wpq.push(std::move(task))`. What's different and why does it matter?
 3. A function is overloaded: `void send(int fd)` and `void send(void* ptr)`. You call `send(NULL)`. Which overload is called? With `nullptr`?
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/C++11]]  
+**Mental Models:** [[Move Semantics — The Machine]], [[Smart Pointers — The Machine]], [[RAII — The Machine]], [[Threads and pthreads — The Machine]], [[Templates — The Machine]]  
+**Tradeoffs:** [[Why RAII over manual cleanup]]  
+**LDS Implementation:** [[LDS/Infrastructure/Utilities Framework]] — ThreadPool uses std::thread, std::mutex, std::function lambdas throughout  
+**Runtime Machines:** [[LDS/Runtime Machines/ThreadPool and WPQ — The Machine]]

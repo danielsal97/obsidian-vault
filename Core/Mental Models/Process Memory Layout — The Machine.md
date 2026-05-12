@@ -57,3 +57,10 @@ Low address   └─────────────────────
 1. A global `std::atomic<bool> g_running = true;` in LDS — which segment is it in? What initializes it?
 2. `LocalStorage::Read` allocates a local `char buf[512]`. Where in the building does this buffer live, and when is it destroyed?
 3. Two threads in the LDS ThreadPool call `LocalStorage::Read` simultaneously. They execute the same code (`.text`). Do they share the same stack? Explain the physical layout.
+
+## Connections
+
+**Theory:** [[Core/Theory/Memory/Process Memory Layout]]  
+**Mental Models:** [[Stack vs Heap — The Machine]], [[Processes — The Machine]], [[mmap — The Machine]], [[malloc and free — The Machine]]  
+**LDS Implementation:** [[LDS/Application/LocalStorage]] — shared_mutex lives in object heap allocation  
+**Glossary:** [[VFS]]

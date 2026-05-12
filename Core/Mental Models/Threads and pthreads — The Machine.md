@@ -85,3 +85,12 @@ while (m_is_running) {
 1. LDS uses `shared_mutex` for `LocalStorage`. Two threads call `Read` simultaneously. Do they block each other? What about one `Read` and one `Write`?
 2. A worker calls `m_wpq.pop()` after releasing the mutex. Another worker sneaks in between `top()` and `pop()` and takes the same task. How does LDS prevent this?
 3. You want to stop all ThreadPool workers. You set `m_is_running = false` and call `m_cv.notify_all()`. Why is `notify_all` (not `notify_one`) required here?
+
+## Connections
+
+**Theory:** [[Core/Theory/Linux/Threads - pthreads]]  
+**Mental Models:** [[Multithreading Patterns — The Machine]], [[Memory Ordering — The Machine]], [[Semaphores — The Machine]], [[RAII — The Machine]], [[Reactor Pattern — The Machine]]  
+**Tradeoffs:** [[Why ThreadPool over inline execution]]  
+**LDS Implementation:** [[LDS/Infrastructure/ThreadPool]], [[LDS/Infrastructure/Threading Deep Dive]]  
+**Runtime Machines:** [[LDS/Runtime Machines/ThreadPool and WPQ — The Machine]]  
+**Glossary:** [[pthreads]], [[WPQ]]

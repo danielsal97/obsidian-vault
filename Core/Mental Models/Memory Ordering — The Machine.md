@@ -67,3 +67,10 @@ m_read_count.fetch_add(1, std::memory_order_relaxed);   // no ordering needed fo
 1. The Reactor uses `atomic<bool> m_running`. The signal handler sets it to `false`. Without `atomic` (plain `bool`), what two things could go wrong?
 2. Two threads: Thread A does `x = 42; flag.store(1, relaxed)`. Thread B does `if (flag.load(relaxed)) use(x)`. Is `x = 42` guaranteed visible when Thread B reads x? What ordering fixes this?
 3. LDS metrics counter `atomic<uint64_t> reads_served`. Is `seq_cst` or `relaxed` appropriate here? Why?
+
+## Connections
+
+**Theory:** [[Core/Theory/Concurrency/Memory Ordering]]  
+**Mental Models:** [[Threads and pthreads — The Machine]], [[Multithreading Patterns — The Machine]], [[Undefined Behavior — The Machine]]  
+**LDS Implementation:** [[LDS/Infrastructure/Reactor]] — `m_running` atomic; [[LDS/Architecture/Concurrency Model]]  
+**Glossary:** [[pthreads]]

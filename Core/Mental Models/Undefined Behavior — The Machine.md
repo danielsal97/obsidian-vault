@@ -57,3 +57,9 @@ The `LocalStorage::Read` function copies data to a caller-provided buffer. If th
 1. LDS sets `m_running = false` from a signal handler to stop the Reactor loop. The loop reads `m_running` without synchronization. This is a data race — UB. Why might it "work" in debug builds?
 2. You index `m_data[offset + len]` in `LocalStorage` without checking `offset + len <= m_data.size()`. This is a potential out-of-bounds access. With `-O2`, what might the compiler do if it can prove `offset + len` is always in-bounds under your assumptions?
 3. What command do you run to check LDS for UB right now?
+
+## Connections
+
+**Theory:** (cross-cutting — see C++ notes)  
+**Mental Models:** [[Type Casting — The Machine]], [[Memory Ordering — The Machine]], [[Pointers — The Machine]], [[Strings — The Machine]]  
+**LDS Implementation:** [[LDS/Debugging/Testing]] — ASan/UBSan build targets

@@ -92,3 +92,9 @@ Every call advances the sticky note. The constraint: `ptr` must always point ins
 1. You have `int arr[4] = {1,2,3,4}` and `int* p = arr + 1`. What does `*(p + 2)` return? What address does `p - 1` point to?
 2. Why does `NBDDriverComm::ReadAll` use `char*` specifically rather than `int*` or `void*` to walk through the buffer? What would break if it used `int*`?
 3. In LDS, `ReceiveRequest()` passes `void* buf = &request` to `ReadAll`. The cast to `char*` happens inside `ReadAll`. What contract does the caller guarantee about `buf`'s lifetime — and what would a dangling pointer look like here?
+
+## Connections
+
+**Theory:** [[Core/Theory/C/Pointers]]  
+**Mental Models:** [[Stack vs Heap — The Machine]], [[Process Memory Layout — The Machine]], [[Smart Pointers — The Machine]], [[Serialization — The Machine]]  
+**LDS Implementation:** [[LDS/Linux Integration/NBDDriverComm]] — ReadAll pointer-walk pattern

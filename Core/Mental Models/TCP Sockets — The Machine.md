@@ -80,3 +80,12 @@ The Reactor registers the listening socket with `EPOLLIN`. When a new connection
 1. LDS reads an NBD header with `RecvAll(fd, buf, 28)`. The first call to `recv` returns 10 bytes. What does `RecvAll` do next, and what does it pass as the buffer pointer?
 2. LDS crashes and immediately restarts. Without `SO_REUSEADDR`, `bind` fails. What kernel state causes this, and for how long?
 3. A client connects to LDS and immediately sends 1000 requests without waiting for replies. Where do these requests accumulate, and what happens when they overflow?
+
+## Connections
+
+**Theory:** [[Core/Theory/Networking/Sockets TCP]]  
+**Mental Models:** [[epoll — The Machine]], [[File Descriptors — The Machine]], [[IPC Overview — The Machine]], [[UDP Sockets — The Machine]], [[Serialization — The Machine]]  
+**Tradeoffs:** [[Why UDP vs TCP]]  
+**LDS Implementation:** [[LDS/Linux Integration/TCPServer]], [[LDS/Decisions/Why TCP for Client]]  
+**Runtime Machines:** [[LDS/Runtime Machines/TCPDriverComm — The Machine]]  
+**Glossary:** [[TCP]], [[socketpair]]

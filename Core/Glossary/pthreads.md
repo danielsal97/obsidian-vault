@@ -34,7 +34,10 @@ Total:   N + 4 threads (N = hardware_concurrency)
 
 LDS uses the C++ standard library wrappers (`std::thread`, `std::mutex`, `std::condition_variable`) rather than raw pthreads, but they compile to the same pthreads calls on Linux.
 
-## Related
-- [[Utilities Framework]] — ThreadPool + WPQ implementation
-- [[Threading Deep Dive]] — deep analysis of the concurrency model
-- [[Concurrency Model]] — how threads interact
+## Connections
+
+**Theory:** [[Core/Theory/Linux/Threads - pthreads]]  
+**Mental Models:** [[Threads and pthreads — The Machine]], [[Multithreading Patterns — The Machine]], [[Memory Ordering — The Machine]]  
+**LDS Implementation:** [[Utilities Framework]] — ThreadPool + WPQ; [[Threading Deep Dive]]; [[LDS/Architecture/Concurrency Model]]  
+**Runtime Machines:** [[ThreadPool and WPQ — The Machine]]  
+**Related Glossary:** [[WPQ]]

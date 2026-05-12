@@ -82,3 +82,9 @@ To debug the mutex deadlock in LocalStorage, run with TSan: `make tsan && ./lds_
 1. LDS crashes with SIGSEGV. You run `gdb ./lds_server core` and type `bt`. What does the output tell you, and what do you look for first?
 2. You set `b LocalStorage::Read`. The breakpoint triggers. `p offset` shows `offset = 18446744073709551615`. What does this value tell you in hex?
 3. `thread apply all bt` shows Thread 3 in `__lll_lock_wait`. What does this mean about Thread 3's state?
+
+## Connections
+
+**Theory:** [[Core/Theory/Linux/gdb Debugging]]  
+**Mental Models:** [[Processes — The Machine]], [[Stack vs Heap — The Machine]], [[Undefined Behavior — The Machine]], [[Threads and pthreads — The Machine]]  
+**LDS Implementation:** [[LDS/Debugging/Testing]], [[LDS/Debugging/Known Bugs]]

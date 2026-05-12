@@ -66,3 +66,12 @@ The LDS ThreadPool is the central execution engine. The WPQ feeds it with priori
 1. A LDS WRITE task is submitted while all 4 workers are executing READ tasks. What happens in the WPQ, and when does the WRITE task execute?
 2. The ThreadPool is being destroyed. `m_is_running = false` is set and `m_cv.notify_all()` is called. One worker is mid-task (has already popped its task and released the lock). Does it finish its task or terminate immediately?
 3. You increase the ThreadPool to 16 workers on a 4-core machine. Does performance improve? What is the limit, and what type of tasks benefit from more workers than cores?
+
+## Connections
+
+**Theory:** [[Core/Theory/Concurrency/Multithreading Patterns]]  
+**Mental Models:** [[Threads and pthreads — The Machine]], [[Memory Ordering — The Machine]], [[Reactor Pattern — The Machine]]  
+**Tradeoffs:** [[Why ThreadPool over inline execution]]  
+**LDS Implementation:** [[LDS/Infrastructure/ThreadPool]], [[LDS/Infrastructure/Utilities Framework]]  
+**Runtime Machines:** [[LDS/Runtime Machines/ThreadPool and WPQ — The Machine]]  
+**Glossary:** [[WPQ]], [[pthreads]]

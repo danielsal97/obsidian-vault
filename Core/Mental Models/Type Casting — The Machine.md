@@ -69,3 +69,9 @@ len = ntohl(len);
 1. `InputMediator` holds `IDriverComm* m_driver`. You want to call `NBDDriverComm::SetBlockDevice()`, which is not in `IDriverComm`. When should you use `dynamic_cast` vs `static_cast` here?
 2. A function takes `const Request& req` but you need to pass it to a legacy C API that takes `Request*`. Is `const_cast` safe here? What is the one condition where it's UB?
 3. Why is `*(uint32_t*)(char_buffer)` UB but `memcpy(&val, char_buffer, 4)` is not — they read the same 4 bytes?
+
+## Connections
+
+**Theory:** [[Core/Theory/C++/Type Casting]]  
+**Mental Models:** [[Inheritance — The Machine]], [[Virtual Functions — The Machine]], [[Undefined Behavior — The Machine]], [[Serialization — The Machine]]  
+**LDS Implementation:** [[LDS/Linux Integration/NBDDriverComm]] — memcpy over reinterpret_cast for protocol parsing

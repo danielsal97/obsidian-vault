@@ -46,3 +46,10 @@ free(0x1000):
 1. You call `malloc(100)`, write 105 bytes into the result, then `free` it. No immediate crash. Why might the crash appear 10 calls later in a completely unrelated `malloc`?
 2. `std::vector<char>` in `LocalStorage` doubles its capacity when it runs out of space. Trace exactly what `malloc`/`free` calls happen during that resize.
 3. `new LocalStorage()` vs `malloc(sizeof(LocalStorage))` — both allocate on the heap. What does `new` do that `malloc` does not?
+
+## Connections
+
+**Theory:** [[Core/Theory/C/Memory - malloc and free]]  
+**Mental Models:** [[Stack vs Heap — The Machine]], [[Process Memory Layout — The Machine]], [[RAII — The Machine]], [[mmap — The Machine]]  
+**LDS Implementation:** [[LDS/Application/LocalStorage]] — vector m_data buffer  
+**Runtime Machines:** [[LDS/Runtime Machines/LocalStorage — The Machine]]
