@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Strategy/00 Master Dashboard.md",
+                "file": "LDS/Start Here.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "00 Master Dashboard"
+              "title": "Start Here"
             }
           }
         ]
@@ -159,6 +159,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "markdown-importer:Open format converter": false,
       "switcher:Open quick switcher": false,
       "graph:Open graph view": false,
       "canvas:Create new canvas": false,
@@ -171,18 +172,34 @@
   "active": "688af608026e5764",
   "lastOpenFiles": [
     "Strategy/Interview Prep Track.md",
-    "Engineering/DevOps/Docker.md",
-    "Engineering/Linux/gdb Debugging.md",
-    "Engineering/Build Process/Make and CMake.md",
-    "Engineering/Algorithms/Big-O and Complexity.md",
-    "Engineering/Algorithms/Data Structures.md",
+    "LDS/Machines/00 - LDS System.md",
+    "LDS/Machines/01 - Reactor.md",
+    "LDS/Machines/08 - RAID01Manager.md",
+    "LDS/Machines/05 - NBDDriverComm.md",
+    "LDS/Machines/07 - Plugin System.md",
+    "LDS/Machines/02 - ThreadPool and WPQ.md",
+    "LDS/Machines/06 - TCPDriverComm.md",
+    "LDS/Machines/09 - Request Lifecycle.md",
+    "LDS/Machines/04 - InputMediator.md",
+    "LDS/Machines/03 - LocalStorage.md",
+    "LDS/Machines",
+    "Engineering/Machines/52 - Command Pattern.md",
+    "Engineering/Machines/32 - Inheritance.md",
+    "Engineering/Machines/48 - epoll.md",
+    "Engineering/Machines/04 - Linker.md",
+    "Engineering/Machines/54 - Strategy Pattern.md",
+    "Engineering/Machines/44 - Memory Ordering.md",
+    "Engineering/Machines/10 - Structs and Unions.md",
+    "Engineering/Machines/19 - Processes.md",
+    "Engineering/Machines/21 - Threads and pthreads.md",
+    "Engineering/Machines/35 - Type Casting.md",
+    "Engineering/Machines/40 - C++17.md",
+    "Engineering/Machines/15 - Undefined Behavior.md",
+    "Engineering/Machines/17 - Data Structures.md",
+    "Engineering/Machines/06 - Process Memory Layout.md",
+    "Engineering/Machines/38 - C++11.md",
+    "Engineering/Machines",
     "Engineering/Algorithms",
-    "Engineering/DevOps",
-    "Strategy/00 Master Dashboard.md",
-    "LDS/Manager/Job Search Plan.md",
-    "Engineering/C++/RAII.md",
-    "Engineering/C/Undefined Behavior.md",
-    "Engineering/C/Memory - malloc and free.md",
-    "Engineering/C/Bitwise Operations.md"
+    "Engineering/DevOps"
   ]
 }

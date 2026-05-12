@@ -12,8 +12,8 @@ Separate from the Learning Curriculum. This is interview-first order — what ge
 - [ ] Memorise the 3-minute LDS pitch — [[LDS/Engineering/Interview Guide]]
 - [ ] Record yourself saying it. Listen back. Is it clear to someone who doesn't know LDS?
 - [ ] CV updated with LDS bullet points — [[LDS/Manager/Job Search Plan]]
-- [ ] GitHub repo polished — README done ✅, branches clean ✅
-- [ ] gtest unit tests added (shows professional, not student)
+- [x] GitHub repo polished — README done ✅, branches clean ✅
+- [x] gtest unit tests added (shows professional, not student)
 - [ ] GitHub Actions CI — green checkmark on every commit
 
 ---
