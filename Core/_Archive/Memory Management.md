@@ -1,6 +1,6 @@
 # Memory Management
 
-*Quick reference — condensed summaries only. For full coverage with LDS tie-ins and Understanding Check Q&A, see [[Memory/Process Memory Layout]], [[Memory/Stack vs Heap]], [[Memory/Memory Errors and Tools]].*
+*Quick reference — condensed summaries only. For full coverage with LDS tie-ins and Understanding Check Q&A, see [[Memory/01 - Process Memory Layout]], [[Memory/02 - Stack vs Heap]], [[Memory/09 - Memory Errors and Tools]].*
 
 ---
 

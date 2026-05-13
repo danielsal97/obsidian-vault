@@ -85,6 +85,6 @@ To debug the mutex deadlock in LocalStorage, run with TSan: `make tsan && ./lds_
 
 ## Connections
 
-**Theory:** [[Core/Theory/Linux/gdb Debugging]]  
+**Theory:** [[Core/Theory/Linux/09 - gdb Debugging]]  
 **Mental Models:** [[Processes — The Machine]], [[Stack vs Heap — The Machine]], [[Undefined Behavior — The Machine]], [[Threads and pthreads — The Machine]]  
 **LDS Implementation:** [[LDS/Debugging/Testing]], [[LDS/Debugging/Known Bugs]]

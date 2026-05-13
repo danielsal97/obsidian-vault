@@ -68,7 +68,7 @@ The NBD block device `/dev/nbd0` is accessed via a file descriptor. LDS's `NBDDr
 
 ## Connections
 
-**Theory:** [[Core/Theory/Linux/mmap]]  
+**Theory:** [[Core/Theory/Linux/07 - mmap]]  
 **Mental Models:** [[File Descriptors — The Machine]], [[Shared Memory — The Machine]], [[Stack vs Heap — The Machine]], [[malloc and free — The Machine]]  
 **LDS Implementation:** [[LDS/Application/LocalStorage]] — potential mmap optimization for storage file  
 **Runtime Machines:** [[LDS/Runtime Machines/LocalStorage — The Machine]]  
