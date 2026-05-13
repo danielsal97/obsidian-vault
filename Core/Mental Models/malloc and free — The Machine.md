@@ -28,6 +28,42 @@ free(0x1000):
 - **Fragmentation**: after many alloc/free cycles of varying sizes, the ledger has many small free gaps that can't satisfy large requests even though total free memory is sufficient.
 - **Thread safety**: modern allocators (glibc ptmalloc, jemalloc) use per-thread arenas to reduce lock contention.
 
+## Program Lifecycle & Memory Flow
+
+`malloc` doesn't own memory — it borrows pages from the OS and subdivides them.
+
+```
+Process start:
+  brk = end of .bss    ← heap boundary initialized here, heap is EMPTY
+
+First malloc(256):
+  free-list is empty
+  → sbrk(N) or mmap(N) syscall
+  → kernel maps new virtual pages (demand-zero, no physical RAM yet)
+  → malloc carves 256B from the new arena, returns pointer
+  → on first write to that pointer: PAGE FAULT → kernel allocates physical frame
+
+Steady state:
+  malloc → searches per-thread arena → splits free block → returns pointer
+           (no syscall if free-list has a suitable block — fast path)
+
+free(p) → block returned to free-list → coalesced with neighbors
+          if region is large enough → madvise(MADV_FREE) may release pages to OS
+
+Process exit:
+  OS reclaims ALL virtual pages regardless of free/leak state
+```
+
+**Why malloc latency varies:**
+- Fast path (free-list hit): a few instructions, no syscall
+- Slow path (free-list empty): `sbrk()`/`mmap()` → kernel mode → new pages mapped
+- First write to new page: page fault → physical frame allocated
+
+**Allocator internals (glibc ptmalloc):**
+- Per-thread arenas reduce lock contention
+- Size classes: small requests go to bins with pre-sized blocks
+- Metadata stored inline before each block — overflow corrupts the heap
+
 ## Where It Breaks
 
 - **Double-free**: manager marks a used block free twice — the block appears in the free-list twice. Next `malloc` may return the same address to two callers simultaneously.

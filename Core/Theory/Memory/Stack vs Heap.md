@@ -161,3 +161,74 @@ pthread_create(&thread, &attr, fn, arg);
 
 > [!question]- What is heap fragmentation, and why does a long-running LDS storage server need to be more careful about it than a short-lived command-line tool?
 > Fragmentation occurs when freed blocks are scattered throughout the heap in sizes that don't match future allocation requests. For example, alternating allocations of 100B and 1000B objects, then freeing all the 1000B ones, leaves many 1000B holes — but a request for 1001B cannot use any of them and must grow the heap. A short-lived tool exits before fragmentation accumulates. A long-running server that processes millions of requests, each with slightly different allocation patterns, can slowly increase its RSS (resident memory) over hours or days even with no logical memory leak. Mitigations include using size-class allocators (tcmalloc, jemalloc), reusing fixed-size buffers from a pool, and avoiding many small short-lived heap allocations on hot paths.
+
+---
+
+## Program Lifecycle: When Stack and Heap Come to Exist
+
+Stack and heap are not always there — they are built during a specific pipeline.
+
+### Pipeline: Source → Running Process
+
+```
+Source (.c/.cpp)
+    ↓ compiler (clang/g++)
+Object files (.o)     ← machine code + unresolved symbol table
+    ↓ linker (ld)
+ELF executable        ← sections merged: .text, .data, .bss, .rodata
+    ↓ execve() syscall
+Kernel creates process
+    ├── maps .text (read-only, shared if same binary runs twice)
+    ├── maps .data (copy-on-write from ELF)
+    ├── zeroes .bss (not stored in ELF, kernel zero-fills)
+    ├── allocates initial stack page, sets rsp
+    └── sets brk = end of .bss (heap starts empty)
+    ↓ dynamic linker (ld.so) runs
+    └── maps shared libraries (.so), resolves GOT/PLT entries
+    ↓ calls main()
+Runtime begins
+```
+
+### Lifetime of Each Region
+
+| Region | Created | Grows | Dies |
+|---|---|---|---|
+| `.text` | load time | never | process exit |
+| `.data` | load time | never | process exit |
+| `.bss` | load time (zeroed) | never | process exit |
+| Stack | load time (initial page) | on every function call (down) | process exit |
+| Heap | load time (brk set) | on malloc → brk()/mmap() | process exit (or explicit free) |
+| Stack frame | on function call | no | on function return |
+| Heap block | on malloc() | no | on free() |
+
+### Virtual Memory and Lazy Allocation
+
+`malloc(1MB)` returns immediately — no physical RAM is allocated yet. The kernel maps virtual pages as **demand zero pages**. On first write, a page fault fires → kernel allocates a physical frame → execution resumes. This is why:
+- `malloc` is fast (just updates metadata)
+- first write to a new heap page is slower (page fault)
+- `RSS` (resident set size) grows lazily, not when malloc is called
+
+### Calling Convention (x86-64 Linux)
+
+The ABI defines exactly how stack frames are built:
+
+```
+Caller pushes: nothing for first 6 int args (rdi, rsi, rdx, rcx, r8, r9)
+               7th+ arg goes on stack
+               return address pushed by call instruction
+Callee builds: push rbp; mov rbp, rsp   (frame pointer setup)
+               sub rsp, N               (reserve locals)
+               [executes]
+               add rsp, N
+               pop rbp
+               ret                      (pop return addr → jmp)
+```
+
+Return value: `rax` (integer/pointer), `xmm0` (float/double).
+
+This is why debugging shows `rbp` chains — each frame's saved `rbp` points to the previous frame, forming the call stack you see in `gdb`'s `backtrace`.
+
+---
+
+**Mental Model:** [[Stack vs Heap — The Machine]]  
+**Related Theory:** [[Process Memory Layout]], [[Memory - malloc and free]]

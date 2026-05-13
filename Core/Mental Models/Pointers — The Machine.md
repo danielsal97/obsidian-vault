@@ -61,6 +61,40 @@ int* p;
 - **Dangling**: pointer to stack memory that has gone out of scope. Address is still written on the note, but the room belongs to someone else.
 - **`shared_ptr`**: a sticky note with a counter. The room is freed when the counter reaches zero.
 
+## Program Lifecycle & Memory Flow
+
+Every pointer value is a **virtual address**. The CPU never sees physical RAM directly — the MMU translates on every load/store.
+
+```
+*p  (dereference)
+    ↓
+CPU issues virtual address (e.g. 0x7fff1234)
+    ↓
+MMU checks TLB (cache of recent virtual→physical translations)
+    ├── TLB HIT  → physical address in ~1 cycle → cache lookup
+    └── TLB MISS → page table walk (4 levels on x86-64, ~dozens of cycles)
+                   ↓
+                   PTE found, physical frame known → TLB updated → continue
+                   PTE not present → PAGE FAULT
+                        ├── valid address (new heap/stack page) → kernel maps frame → resume
+                        └── invalid address (null, unmapped gap) → SIGSEGV
+```
+
+**What this means for pointer performance:**
+
+| Access pattern | Why | Cost |
+|---|---|---|
+| `arr[0], arr[1], arr[2]...` | Sequential, cache-friendly | ~1 cycle (L1 hit) |
+| Linked list node traversal | Scattered heap pointers, cache cold | ~100–300 cycles (cache miss) |
+| Pointer to local variable | Stack, recently accessed, L1 hot | ~1 cycle |
+| Pointer to freed memory | Page may be returned to OS | SIGSEGV or silent corruption |
+
+**Pointer lifetime vs allocation lifetime:**  
+A pointer is just 8 bytes. It outlives the object it points to if you're not careful. The allocation has a lifetime (stack frame duration, or until `free()`). The pointer has no knowledge of whether that lifetime is over — it's just an integer address.
+
+**NULL = address 0:**  
+The kernel never maps address 0. Any dereference of a null pointer hits the unmapped page → MMU raises a fault → OS sends SIGSEGV. This is a hardware guarantee, not a software one.
+
 ## Where It Breaks
 
 - **Dangling pointer**: local variable goes out of scope, pointer still used. Writes corrupt unrelated stack frames.

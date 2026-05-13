@@ -38,6 +38,117 @@ void Read() {                      void* p = malloc(1024);
 - Stack: small, fixed-size locals that die with the function
 - Heap: large data, data with dynamic size, data that must outlive the function, shared between threads
 
+## Program Lifecycle & Memory Flow
+
+Stack and heap don't just exist — they are *created* during a precise sequence. You cannot reason about memory without knowing when each region appears.
+
+### The Complete Lifecycle
+
+```
+1. SOURCE CODE        → .c / .cpp files
+2. COMPILATION        → object files (.o) — machine code + unresolved symbols
+3. LINKING            → resolves symbols, merges sections → ELF executable
+4. PROGRAM LOADING    → OS reads ELF, creates process, maps segments
+5. VIRTUAL ADDRESS SPACE CREATION
+                      → kernel sets up page tables
+6. STACK SETUP        → kernel allocates initial stack page, sets rsp
+7. HEAP INITIALIZATION → runtime sets up brk pointer (heap starts empty)
+8. RUNTIME            → function calls build stack frames, malloc grows heap
+9. DYNAMIC ALLOCATION LIFECYCLE → alloc → use → free → coalesce
+10. PROGRAM TERMINATION → OS reclaims all pages; stack/heap cease to exist
+```
+
+### ELF Segments → Virtual Address Space
+
+When the loader maps an ELF executable, each segment maps to a distinct region:
+
+```
+High Address  ┌──────────────────┐
+              │  Command-line    │  argv, envp strings
+              │  args / env      │
+              ├──────────────────┤
+              │   STACK          │  grows ↓  (per-thread)
+              │        ↓         │  exists from load time
+              ├──────────────────┤
+              │                  │
+              │   (free space)   │  unmapped — SIGSEGV if touched
+              │                  │
+              ├──────────────────┤
+              │   HEAP           │  grows ↑  (starts empty)
+              │        ↑         │  created at load time, grows via brk/mmap
+              ├──────────────────┤
+              │   .bss           │  zero-initialized globals (load time)
+              ├──────────────────┤
+              │   .data          │  initialized globals (from ELF segment)
+              ├──────────────────┤
+              │   .text          │  machine code (read-only, shared pages)
+Low Address   └──────────────────┘
+```
+
+**Which regions are created at load time:** `.text`, `.data`, `.bss`, initial stack page, brk pointer (heap base).  
+**Which regions grow at runtime:** stack (grows down on each function call), heap (grows up on `brk()`/`mmap()` calls inside `malloc`).  
+**Which memory is static:** `.text` and `.data` — size fixed at link time.  
+**Which memory is thread-local:** each thread has its own stack; heap is shared.
+
+### Compile Time vs Runtime: What Each Decides
+
+| | Compile Time | Runtime |
+|---|---|---|
+| Stack frame size | ✅ fixed by compiler | only the *allocation* (rsp -= N) happens at runtime |
+| Which heap blocks exist | ❌ unknown | determined by malloc/free calls |
+| Virtual address of .text | mostly fixed (ASLR shifts it) | loaded by kernel |
+| Stack depth | ❌ unknown | depends on call chain |
+| Object lifetimes on heap | ❌ unknown | determined by when free() is called |
+
+### Function Call → Stack Frame Anatomy
+
+Every call is a structured push:
+
+```
+call f:
+  1. push return address        ← where to resume after f returns
+  2. push caller-saved registers (calling convention)
+  3. push frame pointer (rbp)   ← optional, -fomit-frame-pointer removes it
+  4. sub rsp, N                 ← reserve space for f's locals
+  5. [f executes]
+  6. add rsp, N                 ← release locals
+  7. pop rbp
+  8. ret                        ← pop return address → jmp
+```
+
+Calling convention (System V AMD64 ABI on Linux): first 6 integer args in `rdi, rsi, rdx, rcx, r8, r9`; rest on stack. Return value in `rax`. Callee saves `rbx, rbp, r12–r15`; caller saves the rest.
+
+### Virtual Memory & the MMU
+
+Every address your program uses is **virtual**. The MMU translates it to physical RAM via page tables on every memory access:
+
+```
+Virtual address → [ Page Table Walk ] → Physical frame + offset
+                      (4KB pages)
+```
+
+If the page isn't in RAM → **page fault** → OS loads it from disk (or zero-fills it for new heap pages). This is why `malloc` can return a pointer before the physical memory exists — the OS maps it lazily.
+
+**Cache locality matters** because the CPU caches physical cache lines (64 bytes). Stack variables are adjacent in memory and accessed in order → high cache hit rate. Heap allocations may be scattered → cache misses, especially after fragmentation.
+
+### Dynamic Allocation Lifecycle
+
+```
+malloc(n)
+  → check thread-local size-class cache (tcmalloc / jemalloc fast path)
+  → if miss: search free list for block ≥ n
+  → if heap exhausted: brk() syscall grows the heap segment
+  → return pointer
+
+free(p)
+  → read hidden metadata block before p (contains size)
+  → add block to free list
+  → coalesce with adjacent free blocks
+  → if large enough: may return pages to OS via sbrk(-n) or madvise
+```
+
+**Fragmentation** accumulates when freed blocks are too small to satisfy future requests — the heap grows even though aggregate live bytes shrink. Long-running processes need size-class allocators (tcmalloc, jemalloc) or object pools to avoid this.
+
 ## Where It Breaks
 
 - **Stack overflow**: too many nested calls or too-large local array → `rsp` walks into the heap → segfault
@@ -61,7 +172,7 @@ Each worker thread in the LDS ThreadPool gets its own stack (OS-allocated at thr
 
 ## Connections
 
-**Theory:** [[Core/Theory/Memory/Stack vs Heap]]  
-**Mental Models:** [[Process Memory Layout — The Machine]], [[malloc and free — The Machine]], [[RAII — The Machine]], [[Pointers — The Machine]]  
+**Theory:** [[Core/Theory/Memory/Stack vs Heap]], [[Core/Theory/Memory/Process Memory Layout]]  
+**Mental Models:** [[Process Memory Layout — The Machine]], [[malloc and free — The Machine]], [[RAII — The Machine]], [[Pointers — The Machine]], [[Build Process — The Machine]], [[Linker — The Machine]]  
 **LDS Implementation:** [[LDS/Application/LocalStorage]] — vector heap allocation  
 **Runtime Machines:** [[LDS/Runtime Machines/LocalStorage — The Machine]]

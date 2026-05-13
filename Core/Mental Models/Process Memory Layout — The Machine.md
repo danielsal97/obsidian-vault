@@ -39,6 +39,40 @@ Low address   └─────────────────────
 - **Stack**: managed by the CPU. Each function call pushes a frame (local variables, return address, saved registers). `ret` pops it.
 - **Stack overflow**: stack grows too deep (infinite recursion) → collides with heap → segfault.
 
+## Program Lifecycle & Memory Flow
+
+The layout doesn't spring into existence — the kernel builds it during `execve()`.
+
+```
+ELF executable on disk
+    ↓ execve() syscall
+Kernel reads ELF program headers
+    ├── maps .text  → read-only, shared pages (one physical copy for all instances)
+    ├── maps .data  → copy-on-write from ELF file
+    ├── maps .bss   → demand-zero pages (NOT stored in ELF — just a size)
+    ├── creates stack region → allocates initial guard page + stack page, sets rsp
+    └── sets brk   → heap starts empty at end of .bss
+dynamic linker maps shared libraries → mmap region between heap and stack
+main() called → runtime begins, heap/stack grow from here
+```
+
+**Load time vs runtime:**
+
+| Region | At load time | At runtime |
+|---|---|---|
+| `.text` | mapped from ELF | never changes |
+| `.data` | copied from ELF | can be written |
+| `.bss` | demand-zeroed pages | can be written |
+| Stack | initial page allocated | grows DOWN on each call |
+| Heap | brk pointer set (empty) | grows UP via brk()/mmap() |
+| mmap region | shared libs mapped | grows for anonymous mmap |
+
+**Virtual vs Physical — lazy mapping:**  
+The address space is virtual. When a new heap or stack page is first touched, a **page fault** fires. The MMU finds no mapping → kernel allocates a physical 4KB frame, installs a PTE, and resumes execution transparently. `malloc(1GB)` returns instantly — the 256,000 physical frames are only allocated as pages are written.
+
+**Per-thread stacks:**  
+Each new thread gets its own stack region in the mmap area, allocated by `pthread_create`. They share `.text`, `.data`, `.bss`, and heap. Stack size default: 8MB (`ulimit -s`).
+
 ## Where It Breaks
 
 - **Segfault**: accessing an address in the unmapped gap (null dereference → address 0, always unmapped)
@@ -61,6 +95,6 @@ Low address   └─────────────────────
 ## Connections
 
 **Theory:** [[Core/Theory/Memory/Process Memory Layout]]  
-**Mental Models:** [[Stack vs Heap — The Machine]], [[Processes — The Machine]], [[mmap — The Machine]], [[malloc and free — The Machine]]  
+**Mental Models:** [[Stack vs Heap — The Machine]], [[Virtual Memory — The Machine]], [[Paging — The Machine]], [[MMU — The Machine]], [[Processes — The Machine]], [[mmap — The Machine]], [[malloc and free — The Machine]]  
 **LDS Implementation:** [[LDS/Application/LocalStorage]] — shared_mutex lives in object heap allocation  
 **Glossary:** [[VFS]]
