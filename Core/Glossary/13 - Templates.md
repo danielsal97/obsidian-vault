@@ -72,7 +72,7 @@ Templates check types at compile time. Wrong types are caught before the program
 
 ## Connections
 
-**Theory:** [[Core/Theory/C++/04 - Templates]]  
+**Theory:** [[Core/Domains/03 - C++/Theory/04 - Templates]]  
 **Mental Models:** [[Templates — The Machine]], [[Observer Pattern — The Machine]], [[Factory Pattern — The Machine]], [[Strategy Pattern — The Machine]]  
 **Tradeoffs:** [[LDS/Decisions/Why Templates not Virtual Functions]]  
 **LDS Implementation:** [[LDS/Infrastructure/Observer Pattern Internals]] — Dispatcher<T>; [[LDS/Infrastructure/Singleton]]  

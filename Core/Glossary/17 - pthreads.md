@@ -36,7 +36,7 @@ LDS uses the C++ standard library wrappers (`std::thread`, `std::mutex`, `std::c
 
 ## Connections
 
-**Theory:** [[Core/Theory/Linux/04 - Threads - pthreads]]  
+**Theory:** [[Core/Domains/04 - Linux/Theory/04 - Threads - pthreads]]  
 **Mental Models:** [[Threads and pthreads — The Machine]], [[Multithreading Patterns — The Machine]], [[Memory Ordering — The Machine]]  
 **LDS Implementation:** [[Utilities Framework]] — ThreadPool + WPQ; [[Threading Deep Dive]]; [[LDS/Architecture/Concurrency Model]]  
 **Runtime Machines:** [[ThreadPool and WPQ — The Machine]]  

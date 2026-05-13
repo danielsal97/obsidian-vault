@@ -55,7 +55,7 @@ LDS uses `shared_ptr<DriverData>` because ownership transfers from the handler t
 
 ## Connections
 
-**Theory:** [[Core/Theory/C++/02 - Smart Pointers]]  
+**Theory:** [[Core/Domains/03 - C++/Theory/02 - Smart Pointers]]  
 **Mental Models:** [[Smart Pointers — The Machine]], [[RAII — The Machine]], [[Move Semantics — The Machine]]  
 **LDS Implementation:** [[Decisions/Why RAII]] — the broader principle; [[Request Lifecycle]] — DriverData zero-copy lifecycle  
 **Related Glossary:** [[RAII]], [[Templates]]

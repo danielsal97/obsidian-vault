@@ -1,54 +1,58 @@
 # Interview Preparation
 
-Everything you need to prepare for systems engineering interviews.
+Systems engineering interviews test whether you can **explain what the machine is doing** — not whether you can recite the API.
 
 ---
 
 ## Step 1 — Know the theory cold
 
-Work through [[Learn Systems Engineering]] in order.
+Work through [[01 - Learn Systems Engineering]] in order.
 When you can explain every layer without notes, move to Step 2.
 
 ---
 
 ## Step 2 — Build runtime intuition
 
-Work through [[Build Runtime Intuition]].
-You need to be able to describe what happens at runtime, not just recite APIs.
+Work through [[02 - Build Runtime Intuition]].
+The difference between a good candidate and a great one: "RAII means the destructor cleans up" vs "when this `unique_ptr` goes out of scope, the stack unwinds, the destructor fires, and the file descriptor is closed — even if an exception was thrown."
 
 ---
 
 ## Step 3 — Answer interview questions
 
-These Q&A notes are interview-format: question → concise answer.
+These Q&A files are interview-format: question → concise answer. Cover them until the answers are automatic.
 
-→ [[../Tracks/Interview Preparation/01 - C++ Language Q&A]]
+→ [[../Domains/03 - C++/Interview/01 - C++ Language Q&A]]
 — RAII, move semantics, vtables, templates, smart pointers, Rule of Five, noexcept
 
-→ [[../Tracks/Interview Preparation/02 - Concurrency Q&A]]
+→ [[../Domains/05 - Concurrency/Interview/01 - Concurrency Q&A]]
 — mutex, race conditions, deadlock, condition variables, atomic, memory ordering
 
-→ [[../Tracks/Interview Preparation/03 - Linux and Networking Q&A]]
+→ [[../Domains/06 - Networking/Interview/01 - Linux and Networking Q&A]]
 — fork/exec, signals, epoll, TCP sockets, byte ordering, file descriptors
 
-→ [[../Tracks/Interview Preparation/04 - Data Structures Q&A]]
+→ [[../Domains/08 - Algorithms/Interview/01 - Data Structures Q&A]]
 — Big-O, heap/priority queue, hash table, trie, system design
 
 ---
 
-## Step 4 — Practice explaining the LDS project
+## Step 4 — Know the tradeoffs
 
-→ LDS/Interview/Interview Guide — 3-minute pitch, cold Q&A, bugs to mention honestly
-→ LDS/Interview/main() Wiring Explained — how to walk through the wiring from memory
+Interviewers ask "why" questions constantly. "Why epoll?" "Why UDP?" "Why a thread pool?"
+
+→ [[03 - Study Tradeoffs]] — generic engineering tradeoffs with full context
+→ LDS/Decisions/ — LDS-specific decisions with full rationale (use when explaining the project)
 
 ---
 
-## Step 5 — Study tradeoffs
+## Step 5 — Practice explaining the LDS project
 
-Interviewers ask "why" questions constantly.
+The project is the anchor for every abstract concept you know.
 
-→ [[Study Tradeoffs]] — generic engineering tradeoffs
-→ LDS/Decisions/ — LDS-specific decisions with full rationale
+→ LDS/Interview/01 - Interview Guide — 3-minute pitch, cold Q&A, bugs to mention honestly
+→ LDS/Interview/02 - main() Wiring Explained — how to walk through the wiring from memory
+
+The pattern: interviewers ask about epoll → explain the Reactor in LDS → show you know both the pattern and a real implementation.
 
 ---
 
