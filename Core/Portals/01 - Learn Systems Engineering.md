@@ -58,9 +58,9 @@ C++ adds automatic resource lifetime management on top of C's manual model. This
 → [[../Domains/03 - C++/Theory/04 - Templates]] — function/class templates, specialization, SFINAE
 → [[../Domains/03 - C++/Theory/09 - Exception Handling]] — throw/catch, exception safety levels, noexcept
 
-Runtime payoff: after this layer, you can explain what happens in memory when `unique_ptr<Foo> p = std::move(q)` executes.
+Runtime payoff: after this layer, you can explain what happens in memory when `unique_ptr<Foo> p = std::move(q)` executes, why noexcept matters on move constructors, and what the CPU executes for `base->virtualMethod()`.
 
-Mental models: [[../Domains/03 - C++/Mental Models/01 - RAII — The Machine]] → [[../Domains/03 - C++/Mental Models/02 - Smart Pointers — The Machine]] → [[../Domains/03 - C++/Mental Models/03 - Move Semantics — The Machine]]
+Mental models: [[../Domains/03 - C++/Mental Models/01 - RAII — The Machine]] → [[../Domains/03 - C++/Mental Models/02 - Smart Pointers — The Machine]] → [[../Domains/03 - C++/Mental Models/22 - shared_ptr — The Machine]] → [[../Domains/03 - C++/Mental Models/21 - Move Semantics — The Machine (deep)]] → [[../Domains/03 - C++/Mental Models/18 - VTables — The Machine]] → [[../Domains/03 - C++/Mental Models/17 - std::vector — The Machine]] → [[../Domains/03 - C++/Mental Models/20 - Exception Unwinding — The Machine]]
 
 ---
 
@@ -75,9 +75,9 @@ A process doesn't run in isolation. It interacts with the kernel constantly. Thi
 → [[../Domains/04 - Linux/Theory/06 - Semaphores]] — counting semaphore, sem_wait/post, producer/consumer
 → [[../Domains/04 - Linux/Theory/07 - mmap]] — file-backed vs anonymous mapping, MAP_PRIVATE vs MAP_SHARED
 
-Runtime payoff: after this layer, you can explain the entire process model and why SIGPIPE kills a process writing to a closed socket.
+Runtime payoff: after this layer, you can explain the entire process model, why SIGPIPE kills a process writing to a closed socket, and what happens on every timer interrupt.
 
-Mental models: [[../Domains/04 - Linux/Mental Models/01 - Processes — The Machine]] → [[../Domains/04 - Linux/Mental Models/02 - File Descriptors — The Machine]] → [[../Domains/04 - Linux/Mental Models/04 - Threads and pthreads — The Machine]]
+Mental models: [[../Domains/04 - Linux/Mental Models/01 - Processes — The Machine]] → [[../Domains/04 - Linux/Mental Models/02 - File Descriptors — The Machine]] → [[../Domains/04 - Linux/Mental Models/04 - Threads and pthreads — The Machine]] → [[../Domains/04 - Linux/Mental Models/10 - Context Switch — The Machine]] → [[../Domains/04 - Linux/Mental Models/11 - Scheduler — The Machine]]
 
 ---
 
@@ -114,6 +114,6 @@ Multiple threads operate on shared state. This layer covers the models that prev
 → [[../Domains/05 - Concurrency/Theory/01 - Multithreading Patterns]] — thread pool, producer/consumer WPQ, futures
 → [[../Domains/05 - Concurrency/Theory/02 - Memory Ordering]] — happens-before, acquire/release, CAS, memory barriers
 
-Runtime payoff: after this layer, you can explain why `std::atomic<bool>` with `memory_order_relaxed` is NOT safe for synchronizing two threads.
+Runtime payoff: after this layer, you can explain why `std::atomic<bool>` with `memory_order_relaxed` is NOT safe for synchronizing two threads, and why two threads incrementing adjacent counters can be 100x slower than expected.
 
-Mental models: [[../Domains/05 - Concurrency/Mental Models/01 - Multithreading Patterns — The Machine]] → [[../Domains/05 - Concurrency/Mental Models/02 - Memory Ordering — The Machine]]
+Mental models: [[../Domains/05 - Concurrency/Mental Models/01 - Multithreading Patterns — The Machine]] → [[../Domains/05 - Concurrency/Mental Models/02 - Memory Ordering — The Machine]] → [[../Domains/05 - Concurrency/Mental Models/04 - Atomics — The Machine]] → [[../Domains/05 - Concurrency/Mental Models/03 - False Sharing — The Machine]]

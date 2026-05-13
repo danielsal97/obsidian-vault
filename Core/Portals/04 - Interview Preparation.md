@@ -28,8 +28,11 @@ These Q&A files are interview-format: question → concise answer. Cover them un
 → [[../Domains/05 - Concurrency/Interview/01 - Concurrency Q&A]]
 — mutex, race conditions, deadlock, condition variables, atomic, memory ordering
 
-→ [[../Domains/06 - Networking/Interview/01 - Linux and Networking Q&A]]
-— fork/exec, signals, epoll, TCP sockets, byte ordering, file descriptors
+→ [[../Domains/04 - Linux/Interview/01 - Linux Q&A]]
+— fork/exec, signals, file descriptors, mmap, inotify
+
+→ [[../Domains/06 - Networking/Interview/01 - Networking Q&A]]
+— epoll vs select, TCP sockets, TCP framing, byte ordering, UDP vs TCP
 
 → [[../Domains/08 - Algorithms/Interview/01 - Data Structures Q&A]]
 — Big-O, heap/priority queue, hash table, trie, system design

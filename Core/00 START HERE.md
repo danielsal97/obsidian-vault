@@ -22,6 +22,8 @@ Not APIs. Not definitions. What happens, step by step, while a process is runnin
 
 ### What happens when a thread starts?
 → [[Domains/04 - Linux/Theory/04 - Threads - pthreads]] — clone(), stack allocation, kernel scheduling
+→ [[Domains/04 - Linux/Mental Models/10 - Context Switch — The Machine]] — timer interrupt → save registers → scheduler picks next → load new state
+→ [[Domains/04 - Linux/Mental Models/11 - Scheduler — The Machine]] — CFS red-black tree, vruntime, TIF_NEED_RESCHED preemption
 → [[Domains/05 - Concurrency/Theory/01 - Multithreading Patterns]] — thread pool, work queue
 → [[Domains/05 - Concurrency/Theory/02 - Memory Ordering]] — what "visible to another thread" actually means
 → [[Runtime Machines/Concurrency Runtime — The Machine]] — spawn → mutex contention → wake cycle
@@ -37,9 +39,26 @@ Not APIs. Not definitions. What happens, step by step, while a process is runnin
 → [[Domains/06 - Networking/Theory/01 - Overview]] — the full networking stack picture
 → [[Domains/06 - Networking/Mental Models/03 - UDP Sockets — The Machine]]
 
+### What happens when a `std::vector` reallocates?
+→ [[Domains/03 - C++/Mental Models/17 - std::vector — The Machine]] — 2x growth, move_if_noexcept, iterator invalidation
+→ [[Domains/03 - C++/Mental Models/21 - Move Semantics — The Machine (deep)]] — why noexcept on move matters here
+→ [[Domains/01 - Memory/Mental Models/09 - Cache Hierarchy — The Machine (deep)]] — why sequential vector beats linked list 100x
+
+### What happens when two threads share a struct?
+→ [[Domains/05 - Concurrency/Mental Models/03 - False Sharing — The Machine]] — MESI protocol, 64-byte cache line fights
+→ [[Domains/05 - Concurrency/Mental Models/04 - Atomics — The Machine]] — lock xadd, acquire/release, CAS
+→ [[Domains/05 - Concurrency/Mental Models/02 - Memory Ordering — The Machine]] — what the CPU is allowed to reorder
+
+### What happens when an exception is thrown?
+→ [[Domains/03 - C++/Mental Models/20 - Exception Unwinding — The Machine]] — .eh_frame, __cxa_throw, destructor calls per frame
+→ [[Domains/03 - C++/Mental Models/23 - Copy Elision — The Machine]] — why `return std::move(x)` is wrong (disables NRVO)
+→ [[Domains/03 - C++/Mental Models/01 - RAII — The Machine]] — why destructors run during unwind
+
 ### What happens at end of scope (RAII)?
 → [[Domains/03 - C++/Theory/01 - RAII]] — destructor timing, stack unwinding
 → [[Domains/03 - C++/Theory/02 - Smart Pointers]] — unique_ptr/shared_ptr destruction
+→ [[Domains/03 - C++/Mental Models/22 - shared_ptr — The Machine]] — control block, atomic ref count, weak_ptr cycle breaking
+→ [[Domains/03 - C++/Mental Models/25 - weak_ptr — The Machine]] — non-owning observer, lock() CAS, expired() race
 → [[Runtime Machines/C++ Object Lifetime — The Machine]] — ctor → use → dtor, live
 
 ---
@@ -70,9 +89,9 @@ Not APIs. Not definitions. What happens, step by step, while a process is runnin
 → **[[Domains/00 - Build Process]]** — preprocessor · compiler · assembler · linker · make
 → **[[Domains/01 - Memory]]** — layout · heap · virtual memory · paging · MMU · TLB · cache
 → **[[Domains/02 - C]]** — pointers · malloc · strings · structs · file IO · bitwise · serialization
-→ **[[Domains/03 - C++]]** — RAII · smart ptrs · move · templates · vtables · STL · versions
-→ **[[Domains/04 - Linux]]** — processes · fds · signals · threads · shared mem · mmap · kernel · gdb
-→ **[[Domains/05 - Concurrency]]** — threading patterns · memory ordering · thread pool
+→ **[[Domains/03 - C++]]** — RAII · smart ptrs · move · vtables · object layout · exception unwinding · STL · allocators · versions
+→ **[[Domains/04 - Linux]]** — processes · fds · signals · threads · context switch · scheduler · mmap · kernel · gdb
+→ **[[Domains/05 - Concurrency]]** — threading patterns · memory ordering · false sharing · atomics
 → **[[Domains/06 - Networking]]** — sockets · TCP · UDP · epoll · IPC · tradeoffs
 → **[[Domains/07 - Design Patterns]]** — Reactor · Observer · Singleton · Factory · Command · Strategy
 → **[[Domains/08 - Algorithms]]** — data structures · Big-O
