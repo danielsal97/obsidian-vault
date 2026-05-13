@@ -12,7 +12,8 @@ Not APIs. Not definitions. What happens, step by step, while a process is runnin
 → [[Domains/00 - Build Process/Theory/04 - Linker]] — how the binary was assembled from .o files
 → [[Domains/04 - Linux/Theory/01 - Processes]] — exec(), fork(), process image loaded by kernel
 → [[Domains/01 - Memory/Theory/01 - Process Memory Layout]] — where text/data/BSS/heap/stack land in virtual memory
-**→ See it all connected:** [[Runtime Machines/Program Startup — The Machine]] — exec() → ELF loader → dynamic linker → .init_array → main()
+**→ See it all connected:** [[Runtime Machines/Fork and Exec — The Machine]] — fork() CoW → exec() ELF → dynamic linker → .init_array → main()
+**→ Or just the startup detail:** [[Runtime Machines/Program Startup — The Machine]] — exec() → ELF loader → dynamic linker → main()
 
 ---
 
@@ -23,6 +24,7 @@ Not APIs. Not definitions. What happens, step by step, while a process is runnin
 → [[Domains/03 - C++/Mental Models/24 - Allocators — The Machine]] — ptmalloc2 free bins, arena/pool/tcmalloc patterns
 → [[Domains/01 - Memory/Mental Models/10 - Allocators and Memory Pools — The Machine]] — chunk layout, fragmentation, multi-threaded arenas
 **→ See it all connected:** [[Runtime Machines/Memory System — The Machine]] — malloc → brk/mmap → page fault → TLB miss → cache miss
+**→ The page fault in detail:** [[Runtime Machines/Page Fault — The Machine]] — #PF handler → allocate physical page → TLB fill → resume
 
 ---
 
@@ -30,7 +32,8 @@ Not APIs. Not definitions. What happens, step by step, while a process is runnin
 → [[Domains/03 - C++/Mental Models/18 - VTables — The Machine]] — vptr at offset 0, vtable in .rodata, three-instruction dispatch
 → [[Domains/03 - C++/Mental Models/19 - Object Layout — The Machine]] — struct padding, EBO, multiple inheritance pointer adjustment
 → [[Domains/01 - Memory/Mental Models/09 - Cache Hierarchy — The Machine (deep)]] — vtable in .rodata, cache miss on cold indirect call
-**→ See it all connected:** [[Runtime Machines/C++ Object Lifetime — The Machine]] — construction sets vptr, dispatch fires at each call, destruction resets it
+**→ See it all connected:** [[Runtime Machines/Virtual Dispatch — The Machine]] — construction sets vptr, three-instruction dispatch, cold miss, devirtualization
+**→ Full object story:** [[Runtime Machines/C++ Object Lifetime — The Machine]] — ctor → vptr → use → exception → dtor
 
 ---
 
@@ -111,12 +114,18 @@ Not APIs. Not definitions. What happens, step by step, while a process is runnin
 
 ## Runtime Machines (all entry points)
 
-→ [[Runtime Machines/Linux Runtime — The Machine]] — how Linux runs a process end to end
-→ [[Runtime Machines/Program Startup — The Machine]] — exec() → constructors → main()
-→ [[Runtime Machines/Memory System — The Machine]] — malloc → page fault → cache hierarchy
-→ [[Runtime Machines/Networking Stack — The Machine]] — NIC → packet → fd → epoll → handler
-→ [[Runtime Machines/Concurrency Runtime — The Machine]] — thread spawn → mutex → wakeup
-→ [[Runtime Machines/C++ Object Lifetime — The Machine]] — ctor → move → exception → dtor
+**Start here to see how everything connects:**
+→ [[Runtime Machines/Linux Runtime — The Machine]] — the map: all 6 subsystems (memory, MMU, scheduler, threads, fds, networking) and how they interact
+
+**Zoom in on a subsystem:**
+→ [[Runtime Machines/Fork and Exec — The Machine]] — fork() CoW page tables → exec() ELF load → dynamic linker → main()
+→ [[Runtime Machines/Program Startup — The Machine]] — exec() → constructors → main() (detailed linker path)
+→ [[Runtime Machines/Page Fault — The Machine]] — #PF handler → demand paging → CoW → file-backed → stack growth
+→ [[Runtime Machines/Memory System — The Machine]] — malloc → brk/mmap → page fault → TLB miss → cache miss
+→ [[Runtime Machines/Networking Stack — The Machine]] — NIC DMA → softirq → socket lookup → epoll → handler
+→ [[Runtime Machines/Concurrency Runtime — The Machine]] — thread spawn → futex fast path → mutex contention → wakeup
+→ [[Runtime Machines/Virtual Dispatch — The Machine]] — vptr → vtable → indirect call, cold miss, devirtualization
+→ [[Runtime Machines/C++ Object Lifetime — The Machine]] — ctor sets vptr → use → exception unwind → dtor
 → [[Runtime Machines/Request Lifecycle — The Machine]] — LDS: NBD → Reactor → RAID → UDP reply
 
 ---
