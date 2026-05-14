@@ -92,6 +92,6 @@ auto& [key, handler] = *m_handlers.find(fd);
 
 ## Connections
 
-**Theory:** [[Core/Domains/03 - C++/Theory/C++17]]  
+**Theory:** [[../Theory/Versions/03 - C++17]]  
 **Mental Models:** [[Templates — The Machine]], [[STL Containers — The Machine]], [[Undefined Behavior — The Machine]], [[Serialization — The Machine]]  
 **LDS Implementation:** [[LDS/Infrastructure/Reactor]] — structured bindings for fd→handler iteration; [[LDS/Application/LocalStorage]] — string_view for zero-allocation log messages

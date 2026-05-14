@@ -161,6 +161,6 @@ The scheduler timer fires while thread A is executing. Thread B gets the CPU. Wh
 ## LDS runtime machines → LDS vault
 
 See how these patterns execute inside a real C++ system:
-→ [[../../../LDS/Runtime Machines/01 - LDS System — The Machine]]
-→ [[../../../LDS/Runtime Machines/03 - Reactor — The Machine]]
-→ [[../../../LDS/Runtime Machines/02 - Request Lifecycle — The Machine]]
+→ [[../../LDS/Runtime Machines/01 - LDS System — The Machine]]
+→ [[../../LDS/Runtime Machines/03 - Reactor — The Machine]]
+→ [[../../LDS/Runtime Machines/02 - Request Lifecycle — The Machine]]

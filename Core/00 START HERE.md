@@ -1,8 +1,64 @@
-# 00 START HERE — Core Systems Engineering
+# Core — Systems Engineering
 
-The central question: **how does a Linux system actually live and execute?**
+> How does a Linux system actually live and execute? This vault maps the full stack from hardware to user-space — organized by layer. Every domain has Theory (the what/why) and Mental Models (the machine: step-by-step execution). Runtime Machines cross-cut all layers to show how concepts combine at runtime.
 
-Not APIs. Not definitions. What happens, step by step, while a process is running.
+---
+
+## Layers (bottom → top)
+
+**Layer 0 — Hardware**
+→ [[Domains/01 - Memory/Mental Models/09 - Cache Hierarchy — The Machine (deep)|Cache Hierarchy]] — L1/L2/L3, cache lines, MESI protocol
+
+**Layer 1 — Memory**
+→ [[Domains/01 - Memory|Memory]] — virtual memory · paging · MMU · TLB · heap · allocators · page fault
+
+**Layer 2 — Linux**
+→ [[Domains/04 - Linux|Linux]] — processes · file descriptors · signals · threads · context switch · scheduler · mmap
+
+**Layer 3 — Languages**
+→ [[Domains/02 - C|C]] — pointers · malloc · strings · structs · serialization
+→ [[Domains/03 - C++|C++]] — RAII · smart ptrs · move · vtables · exceptions · STL · allocators
+
+**Layer 4 — Concurrency**
+→ [[Domains/05 - Concurrency|Concurrency]] — thread patterns · memory ordering · atomics · false sharing
+
+**Layer 5 — Networking**
+→ [[Domains/06 - Networking|Networking]] — sockets · TCP · UDP · epoll · IPC
+
+**Layer 6 — Design Patterns**
+→ [[Domains/07 - Design Patterns|Design Patterns]] — Reactor · Observer · Singleton · Factory · Command · Strategy
+
+**Layer 7 — Systems**
+→ [[Domains/00 - Build Process|Build Process]] — preprocessor · compiler · assembler · linker · make
+→ [[Domains/09 - DevOps|DevOps]] — Docker
+
+---
+
+## Runtime Machines — Synthesis
+
+These cross all layers. Start here to see how concepts connect at runtime:
+
+| Machine | What it synthesizes |
+|---|---|
+| [[Runtime Machines/Linux Runtime — The Machine\|Linux Runtime]] | All 6 kernel subsystems in one map |
+| [[Runtime Machines/Fork and Exec — The Machine\|Fork and Exec]] | fork() CoW → exec() ELF → dynamic linker → main() |
+| [[Runtime Machines/Program Startup — The Machine\|Program Startup]] | exec() → constructors → main() (detailed linker path) |
+| [[Runtime Machines/Page Fault — The Machine\|Page Fault]] | #PF handler → demand paging → CoW → stack growth |
+| [[Runtime Machines/Memory System — The Machine\|Memory System]] | malloc → brk/mmap → page fault → TLB → cache |
+| [[Runtime Machines/Concurrency Runtime — The Machine\|Concurrency Runtime]] | thread spawn → futex fast path → mutex contention → wakeup |
+| [[Runtime Machines/Networking Stack — The Machine\|Networking Stack]] | NIC DMA → softirq → socket → epoll → handler |
+| [[Runtime Machines/Virtual Dispatch — The Machine\|Virtual Dispatch]] | vptr → vtable → indirect call, cold miss, devirtualization |
+| [[Runtime Machines/C++ Object Lifetime — The Machine\|C++ Object Lifetime]] | ctor sets vptr → use → exception unwind → dtor |
+| [[Runtime Machines/Request Lifecycle — The Machine\|Request Lifecycle]] | LDS end-to-end: NBD → Reactor → RAID → UDP reply |
+
+---
+
+## Guided paths
+
+→ [[Portals/01 - Learn Systems Engineering]] — full layered curriculum, bottom to top
+→ [[Portals/02 - Build Runtime Intuition]] — execution stories for every component
+→ [[Portals/03 - Study Tradeoffs]] — why each design decision was made
+→ [[Portals/04 - Interview Preparation]] — interview-ready in sequence
 
 ---
 

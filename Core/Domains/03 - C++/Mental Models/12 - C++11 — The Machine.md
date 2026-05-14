@@ -79,7 +79,7 @@ The LDS ThreadPool uses C++11 throughout: `std::thread` for workers, `std::mutex
 
 ## Connections
 
-**Theory:** [[Core/Domains/03 - C++/Theory/C++11]]  
+**Theory:** [[../Theory/Versions/01 - C++11]]  
 **Mental Models:** [[Move Semantics — The Machine]], [[Smart Pointers — The Machine]], [[RAII — The Machine]], [[Threads and pthreads — The Machine]], [[Templates — The Machine]]  
 **Tradeoffs:** [[Why RAII over manual cleanup]]  
 **LDS Implementation:** [[LDS/Infrastructure/Utilities Framework]] — ThreadPool uses std::thread, std::mutex, std::function lambdas throughout  

@@ -9,9 +9,9 @@ Separate from the Learning Curriculum. This is interview-first order — what ge
 ## Stage 0 — Before You Send a Single Application
 *Takes 1–2 days. Do this once.*
 
-- [ ] Memorise the 3-minute LDS pitch — [[LDS/Engineering/Interview Guide]]
+- [ ] Memorise the 3-minute LDS pitch — [[../../LDS/Interview/01 - Interview Guide]]
 - [ ] Record yourself saying it. Listen back. Is it clear to someone who doesn't know LDS?
-- [ ] CV updated with LDS bullet points — [[LDS/Manager/Job Search Plan]]
+- [ ] CV updated with LDS bullet points — [[../../LDS/Roadmap/11 - Job Search Plan]]
 - [x] GitHub repo polished — README done ✅, branches clean ✅
 - [x] gtest unit tests added (shows professional, not student)
 - [ ] GitHub Actions CI — green checkmark on every commit
@@ -25,7 +25,7 @@ This is a pitch + background conversation. No coding yet.
 
 **What you need ready:**
 - [ ] LDS pitch — 3 minutes, hits: epoll, RAID01, TCP, UDP, async, plugin system, C++20
-- [ ] One technical challenge story — pick from [[LDS/Engineering/Known Bugs]]
+- [ ] One technical challenge story — pick from [[../../LDS/Debugging/03 - Known Bugs]]
   - Format: "I noticed X → I traced it to Y → I fixed it by Z"
 - [ ] Why you want this specific company/role — research it before each call
 - [ ] Salary expectations — know your number
@@ -42,7 +42,7 @@ This is a pitch + background conversation. No coding yet.
 **This is the gating factor.** Fail here and nothing else matters. Study this first.
 
 ### Data Structures (must know cold)
-- [ ] [[Engineering/Algorithms/01 - Data Structures]] — read the file
+- [ ] [[../Domains/08 - Algorithms/Theory/01 - Data Structures]] — read the file
 - [ ] Array / vector — know push_back amortised O(1), insert O(n)
 - [ ] Hash map (`unordered_map`) — O(1) avg lookup, `at()` vs `[]` difference
 - [ ] Priority queue (heap) — O(log n) push/pop, O(1) top — LDS WPQ uses this
@@ -50,7 +50,7 @@ This is a pitch + background conversation. No coding yet.
 - [ ] BST / `std::map` — O(log n) guaranteed, sorted iteration
 
 ### Complexity (must recognise on sight)
-- [ ] [[Engineering/Algorithms/02 - Big-O and Complexity]] — read the file
+- [ ] [[../Domains/08 - Algorithms/Theory/02 - Big-O and Complexity]] — read the file
 - [ ] Identify O(n²) nested loops, O(n log n) sort+scan, O(log n) halving
 - [ ] Know: `std::sort` is O(n log n), hash lookup is O(1) avg, binary search is O(log n)
 
@@ -72,12 +72,12 @@ Every pattern above: write the code from scratch, no notes. Time yourself. If yo
 *"Explain RAII. What's the difference between unique_ptr and shared_ptr? What does virtual do?"*
 
 ### Must Know Cold (explain without notes)
-- [ ] [[Engineering/C++/01 - RAII]] — what it is, why it matters, what happens without it
-- [ ] [[Engineering/C++/02 - Smart Pointers]] — unique_ptr vs shared_ptr vs weak_ptr, when to use each
-- [ ] [[Engineering/C++/03 - Move Semantics]] — lvalue vs rvalue, what std::move does, Rule of Five
-- [ ] [[Engineering/C++/06 - Virtual Functions]] — vtable, override, pure virtual, virtual destructor
-- [ ] [[Engineering/C++/04 - Templates]] — why implementation is in headers, SFINAE basics
-- [ ] [[Engineering/C++/11 - Effective C++ - Meyers]] — the non-obvious rules
+- [ ] [[../Domains/03 - C++/Theory/01 - RAII]] — what it is, why it matters, what happens without it
+- [ ] [[../Domains/03 - C++/Theory/02 - Smart Pointers]] — unique_ptr vs shared_ptr vs weak_ptr, when to use each
+- [ ] [[../Domains/03 - C++/Theory/03 - Move Semantics]] — lvalue vs rvalue, what std::move does, Rule of Five
+- [ ] [[../Domains/03 - C++/Theory/06 - Virtual Functions]] — vtable, override, pure virtual, virtual destructor
+- [ ] [[../Domains/03 - C++/Theory/04 - Templates]] — why implementation is in headers, SFINAE basics
+- [ ] [[../Domains/03 - C++/Theory/11 - Effective C++ - Meyers]] — the non-obvious rules
 
 ### Common C++ Interview Questions
 - [ ] "What is RAII?" → resource lifetime tied to object lifetime, stack unwinding calls destructor
@@ -88,16 +88,16 @@ Every pattern above: write the code from scratch, no notes. Time yourself. If yo
 - [ ] "Why are templates in headers?" → compiler needs the full definition to instantiate
 - [ ] "What is the Rule of Five?" → if you define any of {destructor, copy ctor, copy=, move ctor, move=}, define all five
 
-### Full reference: [[LDS/Engineering/Interview - C++ Language]]
+### Full reference: [[../Domains/03 - C++/Interview/01 - C++ Language Q&A]]
 
 ---
 
 ## Stage 4 — Concurrency Round
 *"How do you prevent a race condition? What's a deadlock? Explain condition_variable."*
 
-- [ ] [[Engineering/Concurrency/01 - Multithreading Patterns]] — thread pool, producer/consumer
-- [ ] [[Engineering/Linux/04 - Threads - pthreads]] — mutex, condition variable, why `while` loop
-- [ ] [[Engineering/Concurrency/02 - Memory Ordering]] — atomic, acquire/release basics
+- [ ] [[../Domains/05 - Concurrency/Theory/01 - Multithreading Patterns]] — thread pool, producer/consumer
+- [ ] [[../Domains/04 - Linux/Theory/04 - Threads - pthreads]] — mutex, condition variable, why `while` loop
+- [ ] [[../Domains/05 - Concurrency/Theory/02 - Memory Ordering]] — atomic, acquire/release basics
 
 ### Common Concurrency Interview Questions
 - [ ] "What is a race condition?" → two threads access shared data, at least one writes, no synchronisation
@@ -106,7 +106,7 @@ Every pattern above: write the code from scratch, no notes. Time yourself. If yo
 - [ ] "Why does condition_variable need a while loop?" → spurious wakeups — the condition may be false even after waking
 - [ ] "What is the LDS ThreadPool?" → fixed pool of worker threads, WPQ feeds work with WRITE > READ > FLUSH priority
 
-### Full reference: [[LDS/Engineering/Interview - Concurrency]]
+### Full reference: [[../Domains/05 - Concurrency/Interview/01 - Concurrency Q&A]]
 
 ---
 
@@ -115,27 +115,27 @@ Every pattern above: write the code from scratch, no notes. Time yourself. If yo
 
 This comes in later rounds, often at systems-focused companies.
 
-- [ ] [[Engineering/Networking/04 - epoll]] — select vs poll vs epoll, O(1), level vs edge triggered
-- [ ] [[Engineering/Linux/02 - File Descriptors]] — everything is a file, fd lifecycle, CLOEXEC
-- [ ] [[Engineering/Linux/01 - Processes]] — fork, exec, wait, copy-on-write
-- [ ] [[Engineering/Networking/02 - Sockets TCP]] — socket lifecycle, RecvAll loop
-- [ ] [[Engineering/Kernel]] — syscalls, virtual memory, scheduling
+- [ ] [[../Domains/06 - Networking/Theory/04 - epoll]] — select vs poll vs epoll, O(1), level vs edge triggered
+- [ ] [[../Domains/04 - Linux/Theory/02 - File Descriptors]] — everything is a file, fd lifecycle, CLOEXEC
+- [ ] [[../Domains/04 - Linux/Theory/01 - Processes]] — fork, exec, wait, copy-on-write
+- [ ] [[../Domains/06 - Networking/Theory/02 - Sockets TCP]] — socket lifecycle, RecvAll loop
+- [ ] [[../Domains/04 - Linux/Theory/08 - Kernel]] — syscalls, virtual memory, scheduling
 
 ### Common Systems Interview Questions
 - [ ] "Why epoll instead of select?" → epoll is O(1) per event vs O(n) scan; scales to thousands of fds
 - [ ] "What is a file descriptor?" → small integer per-process handle to a kernel resource
 - [ ] "What happens on fork()?" → child gets a copy of parent's virtual address space (copy-on-write, cheap)
-- [ ] "Walk me through a write() to /dev/nbd0 in LDS" → [[LDS/Request Lifecycle]]
+- [ ] "Walk me through a write() to /dev/nbd0 in LDS" → [[../../LDS/Architecture/08 - Request Lifecycle]]
 
-### Full reference: [[LDS/Engineering/Interview - Linux & Networking]]
+### Full reference: [[../Domains/04 - Linux/Interview/01 - Linux Q&A]]
 
 ---
 
 ## Stage 6 — Design Round
 *"How would you design X? Walk me through your LDS architecture."*
 
-- [ ] [[LDS/System Overview]] — be able to draw the architecture from memory
-- [ ] [[LDS/Request Lifecycle]] — trace a read/write request end-to-end
+- [ ] [[../../LDS/Architecture/01 - System Overview]] — be able to draw the architecture from memory
+- [ ] [[../../LDS/Architecture/08 - Request Lifecycle]] — trace a read/write request end-to-end
 - [ ] For each design pattern in LDS: why you chose it, what the alternative was
   - Reactor → why not thread-per-connection?
   - Strategy (IDriverComm) → why not if/else on mode?
@@ -165,7 +165,7 @@ Run through this every week once you're applying:
 ---
 
 ## Related
-- [[LDS/Engineering/Interview Guide]] — cold Q&A, pitch variants
-- [[LDS/Engineering/Interview - Data Structures]] — DS interview Q&A
-- [[LDS/Manager/Job Search Plan]] — application tracker, where to apply
-- [[Strategy/Progress Tracker]] — full study checklist
+- [[../../LDS/Interview/01 - Interview Guide]] — cold Q&A, pitch variants
+- [[../Domains/08 - Algorithms/Interview/01 - Data Structures Q&A]] — DS interview Q&A
+- [[../../LDS/Roadmap/11 - Job Search Plan]] — application tracker, where to apply
+- [[../../LDS/Roadmap/03 - Progress Tracker]] — full study checklist

@@ -72,7 +72,7 @@ LDS is declared `-std=c++20` in the build. The ThreadPool workers currently use 
 
 ## Connections
 
-**Theory:** [[Core/Domains/03 - C++/Theory/C++20]]  
+**Theory:** [[../Theory/Versions/04 - C++20]]  
 **Mental Models:** [[Threads and pthreads — The Machine]], [[RAII — The Machine]], [[Templates — The Machine]], [[Serialization — The Machine]]  
 **LDS Implementation:** [[LDS/Infrastructure/Utilities Framework]] — jthread would replace std::thread + atomic<bool> in ThreadPool; [[LDS/Linux Integration/NBDDriverComm]] — std::span would replace (char* buf, size_t len) pairs  
 **Runtime Machines:** [[LDS/Runtime Machines/ThreadPool and WPQ — The Machine]]
