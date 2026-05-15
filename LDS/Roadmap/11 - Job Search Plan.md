@@ -35,7 +35,7 @@ These are quick wins that dramatically improve how your GitHub looks to an inter
   - `test_input_mediator.cpp` — dispatch to correct handler
   - `test_tcp_driver.cpp` — already exists but not gtest, convert it
 
-- [ ] **GitHub Actions CI** — green checkmark on every commit
+- [x] **GitHub Actions CI** — green checkmark on every commit
   ```yaml
   # .github/workflows/build.yml
   on: [push, pull_request]
@@ -49,22 +49,22 @@ These are quick wins that dramatically improve how your GitHub looks to an inter
         - run: make run_tests
   ```
 
-- [ ] **Pin the repo** on GitHub profile — make it your featured project
+- [x] **Pin the repo** on GitHub profile — make it your featured project
 
 ---
 
 ## CV Checklist
 
-- [ ] LDS project description — 3 bullet points max:
+- [x] LDS project description — 3 bullet points max:
   - "Distributed NAS system in C++20: epoll Reactor, plugin system via dlopen, TCP block device interface"
   - "Implemented RAID01 block distribution across storage nodes with async UDP + retry/backoff"
   - "Phase 2A: TCP server drop-in for NBD kernel driver, enabling remote Mac↔Linux block I/O"
 
-- [ ] Technologies section: C++20, Linux, pthreads, epoll, TCP/UDP sockets, inotify, NBD, Google Test, Make, Docker, Git
+- [x] Technologies section: C++20, Linux, pthreads, epoll, TCP/UDP sockets, inotify, NBD, Google Test, Make, Docker, Git
 
-- [ ] Keep it to 1 page
+- [x] Keep it to 1 page
 
-- [ ] GitHub link visible at the top
+- [x] GitHub link visible at the top
 
 ---
 

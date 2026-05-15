@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "LDS/Start Here.md",
+                "file": "Core/Domains/00 - Build Process/Theory/01 - Preprocessor.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Start Here"
+              "title": "01 - Preprocessor"
             }
           }
         ]
@@ -171,6 +171,14 @@
   },
   "active": "688af608026e5764",
   "lastOpenFiles": [
+    "Core/Portals/01 - Learn Systems Engineering.md",
+    "Core/Runtime Machines/C++ Object Lifetime — The Machine.md",
+    "LDS/UML/01 - Class Diagram - Full System.md",
+    "LDS/UML/04 - Sequence - Read Request.md",
+    "LDS/UML/05 - Sequence - Write Request.md",
+    "LDS/UML/06 - State Diagram - Minion.md",
+    "LDS/UML/07 - Phase Dependencies.md",
+    "LDS/00 START HERE.md",
     "Strategy/Interview Prep Track.md",
     "LDS/Machines/00 - LDS System.md",
     "LDS/Machines/01 - Reactor.md",
@@ -190,14 +198,6 @@
     "Engineering/Machines/54 - Strategy Pattern.md",
     "Engineering/Machines/44 - Memory Ordering.md",
     "Engineering/Machines/10 - Structs and Unions.md",
-    "Engineering/Machines/19 - Processes.md",
-    "Engineering/Machines/21 - Threads and pthreads.md",
-    "Engineering/Machines/35 - Type Casting.md",
-    "Engineering/Machines/40 - C++17.md",
-    "Engineering/Machines/15 - Undefined Behavior.md",
-    "Engineering/Machines/17 - Data Structures.md",
-    "Engineering/Machines/06 - Process Memory Layout.md",
-    "Engineering/Machines/38 - C++11.md",
     "Engineering/Machines",
     "Engineering/Algorithms",
     "Engineering/DevOps"
