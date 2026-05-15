@@ -15,8 +15,9 @@ Construction — TCPDriverComm(port_):
                                           ← construction doesn't return until connected!
 
 GetFD():
-  return m_listen_fd   ← Reactor monitors the LISTENING socket, not m_client_fd
-                       ← Note: the current impl may return m_client_fd; verify in code
+  return m_client_fd   ← Reactor monitors the CONNECTED client socket
+                       ← m_client_fd is already set (constructor blocked on accept())
+                       ← m_listen_fd only fires on NEW connections — never again after the first
 
 ReceiveRequest():
   ReadAll(m_client_fd, &header, sizeof(RequestHeader))
@@ -48,8 +49,8 @@ TCPDriverComm's wire protocol mirrors the NBD wire format but runs over a normal
 ```cpp
 // tcp/include/TCPDriverComm.hpp:
 class TCPDriverComm : public IDriverComm {
-    int m_listen_fd;    // bound+listening socket — Reactor watches this
-    int m_client_fd;    // accepted connection — actual data flows here
+    int m_listen_fd;    // bound+listening socket — used only in constructor for accept()
+    int m_client_fd;    // accepted connection — Reactor watches this; data flows here
 
     std::map<size_t, std::vector<char>> m_allocations;  // TCP-only
     mutable std::mutex m_alloc_lock;
@@ -101,5 +102,5 @@ The TCP client (Mac-side bridge in Phase 2A) connects to port 7800 and sends the
 ## Validate
 
 1. A TCP client connects and sends a WRITE of 512 bytes at offset 1024. Trace: which bytes hit `m_listen_fd`, which hit `m_client_fd`, and what goes into `m_allocations`.
-2. `GetFD()` returns `m_listen_fd`. The Reactor adds this to epoll. When does `m_listen_fd` become readable — on a new connection arriving, or on data arriving from an existing connection? What does `ReceiveRequest()` do when called with no new connection?
+2. `GetFD()` returns `m_client_fd`. The Reactor adds this to epoll. When does `m_client_fd` become readable — on a new connection arriving, or on data arriving from the existing connection? What would break if `m_listen_fd` were returned instead?
 3. `NBDDriverComm::SendReply()` and `TCPDriverComm::SendReplay()` have different spellings. If `InputMediator` calls `m_driver->SendReply(request)` for a WRITE, and `m_driver` is `TCPDriverComm*`, what happens at runtime? Check the virtual table lookup path.

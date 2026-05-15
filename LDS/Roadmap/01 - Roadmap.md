@@ -82,39 +82,39 @@ All done. Reactor, NBD, ThreadPool, Factory, PNP, InputMediator wired together.
 - `test/unit/test_tcp_driver.cpp` — unit tests for TCPDriverComm
 
 #### Pre-work (before any new code)
-- [ ] Fix bug #3 — always reply to kernel even on storage error
-- [ ] Fix bug #8 — Dispatcher needs shared_mutex
-- [ ] Fix bug #10 — ThreadPool static mutex/cv
+- [x] Fix bug #3 — always reply to kernel even on storage error
+- [x] Fix bug #8 — Dispatcher needs shared_mutex
+- [x] Fix bug #10 — ThreadPool static mutex/cv
 
 #### Task 2A.1 — Reactor Upgrade (2 hrs)
-- [ ] Change `Add(fd)` + `SetHandler(fn)` → `Add(fd, fn)` with per-fd handler map
-- [ ] Update `LDS.cpp` to new API
-- [ ] Verify all existing tests still pass
+- [x] Change `Add(fd)` + `SetHandler(fn)` → `Add(fd, fn)` with per-fd handler map
+- [x] Update `LDS.cpp` to new API
+- [x] Verify all existing tests still pass
 
 #### Task 2A.2 — Wire Protocol (1 hr)
-- [ ] Define `services/network/include/NetworkProtocol.hpp`
-- [ ] `ClientRequest` struct: type (1B) + offset (8B big-endian) + length (4B big-endian)
-- [ ] `ServerResponse` struct: status (1B) + length (4B big-endian)
+- [x] Define `services/network/include/NetworkProtocol.hpp`
+- [x] `ClientRequest` struct: type (1B) + offset (8B big-endian) + length (4B big-endian)
+- [x] `ServerResponse` struct: status (1B) + length (4B big-endian)
 
 #### Task 2A.3 — TCPServer on Linux (5 hrs)
-[[Components/TCPServer]]
-- [ ] `socket()` + `bind()` + `listen()` on port 7800
-- [ ] `OnAccept()` — `accept()` + `reactor.Add(client_fd, handler)`
-- [ ] `RecvAll()` helper — loops until all N bytes received
-- [ ] `OnClientData()` — parse header, call `LocalStorage`, send response
-- [ ] Wire into `LDS.cpp`
+[[LDS/Linux Integration/04 - TCPServer|TCPServer]]
+- [x] `socket()` + `bind()` + `listen()` on port 7800
+- [x] `OnAccept()` — `accept()` + `reactor.Add(client_fd, handler)`
+- [x] `RecvAll()` helper — loops until all N bytes received
+- [x] `OnClientData()` — parse header, call `LocalStorage`, send response
+- [x] Wire into `LDS.cpp`
 
 #### Task 2A.4 — BlockClient on Mac (4 hrs)
-[[Components/BlockClient]]
-- [ ] `Connect(ip, port)` — TCP socket + connect
-- [ ] `Write(offset, data)` — serialize request, send, recv response
-- [ ] `Read(offset, len)` — serialize request, send, recv response + data
-- [ ] CLI demo: `ldsclient <ip> <port> write/read <args>`
+[[LDS/Linux Integration/01 - BlockClient|BlockClient]]
+- [x] `Connect(ip, port)` — TCP socket + connect
+- [x] `Write(offset, data)` — serialize request, send, recv response
+- [x] `Read(offset, len)` — serialize request, send, recv response + data
+- [x] CLI demo: `ldsclient <ip> <port> write/read <args>` (implemented as Python client)
 
 #### Task 2A.5 — End-to-End Test (3 hrs)
-- [ ] Start master on Linux, connect from Mac
-- [ ] Write 1 MB of random data, read it back, `diff` is empty
-- [ ] Tests on real Mac ↔ Linux (not just localhost)
+- [x] Start master on Linux, connect from Mac
+- [x] Write 1 MB of random data, read it back, `diff` is empty
+- [x] Tests on real Mac ↔ Linux (not just localhost)
 
 **Phase 2A milestone:** Mac client writes and reads blocks from Linux server over TCP on real hardware. Two machines, real network.
 
@@ -370,7 +370,7 @@ See full list: [[Known Bugs]]
 |---|---|---|---|
 | M0 | Foundation complete | 2026-04-18 | ✅ Done |
 | M1 | Components wire together | End Phase 1 | ✅ Done |
-| M2A | Mac ↔ Linux TCP working on real hardware | 2026-05-20 | ⏳ Active |
+| M2A | Mac ↔ Linux TCP working on real hardware | 2026-05-08 | ✅ Done |
 | M2 | Master ↔ Minion UDP + async | End Phase 2 | ⏳ Jun 2026 |
 | M3 | Fault tolerance (RAID01 + discovery) | End Phase 3 | ⏳ Jun 2026 |
 | M4 | Full system working | End Phase 5 | ⏳ Jul 2026 |

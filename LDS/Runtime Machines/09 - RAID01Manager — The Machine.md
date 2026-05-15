@@ -74,8 +74,9 @@ std::pair<...> RAID01Manager::GetBlockLocation(size_t offset) const {
 }
 
 // MinionProxy::Send — UDP fire:
-void MinionProxy::Send(size_t block, const std::vector<char>& data, uint64_t msg_id) {
+void MinionProxy::Send(size_t block, const std::vector<char>& data, uint32_t msg_id) {
     RequestPacket pkt{msg_id, block, data};
+    // MSG_ID is uint32_t (4 bytes) — matches wire format [MSG_ID:4B] and ResponseManager map
     sendto(m_sock_fd, &pkt, sizeof(pkt), 0, (sockaddr*)&m_addr, sizeof(m_addr));
 }
 
