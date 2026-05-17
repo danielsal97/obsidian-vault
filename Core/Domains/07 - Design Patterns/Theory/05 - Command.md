@@ -162,8 +162,8 @@ work();
 
 ## Related Notes
 
-- [[../../03 - C++/Theory/08 - STL Containers]] — `std::queue`, `std::function` for command queues
-- [[../../03 - C++/Theory/03 - Move Semantics]] — `std::move` when pushing unique_ptr commands
+- [[08 - STL Containers]] — `std::queue`, `std::function` for command queues
+- [[03 - Move Semantics]] — `std::move` when pushing unique_ptr commands
 - [[Observer]] — observer often responds by issuing a command
 - [[Factory]] — factory can create the right command type based on request
 

@@ -61,6 +61,6 @@ Every memory access in LDS is paged. The `.text` segment is backed by the ELF fi
 
 ## Connections
 
-**Theory:** [[Core/Domains/01 - Memory/Theory/04 - Paging]]
+**Theory:** [[04 - Paging]]
 **Mental Models:** [[Virtual Memory — The Machine]], [[MMU — The Machine]], [[TLB — The Machine]], [[Page Walk — The Machine]], [[Process Memory Layout — The Machine]]
 **Related:** [[mmap — The Machine]], [[Stack vs Heap — The Machine]]

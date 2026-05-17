@@ -78,6 +78,6 @@ target_link_libraries(test_lds PRIVATE lds GTest::gtest_main)
 
 ## Connections
 
-**Theory:** [[Core/Domains/00 - Build Process/Theory/05 - Make and CMake]]  
+**Theory:** [[05 - Make and CMake]]  
 **Mental Models:** [[Build Process — The Machine]], [[Compiler — The Machine]], [[Linker — The Machine]], [[Preprocessor — The Machine]]  
 **LDS Implementation:** [[LDS/DevOps/Build System]] — -MMD -MP dependency tracking, pattern rules, shared library link rule

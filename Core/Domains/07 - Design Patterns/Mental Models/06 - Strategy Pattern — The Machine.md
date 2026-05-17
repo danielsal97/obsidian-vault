@@ -75,7 +75,7 @@ auto mediator = std::make_shared<InputMediator>(driver);
 
 ## Connections
 
-**Theory:** [[Core/Domains/07 - Design Patterns/Theory/06 - Strategy]]  
+**Theory:** [[06 - Strategy]]  
 **Mental Models:** [[Factory Pattern — The Machine]], [[Virtual Functions — The Machine]], [[Smart Pointers — The Machine]], [[Observer Pattern — The Machine]]  
 **LDS Implementation:** [[LDS/Decisions/Why Templates not Virtual Functions]]  
 **Runtime Machines:** [[LDS/Runtime Machines/InputMediator — The Machine]]  

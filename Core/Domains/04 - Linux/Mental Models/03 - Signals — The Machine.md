@@ -70,7 +70,7 @@ The LDS Reactor loop runs `while (m_running)`. To stop LDS gracefully (Ctrl+C), 
 
 ## Connections
 
-**Theory:** [[Core/Domains/04 - Linux/Theory/03 - Signals]]  
+**Theory:** [[03 - Signals]]  
 **Mental Models:** [[Processes — The Machine]], [[File Descriptors — The Machine]], [[Memory Ordering — The Machine]], [[Reactor Pattern — The Machine]]  
 **LDS Implementation:** [[LDS/Infrastructure/Reactor]] — signalfd integration; [[LDS/Decisions/Why signalfd not sigaction]]  
 **Runtime Machines:** [[LDS/Runtime Machines/Reactor — The Machine]]

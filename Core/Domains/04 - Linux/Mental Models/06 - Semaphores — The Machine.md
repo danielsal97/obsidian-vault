@@ -77,7 +77,7 @@ LDS uses `std::mutex` + `std::condition_variable` for the ThreadPool (same-proce
 
 ## Connections
 
-**Theory:** [[Core/Domains/04 - Linux/Theory/06 - Semaphores]]  
+**Theory:** [[06 - Semaphores]]  
 **Mental Models:** [[Threads and pthreads — The Machine]], [[Shared Memory — The Machine]], [[Memory Ordering — The Machine]]  
 **LDS Implementation:** [[LDS/Architecture/Concurrency Model]] — future shared-memory extension  
 **Glossary:** [[pthreads]]

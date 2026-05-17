@@ -98,7 +98,7 @@ std::unique_ptr<IStorage> CreateStorage(...);   // ✓ clear ownership transfer
 IStorage* CreateStorage(...);                   // ✗ who deletes? memory leak risk
 ```
 
-See [[../../03 - C++/Theory/02 - Smart Pointers]].
+See [[02 - Smart Pointers]].
 
 ---
 
@@ -143,8 +143,8 @@ A factory function could wrap this to allow different storage backends based on 
 
 - [[Singleton]] — single instance, global access
 - [[Observer]] — factory often creates observers
-- [[../../03 - C++/Theory/05 - Inheritance]] — factory returns base pointer to derived object
-- [[../../03 - C++/Theory/02 - Smart Pointers]] — unique_ptr for factory ownership
+- [[05 - Inheritance]] — factory returns base pointer to derived object
+- [[02 - Smart Pointers]] — unique_ptr for factory ownership
 
 ---
 

@@ -148,8 +148,8 @@ When the thread-local freelist overflows, it returns a batch to the central cach
 
 ## Related Machines
 
-→ [[../Domains/02 - C/Mental Models/08 - malloc and free — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/01 - Process Memory Layout — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/09 - Cache Hierarchy — The Machine (deep)]]
+→ [[08 - malloc and free — The Machine]]
+→ [[01 - Process Memory Layout — The Machine]]
+→ [[09 - Cache Hierarchy — The Machine (deep)]]
 → [[17 - std::vector — The Machine]]
-→ [[../Domains/03 - C++/Theory/02 - Smart Pointers]]
+→ [[02 - Smart Pointers]]

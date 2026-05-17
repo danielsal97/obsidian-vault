@@ -69,7 +69,7 @@ LDS uses TCP for the client-facing interface because clients need reliable, orde
 
 ## Connections
 
-**Theory:** [[Core/Domains/06 - Networking/Theory/01 - Overview]]  
+**Theory:** [[01 - Overview]]  
 **Mental Models:** [[TCP Sockets — The Machine]], [[UDP Sockets — The Machine]], [[IPC Overview — The Machine]], [[File Descriptors — The Machine]]  
 **Tradeoffs:** [[Why UDP vs TCP]]  
 **LDS Implementation:** [[LDS/Linux Integration/TCPServer]] — TCP for clients; [[LDS/Linux Integration/NBDDriverComm]] — kernel block device interface  

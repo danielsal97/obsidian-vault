@@ -56,6 +56,6 @@ Any `std::make_unique<ThreadPool>(...)` in LDS requires C++14. The LDS `CMakeLis
 
 ## Connections
 
-**Theory:** [[../Theory/Versions/02 - C++14]]  
+**Theory:** [[02 - C++14]]  
 **Mental Models:** [[Smart Pointers — The Machine]], [[RAII — The Machine]], [[Templates — The Machine]]  
 **LDS Implementation:** [[LDS/Infrastructure/Utilities Framework]] — make_unique for ThreadPool construction; [[LDS/DevOps/Build System]] — -std=c++20 enables all C++11–C++20 features

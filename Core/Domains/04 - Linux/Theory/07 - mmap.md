@@ -78,7 +78,7 @@ free equivalent:
 munmap(mem, 1024 * 1024);
 ```
 
-See [[../../02 - C/Theory/02 - Memory - malloc and free]] — `malloc` uses `mmap` for allocations > `MMAP_THRESHOLD` (~128KB).
+See [[02 - Memory - malloc and free]] — `malloc` uses `mmap` for allocations > `MMAP_THRESHOLD` (~128KB).
 
 ---
 
@@ -165,9 +165,9 @@ if (ptr == MAP_FAILED) {   // NOT (ptr == NULL) — MAP_FAILED is (void*)-1
 ## Related Notes
 
 - [[Shared Memory]] — mmap for inter-process shared memory
-- [[../../02 - C/Theory/05 - File IO]] — standard file I/O via open/read/write
-- [[../../01 - Memory/Theory/01 - Process Memory Layout]] — how mmap regions appear in virtual address space
-- [[../../02 - C/Theory/02 - Memory - malloc and free]] — malloc uses mmap internally for large allocations
+- [[05 - File IO]] — standard file I/O via open/read/write
+- [[01 - Process Memory Layout]] — how mmap regions appear in virtual address space
+- [[02 - Memory - malloc and free]] — malloc uses mmap internally for large allocations
 
 ---
 

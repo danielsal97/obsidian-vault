@@ -88,7 +88,7 @@ while (m_is_running) {
 
 ## Connections
 
-**Theory:** [[Core/Domains/04 - Linux/Theory/04 - Threads - pthreads]]  
+**Theory:** [[04 - Threads - pthreads]]  
 **Mental Models:** [[Multithreading Patterns — The Machine]], [[Memory Ordering — The Machine]], [[Semaphores — The Machine]], [[RAII — The Machine]], [[Reactor Pattern — The Machine]]  
 **Tradeoffs:** [[Why ThreadPool over inline execution]]  
 **LDS Implementation:** [[LDS/Infrastructure/ThreadPool]], [[LDS/Infrastructure/Threading Deep Dive]]  

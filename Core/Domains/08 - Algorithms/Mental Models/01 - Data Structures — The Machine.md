@@ -54,7 +54,7 @@ The LDS WorkPriorityQueue IS a heap. Tasks have three priority levels: `WRITE > 
 
 ## Connections
 
-**Theory:** [[Core/Domains/08 - Algorithms/Theory/01 - Data Structures]]  
+**Theory:** [[01 - Data Structures]]  
 **Mental Models:** [[Big-O and Complexity — The Machine]], [[STL Containers — The Machine]]  
 **LDS Implementation:** [[LDS/Infrastructure/Reactor]] — unordered_map<fd, handler>; [[LDS/Infrastructure/Utilities Framework]] — WPQ heap  
 **Glossary:** [[WPQ]]

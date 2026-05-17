@@ -96,4 +96,4 @@ static std::condition_variable m_cv;
 - [[Engineering/Threading Deep Dive]] — full internals with code
 - [[Design Patterns/Command]] — what workers execute
 - [[Engineering/Known Bugs]] — Bug #10
-- [[Architecture/04 - Concurrency Model]]
+- [[04 - Concurrency Model]]

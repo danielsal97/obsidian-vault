@@ -53,6 +53,6 @@ Every pointer dereference in LDS (reading `m_data`, accessing `m_mutex`, walking
 
 ## Connections
 
-**Theory:** [[Core/Domains/01 - Memory/Theory/05 - MMU]]
+**Theory:** [[05 - MMU]]
 **Mental Models:** [[Virtual Memory — The Machine]], [[TLB — The Machine]], [[Page Walk — The Machine]], [[Paging — The Machine]], [[Cache Hierarchy — The Machine]]
 **Related:** [[Pointers — The Machine]], [[Process Memory Layout — The Machine]]

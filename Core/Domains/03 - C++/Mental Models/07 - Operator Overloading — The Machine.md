@@ -67,6 +67,6 @@ The WPQ stores tasks ordered by priority. To work with `std::priority_queue`, th
 
 ## Connections
 
-**Theory:** [[Core/Domains/03 - C++/Theory/07 - Operator Overloading]]  
+**Theory:** [[07 - Operator Overloading]]  
 **Mental Models:** [[STL Containers — The Machine]], [[Smart Pointers — The Machine]]  
 **LDS Implementation:** [[LDS/Infrastructure/Utilities Framework]] — WPQ task ordering via operator<

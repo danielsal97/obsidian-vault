@@ -77,7 +77,7 @@ while (total < n) {
 
 ## Connections
 
-**Theory:** [[Core/Domains/02 - C/Theory/05 - File IO]]  
+**Theory:** [[05 - File IO]]  
 **Mental Models:** [[File Descriptors — The Machine]], [[mmap — The Machine]], [[RAII — The Machine]], [[Kernel — The Machine]]  
 **LDS Implementation:** [[LDS/Linux Integration/TCPServer]] — RecvAll loop  
 **Runtime Machines:** [[LDS/Runtime Machines/TCPDriverComm — The Machine]]

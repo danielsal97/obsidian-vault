@@ -213,9 +213,9 @@ Disconnect()       ─── TCP FIN ───────▶ recv() returns 0
 
 ## Related Notes
 
-- [[Linux Integration/04 - TCPServer\|TCPServer]]
-- [[Linux Integration/01 - BlockClient\|BlockClient]]
-- [[Decisions/05 - Why TCP for Client]]
+- [[04 - TCPServer|TCPServer]]
+- [[01 - BlockClient|BlockClient]]
+- [[05 - Why TCP for Client]]
 - [[Phase 2A - Mac Client TCP Bridge]]
 - [[Wire Protocol Spec]] (UDP protocol for master ↔ minion — different from this TCP protocol)
 - [[Reactor]]

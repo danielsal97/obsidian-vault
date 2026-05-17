@@ -53,7 +53,7 @@ When the NBD fd becomes readable, epoll wakes the main thread and dispatches to 
 
 ## Connections
 
-**Theory:** [[Core/Domains/06 - Networking/Theory/04 - epoll]]  
+**Theory:** [[04 - epoll]]  
 **Mental Models:** [[epoll — The Machine]], [[Reactor Pattern — The Machine]], [[File Descriptors — The Machine]]  
 **Tradeoffs:** [[Why epoll over select and poll]]  
 **LDS Implementation:** [[LDS/Infrastructure/Reactor]] — wraps epoll; [[Decisions/Why signalfd not sigaction]] — signals via epoll  

@@ -38,7 +38,7 @@ UDP packets can be lost, duplicated, or reordered. LDS handles this with:
 
 ## Connections
 
-**Theory:** [[Core/Domains/06 - Networking/Theory/03 - UDP Sockets]]  
+**Theory:** [[03 - UDP Sockets]]  
 **Mental Models:** [[UDP Sockets — The Machine]], [[IPC Overview — The Machine]]  
 **Tradeoffs:** [[Why UDP vs TCP]]  
 **LDS Implementation:** [[MinionProxy]] — sends UDP packets; [[ResponseManager]] — receives UDP packets; [[Decisions/Why UDP not TCP]]  

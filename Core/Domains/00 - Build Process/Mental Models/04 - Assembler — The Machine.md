@@ -57,6 +57,6 @@ Run `objdump -t services/mediator/InputMediator.o` on any LDS `.o` file to see i
 
 ## Connections
 
-**Theory:** [[Core/Domains/00 - Build Process/Theory/03 - Assembler]]  
+**Theory:** [[03 - Assembler]]  
 **Mental Models:** [[Build Process — The Machine]], [[Compiler — The Machine]], [[Linker — The Machine]], [[Process Memory Layout — The Machine]]  
 **LDS Implementation:** [[LDS/DevOps/Build System]]

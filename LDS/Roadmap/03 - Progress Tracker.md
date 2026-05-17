@@ -7,7 +7,7 @@ Check off as you complete each topic. Study order: [[Strategy/Learning Curriculu
 ---
 
 ## Layer 0 — Build Process
-- [ ] [[Engineering/Build Process|Build Process overview]]
+- [ ] [[Build Process|Build Process overview]]
 - [ ] [[Engineering/Build Process/1 - Preprocessor|1 — Preprocessor]]
 - [ ] [[Engineering/Build Process/2 - Compiler|2 — Compiler]]
 - [ ] [[Engineering/Build Process/3 - Assembler|3 — Assembler]]
@@ -77,7 +77,7 @@ Check off as you complete each topic. Study order: [[Strategy/Learning Curriculu
 - [ ] [[Engineering/Design Patterns/Reactor|Reactor]]
 - [ ] [[Engineering/Design Patterns/Observer|Observer]]
 - [ ] [[Engineering/Design Patterns/Command|Command]]
-- [ ] [[Engineering/Design Patterns/Factory|Factory]]
+- [ ] [[Factory|Factory]]
 - [ ] [[Engineering/Design Patterns/Strategy|Strategy]]
 - [ ] [[Engineering/Design Patterns/Singleton|Singleton]]
 

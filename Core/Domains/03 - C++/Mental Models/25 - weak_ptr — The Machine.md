@@ -196,4 +196,4 @@ If weak_ptrs are long-lived and Foo is large: `shared_ptr(new Foo)` may reclaim 
 → [[22 - shared_ptr — The Machine]]
 → [[01 - RAII — The Machine]]
 → [[04 - Atomics — The Machine]]
-→ [[../Domains/03 - C++/Theory/02 - Smart Pointers]]
+→ [[02 - Smart Pointers]]

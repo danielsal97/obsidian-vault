@@ -184,7 +184,7 @@ Use `pahole` (Linux tool) to dump the full layout of structs from a compiled bin
 ## Related Machines
 
 → [[18 - VTables — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/01 - Process Memory Layout — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/08 - Cache Hierarchy — The Machine]]
-→ [[../Domains/02 - C/Mental Models/04 - Structs and Unions — The Machine]]
-→ [[../Domains/03 - C++/Theory/06 - Virtual Functions]]
+→ [[01 - Process Memory Layout — The Machine]]
+→ [[08 - Cache Hierarchy — The Machine]]
+→ [[04 - Structs and Unions — The Machine]]
+→ [[06 - Virtual Functions]]

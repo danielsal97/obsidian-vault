@@ -55,6 +55,6 @@ The LDS ThreadPool keeps worker threads in the same process — they share `CR3`
 
 ## Connections
 
-**Theory:** [[Core/Domains/01 - Memory/Theory/07 - TLB]]
+**Theory:** [[07 - TLB]]
 **Mental Models:** [[MMU — The Machine]], [[Page Walk — The Machine]], [[Paging — The Machine]], [[Cache Hierarchy — The Machine]]
 **Related:** [[Virtual Memory — The Machine]], [[Process Memory Layout — The Machine]]

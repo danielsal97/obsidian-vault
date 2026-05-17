@@ -61,7 +61,7 @@ LDS currently uses TCP sockets for inter-process communication (manager ↔ mini
 
 ## Connections
 
-**Theory:** [[Core/Domains/04 - Linux/Theory/05 - Shared Memory]]  
+**Theory:** [[05 - Shared Memory]]  
 **Mental Models:** [[Semaphores — The Machine]], [[IPC Overview — The Machine]], [[mmap — The Machine]], [[Processes — The Machine]]  
 **LDS Implementation:** [[LDS/Architecture/Concurrency Model]] — potential optimization path  
 **Glossary:** [[pthreads]]

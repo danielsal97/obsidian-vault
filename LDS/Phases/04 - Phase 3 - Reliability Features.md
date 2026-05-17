@@ -142,9 +142,9 @@ flowchart TD
 
 | Pattern | Where |
 |---|---|
-| [[Observer\|Observer]] | Watchdog notifies RAID01Manager of state changes |
-| [[Command\|Command]] | Rebalance tasks enqueued as commands |
-| [[Singleton\|Singleton]] | Logger used throughout for structured output |
+| [[Observer\]] | Watchdog notifies RAID01Manager of state changes |
+| [[Command\]] | Rebalance tasks enqueued as commands |
+| [[Singleton\]] | Logger used throughout for structured output |
 
 ---
 

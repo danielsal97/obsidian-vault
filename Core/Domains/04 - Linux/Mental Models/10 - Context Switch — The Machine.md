@@ -110,9 +110,9 @@ This is why epoll + one Reactor thread + thread pool (all in one process) is che
 
 ## Related Machines
 
-→ [[../Domains/04 - Linux/Mental Models/04 - Threads and pthreads — The Machine]]
-→ [[../Domains/04 - Linux/Mental Models/07 - Kernel — The Machine]]
-→ [[../Domains/05 - Concurrency/Mental Models/01 - Multithreading Patterns — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/07 - TLB — The Machine]]
+→ [[04 - Threads and pthreads — The Machine]]
+→ [[07 - Kernel — The Machine]]
+→ [[01 - Multithreading Patterns — The Machine]]
+→ [[07 - TLB — The Machine]]
 → [[11 - Scheduler — The Machine]]
-→ [[../Domains/04 - Linux/Theory/04 - Threads - pthreads]]
+→ [[04 - Threads - pthreads]]

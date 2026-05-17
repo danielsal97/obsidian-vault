@@ -85,7 +85,7 @@ Process exit:
 
 ## Connections
 
-**Theory:** [[Core/Domains/02 - C/Theory/02 - Memory - malloc and free]]  
+**Theory:** [[02 - Memory - malloc and free]]  
 **Mental Models:** [[Stack vs Heap — The Machine]], [[Process Memory Layout — The Machine]], [[RAII — The Machine]], [[mmap — The Machine]]  
 **LDS Implementation:** [[LDS/Application/LocalStorage]] — vector m_data buffer  
 **Runtime Machines:** [[LDS/Runtime Machines/LocalStorage — The Machine]]

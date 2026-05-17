@@ -74,8 +74,8 @@ LDS defines `ICommand` as a pure virtual interface with `execute()`. The `std::f
 
 ## Connections
 
-**Theory:** [[Core/Domains/07 - Design Patterns/Theory/05 - Command]]  
+**Theory:** [[05 - Command]]  
 **Mental Models:** [[Multithreading Patterns — The Machine]], [[Observer Pattern — The Machine]], [[Reactor Pattern — The Machine]]  
 **LDS Implementation:** [[LDS/Infrastructure/Dispatcher]]  
-**Runtime Machines:** [[LDS/Runtime Machines/Request Lifecycle — The Machine]]  
+**Runtime Machines:** [[Request Lifecycle — The Machine]]  
 **Glossary:** [[WPQ]], [[Templates]]

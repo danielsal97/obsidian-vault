@@ -111,8 +111,8 @@ This allows unit tests to pass a mock `IStorage` instead of the real file-backed
 ## Related Notes
 
 - [[Factory]] — creates objects without the caller knowing the concrete type
-- [[../../03 - C++/Theory/01 - RAII]] — singleton destructor should clean up resources
-- [[../../03 - C++/Theory/02 - Smart Pointers]] — `shared_ptr` for reference-counted shared objects (not singleton, but related)
+- [[01 - RAII]] — singleton destructor should clean up resources
+- [[02 - Smart Pointers]] — `shared_ptr` for reference-counted shared objects (not singleton, but related)
 
 ---
 

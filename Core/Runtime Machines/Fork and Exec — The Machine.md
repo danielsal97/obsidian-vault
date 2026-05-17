@@ -159,10 +159,10 @@ Total from fork() to first line of main(): **~5-10ms** for a typical C++ binary 
 
 ## Links
 
-→ [[../Domains/04 - Linux/Mental Models/01 - Processes — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/03 - Virtual Memory — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/04 - Paging — The Machine]]
-→ [[../Domains/04 - Linux/Theory/01 - Processes]]
+→ [[01 - Processes — The Machine]]
+→ [[03 - Virtual Memory — The Machine]]
+→ [[04 - Paging — The Machine]]
+→ [[01 - Processes]]
 → [[Page Fault — The Machine]]
 → [[Program Startup — The Machine]]
 → [[Memory System — The Machine]]

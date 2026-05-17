@@ -83,7 +83,7 @@ LDS's `Logger` is a Singleton. Every component calls `Logger::getInstance().log(
 
 ## Connections
 
-**Theory:** [[Core/Domains/07 - Design Patterns/Theory/03 - Singleton]]  
+**Theory:** [[03 - Singleton]]  
 **Mental Models:** [[Threads and pthreads — The Machine]], [[Smart Pointers — The Machine]], [[Memory Ordering — The Machine]]  
 **LDS Implementation:** [[LDS/Infrastructure/Singleton]], [[LDS/Infrastructure/Singleton Memory Model]]  
 **Glossary:** [[pthreads]]

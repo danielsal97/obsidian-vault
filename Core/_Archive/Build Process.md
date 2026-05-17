@@ -198,7 +198,7 @@ strace ./program       # trace syscalls at runtime
 ## Deep Dives
 
 For internals of each stage (symbol tables, ELF format, optimization passes, relocation entries):
-- [[Build Process/01 - Preprocessor]] — #include expansion, #define, header guards, conditional compilation
-- [[Build Process/02 - Compiler]] — parsing, type checking, optimization levels, template instantiation
-- [[Build Process/03 - Assembler]] — ELF format, symbol table, relocation entries
-- [[Build Process/04 - Linker]] — symbol resolution, PLT/GOT, static vs dynamic, common errors
+- [[01 - Preprocessor]] — #include expansion, #define, header guards, conditional compilation
+- [[02 - Compiler]] — parsing, type checking, optimization levels, template instantiation
+- [[03 - Assembler]] — ELF format, symbol table, relocation entries
+- [[04 - Linker]] — symbol resolution, PLT/GOT, static vs dynamic, common errors

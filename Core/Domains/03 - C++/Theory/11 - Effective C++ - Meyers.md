@@ -18,7 +18,7 @@ inline int square(int x) { return x * x; }
 
 `#define` is replaced before the compiler sees it — no type checking, no scoping, doesn't appear in the symbol table.
 
-See [[../../00 - Build Process/Theory/01 - Preprocessor]] — macros are a preprocessor-only tool.
+See [[01 - Preprocessor]] — macros are a preprocessor-only tool.
 
 ---
 
@@ -489,7 +489,7 @@ volatile int* mmio_reg = (int*)0x1234;  // memory-mapped I/O register
 
 `volatile` does NOT make operations atomic or thread-safe. `std::atomic` is for threads; `volatile` is for hardware registers.
 
-See [[Concurrency/02 - Memory Ordering]].
+See [[02 - Memory Ordering]].
 
 ---
 
@@ -524,7 +524,7 @@ See [[Concurrency/02 - Memory Ordering]].
 - [[Exception Handling]] — exception safety levels, noexcept
 - [[Inheritance]] — polymorphism, slicing
 - [[Type Casting]] — named casts
-- [[Concurrency/02 - Memory Ordering]] — atomic vs volatile
+- [[02 - Memory Ordering]] — atomic vs volatile
 
 ---
 

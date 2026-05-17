@@ -62,6 +62,6 @@ When compiled with `g++ -c InputMediator.cpp`, the compiler processes the call t
 
 ## Connections
 
-**Theory:** [[Core/Domains/00 - Build Process/Theory/02 - Compiler]]  
+**Theory:** [[02 - Compiler]]  
 **Mental Models:** [[Build Process — The Machine]], [[Assembler — The Machine]], [[Preprocessor — The Machine]], [[Undefined Behavior — The Machine]]  
 **LDS Implementation:** [[LDS/DevOps/Build System]]

@@ -166,7 +166,7 @@ Key difference: NBDDriverComm has one fixed fd. TCPServer spawns a new fd per cl
 
 ## Related Notes
 
-- [[Architecture/03 - Client-Server Architecture]]
+- [[03 - Client-Server Architecture]]
 - [[Phase 2A - Mac Client TCP Bridge]]
 - [[Reactor]]
 - [[LocalStorage]]

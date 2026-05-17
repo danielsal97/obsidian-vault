@@ -93,6 +93,6 @@ This is the preprocessor's only defense against double-paste. Every `.cpp` that 
 
 ## Connections
 
-**Theory:** [[Core/Domains/00 - Build Process/Theory/01 - Preprocessor]]  
+**Theory:** [[01 - Preprocessor]]  
 **Mental Models:** [[Build Process — The Machine]], [[Compiler — The Machine]], [[Templates — The Machine]]  
 **LDS Implementation:** [[LDS/DevOps/Build System]]

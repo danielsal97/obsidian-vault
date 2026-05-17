@@ -121,11 +121,11 @@ Later: remote host sends ACK
 
 ## Related Machines
 
-→ [[../Domains/06 - Networking/Mental Models/04 - epoll — The Machine]]
-→ [[../Domains/07 - Design Patterns/Mental Models/01 - Reactor Pattern — The Machine]]
-→ [[../Domains/05 - Concurrency/Mental Models/01 - Multithreading Patterns — The Machine]]
+→ [[04 - epoll — The Machine]]
+→ [[01 - Reactor Pattern — The Machine]]
+→ [[01 - Multithreading Patterns — The Machine]]
 → [[Concurrency Runtime — The Machine]]
 → [[Memory System — The Machine]]
-→ [[../Domains/04 - Linux/Mental Models/10 - Context Switch — The Machine]]
-→ [[../Domains/06 - Networking/Theory/02 - Sockets TCP]]
-→ [[../Domains/06 - Networking/Theory/04 - epoll]]
+→ [[10 - Context Switch — The Machine]]
+→ [[02 - Sockets TCP]]
+→ [[04 - epoll]]

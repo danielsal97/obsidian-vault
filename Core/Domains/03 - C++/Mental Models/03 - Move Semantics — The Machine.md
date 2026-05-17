@@ -67,6 +67,6 @@ Tasks submitted to the WPQ are `std::function<void()>` objects. When pushing to 
 
 ## Connections
 
-**Theory:** [[Core/Domains/03 - C++/Theory/03 - Move Semantics]]  
+**Theory:** [[03 - Move Semantics]]  
 **Mental Models:** [[RAII — The Machine]], [[Smart Pointers — The Machine]], [[STL Containers — The Machine]]  
 **LDS Implementation:** [[LDS/Infrastructure/Utilities Framework]] — lambda moves into WPQ

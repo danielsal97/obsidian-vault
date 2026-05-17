@@ -92,7 +92,7 @@ TCP is a stream — you can receive half a message. The fix is length-prefix fra
 
 Defined in `services/network/include/NetworkProtocol.hpp` — included by both sides.
 
-→ See [[Architecture/03 - Client-Server Architecture]]
+→ See [[03 - Client-Server Architecture]]
 
 ---
 

@@ -51,7 +51,7 @@ public:
 };
 ```
 
-LDS uses `ThreadPool` + `WPQ` for this. See [[../../07 - Design Patterns/Theory/05 - Command]] — work items are command objects (or lambdas).
+LDS uses `ThreadPool` + `WPQ` for this. See [[05 - Command]] — work items are command objects (or lambdas).
 
 ---
 
@@ -231,10 +231,10 @@ int val = f.get();   // get result when needed
 ## Related Notes
 
 - [[Memory Ordering]] — atomics and happens-before
-- [[../../04 - Linux/Theory/04 - Threads - pthreads]] — pthread API
-- [[../../04 - Linux/Theory/06 - Semaphores]] — producer/consumer with semaphores
-- [[../../07 - Design Patterns/Theory/01 - Reactor]] — single-threaded event loop alternative
-- [[../../07 - Design Patterns/Theory/05 - Command]] — work items in thread pool
+- [[04 - Threads - pthreads]] — pthread API
+- [[06 - Semaphores]] — producer/consumer with semaphores
+- [[01 - Reactor]] — single-threaded event loop alternative
+- [[05 - Command]] — work items in thread pool
 
 ---
 

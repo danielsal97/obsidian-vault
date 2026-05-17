@@ -59,6 +59,6 @@ LDS accesses the same hot buffers repeatedly — `m_data`, the socket fd table, 
 
 ## Connections
 
-**Theory:** [[Core/Domains/01 - Memory/Theory/06 - Page Walk]]
+**Theory:** [[06 - Page Walk]]
 **Mental Models:** [[MMU — The Machine]], [[TLB — The Machine]], [[Paging — The Machine]], [[Virtual Memory — The Machine]]
 **Related:** [[Cache Hierarchy — The Machine]], [[Process Memory Layout — The Machine]]

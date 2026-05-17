@@ -57,6 +57,6 @@ This is the linker invocation. `-shared` = produce a `.so`. At this moment, the 
 
 ## Connections
 
-**Theory:** [[Core/Domains/00 - Build Process/Theory/04 - Linker]]  
+**Theory:** [[04 - Linker]]  
 **Mental Models:** [[Build Process — The Machine]], [[Assembler — The Machine]], [[Processes — The Machine]]  
 **LDS Implementation:** [[LDS/DevOps/Build System]]

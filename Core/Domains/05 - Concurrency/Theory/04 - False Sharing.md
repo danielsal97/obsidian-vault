@@ -138,4 +138,4 @@ Do not pad everything. Padding every struct member to 64 bytes wastes memory, in
 - [[03 - False Sharing — The Machine]] — MESI state machine trace
 - [[02 - Memory Ordering]] — memory ordering and the C++ atomics model
 - [[03 - Atomics]] — atomic operations and why adjacent atomics still suffer this problem
-- [[../01 - Memory/Mental Models/09 - Cache Hierarchy — The Machine (deep)]] — cache hierarchy and prefetching
+- [[09 - Cache Hierarchy — The Machine (deep)]] — cache hierarchy and prefetching

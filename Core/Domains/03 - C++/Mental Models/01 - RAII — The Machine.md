@@ -87,7 +87,7 @@ These `lock` objects are RAII. When `Read` returns — whether normally or via e
 
 ## Connections
 
-**Theory:** [[Core/Domains/03 - C++/Theory/01 - RAII]]  
+**Theory:** [[01 - RAII]]  
 **Mental Models:** [[Smart Pointers — The Machine]], [[Exception Handling — The Machine]], [[Threads and pthreads — The Machine]], [[Stack vs Heap — The Machine]]  
 **LDS Implementation:** [[LDS/Decisions/Why RAII]], [[LDS/Application/LocalStorage]] — shared_mutex RAII  
 **Runtime Machines:** [[LDS/Runtime Machines/ThreadPool and WPQ — The Machine]]  

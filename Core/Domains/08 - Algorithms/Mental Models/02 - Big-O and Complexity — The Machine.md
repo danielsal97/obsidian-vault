@@ -74,7 +74,7 @@ The LDS WorkPriorityQueue is a heap. `push()` is O(log n), `top()` is O(1), `pop
 
 ## Connections
 
-**Theory:** [[Core/Domains/08 - Algorithms/Theory/02 - Big-O and Complexity]]  
+**Theory:** [[02 - Big-O and Complexity]]  
 **Mental Models:** [[Data Structures — The Machine]], [[STL Containers — The Machine]]  
 **LDS Implementation:** [[LDS/Infrastructure/Utilities Framework]] — WPQ heap: push O(log n), top O(1); [[LDS/Infrastructure/Reactor]] — unordered_map O(1) fd→handler lookup  
 **Glossary:** [[WPQ]]

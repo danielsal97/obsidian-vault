@@ -168,6 +168,6 @@ Without `enable_shared_from_this`: `shared_ptr<Foo>(this)` creates a NEW control
 
 → [[01 - RAII — The Machine]]
 → [[21 - Move Semantics — The Machine (deep)]]
-→ [[../Domains/02 - C/Mental Models/08 - malloc and free — The Machine]]
+→ [[08 - malloc and free — The Machine]]
 → [[04 - Atomics — The Machine]]
-→ [[../Domains/03 - C++/Theory/02 - Smart Pointers]]
+→ [[02 - Smart Pointers]]

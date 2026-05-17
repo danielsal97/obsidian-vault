@@ -128,5 +128,5 @@ This is why exceptions are appropriate for truly exceptional conditions, not for
 
 → [[01 - RAII — The Machine]]
 → [[02 - Smart Pointers — The Machine]]
-→ [[../Domains/03 - C++/Theory/09 - Exception Handling]]
-→ [[../Domains/00 - Build Process/Mental Models/05 - Linker — The Machine]]
+→ [[09 - Exception Handling]]
+→ [[05 - Linker — The Machine]]

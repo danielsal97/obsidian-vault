@@ -74,9 +74,9 @@ This is why the mutex protects not just atomicity but VISIBILITY.
 
 ## Links
 
-→ [[../Domains/05 - Concurrency/Theory/01 - Multithreading Patterns]] — thread pool, WPQ, producer/consumer
-→ [[../Domains/05 - Concurrency/Theory/02 - Memory Ordering]] — acquire/release, happens-before
-→ [[../Domains/04 - Linux/Theory/04 - Threads - pthreads]] — pthreads API
-→ [[../Domains/04 - Linux/Theory/06 - Semaphores]] — counting semaphore
-→ [[../Domains/05 - Concurrency/Mental Models/01 - Multithreading Patterns — The Machine]]
-→ [[../Domains/05 - Concurrency/Mental Models/02 - Memory Ordering — The Machine]]
+→ [[01 - Multithreading Patterns]] — thread pool, WPQ, producer/consumer
+→ [[02 - Memory Ordering]] — acquire/release, happens-before
+→ [[04 - Threads - pthreads]] — pthreads API
+→ [[06 - Semaphores]] — counting semaphore
+→ [[01 - Multithreading Patterns — The Machine]]
+→ [[02 - Memory Ordering — The Machine]]

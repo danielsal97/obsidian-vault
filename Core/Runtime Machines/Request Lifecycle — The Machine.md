@@ -74,7 +74,7 @@ The Reactor thread NEVER blocks on I/O (always non-blocking reads). It never exe
 
 → LDS/Flows/01 - Write Request — End to End — full LDS-specific walk-through
 → LDS/Runtime Machines/02 - Request Lifecycle — The Machine — LDS detail
-→ [[../Domains/07 - Design Patterns/Theory/01 - Reactor]] — Reactor pattern
-→ [[../Domains/07 - Design Patterns/Mental Models/01 - Reactor Pattern — The Machine]]
+→ [[01 - Reactor]] — Reactor pattern
+→ [[01 - Reactor Pattern — The Machine]]
 → [[Concurrency Runtime — The Machine]] — thread pool internals
 → [[Networking Stack — The Machine]] — epoll and UDP receive path

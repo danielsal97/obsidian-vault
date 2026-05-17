@@ -148,4 +148,4 @@ Common implementations: `std::string` becomes empty, `std::unique_ptr` becomes n
 → [[17 - std::vector — The Machine]]
 → [[01 - RAII — The Machine]]
 → [[20 - Exception Unwinding — The Machine]]
-→ [[../Domains/03 - C++/Theory/03 - Move Semantics]]
+→ [[03 - Move Semantics]]

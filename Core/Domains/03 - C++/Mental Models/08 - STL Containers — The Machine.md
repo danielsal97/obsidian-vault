@@ -81,7 +81,7 @@ v.reserve(1000);   // pre-allocate 1000 slots — push_back never reallocates be
 
 ## Connections
 
-**Theory:** [[Core/Domains/03 - C++/Theory/08 - STL Containers]]  
+**Theory:** [[08 - STL Containers]]  
 **Mental Models:** [[Data Structures — The Machine]], [[Move Semantics — The Machine]], [[Templates — The Machine]]  
 **LDS Implementation:** [[LDS/Infrastructure/Utilities Framework]] — WPQ priority_queue; [[LDS/Infrastructure/Reactor]] — unordered_map<fd, handler>  
 **Glossary:** [[WPQ]]

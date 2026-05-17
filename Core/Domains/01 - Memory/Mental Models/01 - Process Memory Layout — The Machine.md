@@ -94,7 +94,7 @@ Each new thread gets its own stack region in the mmap area, allocated by `pthrea
 
 ## Connections
 
-**Theory:** [[Core/Domains/01 - Memory/Theory/01 - Process Memory Layout]]  
+**Theory:** [[01 - Process Memory Layout]]  
 **Mental Models:** [[Stack vs Heap — The Machine]], [[Virtual Memory — The Machine]], [[Paging — The Machine]], [[MMU — The Machine]], [[Processes — The Machine]], [[mmap — The Machine]], [[malloc and free — The Machine]]  
 **LDS Implementation:** [[LDS/Application/LocalStorage]] — shared_mutex lives in object heap allocation  
 **Glossary:** [[VFS]]

@@ -29,7 +29,7 @@ TCP is the right choice when:
 
 ## Connections
 
-**Theory:** [[Core/Domains/06 - Networking/Theory/02 - Sockets TCP]]  
+**Theory:** [[02 - Sockets TCP]]  
 **Mental Models:** [[TCP Sockets — The Machine]], [[IPC Overview — The Machine]], [[File Descriptors — The Machine]]  
 **Tradeoffs:** [[Why UDP vs TCP]]  
 **LDS Implementation:** [[LDS/Linux Integration/TCPServer]] — LDS TCP server; [[Decisions/Why TCP for Client]] — why client uses TCP  

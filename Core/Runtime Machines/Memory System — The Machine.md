@@ -71,10 +71,10 @@ next access to nearby address (within 64 bytes): L1 hit → 0.5ns
 
 ## Links
 
-→ [[../Domains/02 - C/Theory/02 - Memory - malloc and free]] — allocator internals
-→ [[../Domains/01 - Memory/Theory/01 - Process Memory Layout]] — virtual address space regions
-→ [[../Domains/01 - Memory/Theory/03 - Virtual Memory]] — page tables, demand paging
-→ [[../Domains/01 - Memory/Theory/04 - Paging]] — page fault handling in detail
-→ [[../Domains/01 - Memory/Theory/07 - TLB]] — address translation cache
-→ [[../Domains/01 - Memory/Theory/08 - Cache Hierarchy]] — L1/L2/L3 details
-→ [[../Domains/01 - Memory/Mental Models/04 - Paging — The Machine]] — page fault runtime story
+→ [[02 - Memory - malloc and free]] — allocator internals
+→ [[01 - Process Memory Layout]] — virtual address space regions
+→ [[03 - Virtual Memory]] — page tables, demand paging
+→ [[04 - Paging]] — page fault handling in detail
+→ [[07 - TLB]] — address translation cache
+→ [[08 - Cache Hierarchy]] — L1/L2/L3 details
+→ [[04 - Paging — The Machine]] — page fault runtime story

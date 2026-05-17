@@ -62,7 +62,7 @@ Igit/                          ← top-level git repo (everything lives here)
 | Warning level | `-Wall -Wextra -pedantic-errors` |
 | Target OS | Linux (server), macOS (BlockClient only) |
 
-→ See [[DevOps/02 - Build System]] for full Makefile details.
+→ See [[02 - Build System]] for full Makefile details.
 
 ---
 
@@ -181,8 +181,8 @@ make run_tests
 
 ## Related Notes
 
-- [[DevOps/02 - Build System]] — full Makefile reference
-- [[DevOps/03 - Docker Setup]] — Docker environment for Linux
+- [[02 - Build System]] — full Makefile reference
+- [[03 - Docker Setup]] — Docker environment for Linux
 - [[Components/Scheduler]] — C scheduler in ds/
 - [[Components/Watchdog]] — C watchdog in ds/
-- [[Architecture/03 - Client-Server Architecture]] — Mac client setup
+- [[03 - Client-Server Architecture]] — Mac client setup

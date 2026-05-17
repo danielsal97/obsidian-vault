@@ -70,7 +70,7 @@ m_read_count.fetch_add(1, std::memory_order_relaxed);   // no ordering needed fo
 
 ## Connections
 
-**Theory:** [[Core/Domains/05 - Concurrency/Theory/02 - Memory Ordering]]  
+**Theory:** [[02 - Memory Ordering]]  
 **Mental Models:** [[Threads and pthreads — The Machine]], [[Multithreading Patterns — The Machine]], [[Undefined Behavior — The Machine]]  
 **LDS Implementation:** [[LDS/Infrastructure/Reactor]] — `m_running` atomic; [[LDS/Architecture/Concurrency Model]]  
 **Glossary:** [[pthreads]]

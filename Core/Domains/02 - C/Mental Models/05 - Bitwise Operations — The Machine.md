@@ -67,7 +67,7 @@ The NBD protocol uses a packed request structure. The request type field (`NBD_C
 
 ## Connections
 
-**Theory:** [[Core/Domains/02 - C/Theory/06 - Bitwise Operations]]  
+**Theory:** [[06 - Bitwise Operations]]  
 **Mental Models:** [[Serialization — The Machine]], [[Structs and Unions — The Machine]]  
 **LDS Implementation:** [[LDS/Architecture/Wire Protocol Spec]] — flags and type field extraction  
 **Runtime Machines:** [[LDS/Runtime Machines/NBDDriverComm — The Machine]]

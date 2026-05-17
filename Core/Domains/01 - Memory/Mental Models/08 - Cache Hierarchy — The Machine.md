@@ -98,6 +98,6 @@ The LDS `LocalStorage` buffer (`m_data`) is a contiguous `std::vector<char>` —
 
 ## Connections
 
-**Theory:** [[Core/Domains/01 - Memory/Theory/08 - Cache Hierarchy]]
+**Theory:** [[08 - Cache Hierarchy]]
 **Mental Models:** [[MMU — The Machine]], [[TLB — The Machine]], [[Stack vs Heap — The Machine]], [[Process Memory Layout — The Machine]]
 **Related:** [[Pointers — The Machine]], [[malloc and free — The Machine]], [[Virtual Memory — The Machine]]

@@ -69,7 +69,7 @@ The LDS ThreadPool is the central execution engine. The WPQ feeds it with priori
 
 ## Connections
 
-**Theory:** [[Core/Domains/05 - Concurrency/Theory/01 - Multithreading Patterns]]  
+**Theory:** [[01 - Multithreading Patterns]]  
 **Mental Models:** [[Threads and pthreads — The Machine]], [[Memory Ordering — The Machine]], [[Reactor Pattern — The Machine]]  
 **Tradeoffs:** [[Why ThreadPool over inline execution]]  
 **LDS Implementation:** [[LDS/Infrastructure/ThreadPool]], [[LDS/Infrastructure/Utilities Framework]]  

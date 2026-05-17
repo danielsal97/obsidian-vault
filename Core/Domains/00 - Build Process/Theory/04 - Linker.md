@@ -106,8 +106,8 @@ Virtual Address Space (set by linker, loaded by OS):
           [stack]  — grows down (managed by the OS/CPU)
 ```
 
-See [[../../01 - Memory/Theory/01 - Process Memory Layout]] for the full runtime layout.  
-See [[../../02 - C/Theory/02 - Memory - malloc and free]] — `malloc` manages the heap which exists above `.bss`.
+See [[01 - Process Memory Layout]] for the full runtime layout.  
+See [[02 - Memory - malloc and free]] — `malloc` manages the heap which exists above `.bss`.
 
 ---
 

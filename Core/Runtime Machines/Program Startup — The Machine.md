@@ -57,8 +57,8 @@ RAII-dependent systems avoid global objects with constructors, or use `static` l
 
 ## Links
 
-→ [[../Domains/04 - Linux/Theory/01 - Processes]] — exec() semantics
-→ [[../Domains/00 - Build Process/Theory/04 - Linker]] — static linking, ELF sections, relocations
-→ [[../Domains/01 - Memory/Theory/01 - Process Memory Layout]] — what each ELF section maps to in memory
-→ [[../Domains/03 - C++/Theory/01 - RAII]] — why global constructors are dangerous
+→ [[01 - Processes]] — exec() semantics
+→ [[04 - Linker]] — static linking, ELF sections, relocations
+→ [[01 - Process Memory Layout]] — what each ELF section maps to in memory
+→ [[01 - RAII]] — why global constructors are dangerous
 → [[Linux Runtime — The Machine]] — what happens after main() runs

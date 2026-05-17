@@ -65,6 +65,6 @@ When LDS starts, the kernel creates its virtual address space from the ELF binar
 
 ## Connections
 
-**Theory:** [[Core/Domains/01 - Memory/Theory/03 - Virtual Memory]]
+**Theory:** [[03 - Virtual Memory]]
 **Mental Models:** [[Process Memory Layout — The Machine]], [[Paging — The Machine]], [[MMU — The Machine]], [[malloc and free — The Machine]], [[mmap — The Machine]]
 **Related:** [[TLB — The Machine]], [[Page Walk — The Machine]], [[Cache Hierarchy — The Machine]]

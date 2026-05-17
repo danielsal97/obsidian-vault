@@ -75,6 +75,6 @@ std::unordered_map<Key, CreateFunc> m_createTable;
 ---
 
 ## Related Notes
-- [[Design Patterns/Factory]] — deep dive with diagrams
+- [[Factory]] — deep dive with diagrams
 - [[Engineering/Plugin Loading Internals]] — how plugins self-register
 - [[Design Patterns/Singleton]] — Factory is always a Singleton

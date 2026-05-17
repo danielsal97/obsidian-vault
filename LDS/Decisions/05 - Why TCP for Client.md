@@ -50,5 +50,5 @@ None of those apply here. The tradeoff is simple: TCP costs a three-way handshak
 ## Related Notes
 
 - [[Why UDP not TCP]] — why the master ↔ minion path uses UDP (different reasoning)
-- [[Architecture/03 - Client-Server Architecture]]
+- [[03 - Client-Server Architecture]]
 - [[Phase 2A - Mac Client TCP Bridge]]

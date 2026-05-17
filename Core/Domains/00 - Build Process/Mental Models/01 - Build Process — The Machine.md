@@ -71,6 +71,6 @@ The `-Wl,-rpath,$(LIB_DIR)` bakes the search path for `libfoo-debug.so` into the
 
 ## Connections
 
-**Theory:** [[Core/Domains/00 - Build Process/Theory/01 - Preprocessor]], [[Core/Domains/00 - Build Process/Theory/02 - Compiler]], [[Core/Domains/00 - Build Process/Theory/03 - Assembler]], [[Core/Domains/00 - Build Process/Theory/04 - Linker]]  
+**Theory:** [[01 - Preprocessor]], [[02 - Compiler]], [[03 - Assembler]], [[04 - Linker]]  
 **Mental Models:** [[Preprocessor — The Machine]], [[Compiler — The Machine]], [[Assembler — The Machine]], [[Linker — The Machine]], [[Make and CMake — The Machine]]  
 **LDS Implementation:** [[LDS/DevOps/Build System]]

@@ -143,9 +143,9 @@ class ExponentialBackoff : public IRetryStrategy {
 ## Related Notes
 
 - [[Factory]] — factory often selects which strategy to create
-- [[../../03 - C++/Theory/06 - Virtual Functions]] — strategy uses virtual dispatch
-- [[../../03 - C++/Theory/04 - Templates]] — policy-based design is compile-time strategy
-- [[../../03 - C++/Theory/02 - Smart Pointers]] — own strategy with unique_ptr
+- [[06 - Virtual Functions]] — strategy uses virtual dispatch
+- [[04 - Templates]] — policy-based design is compile-time strategy
+- [[02 - Smart Pointers]] — own strategy with unique_ptr
 
 ---
 

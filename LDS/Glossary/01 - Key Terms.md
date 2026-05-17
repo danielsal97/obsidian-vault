@@ -27,7 +27,7 @@ Every significant term used in this project has its own note in the unified [[Co
 | [[Inotify]] | Filesystem event API — detects new plugin `.so` files |
 | [[pthreads]] | POSIX thread API — what ThreadPool and workers are built on |
 | [[VFS]] | Virtual File System — the kernel layer above our block device |
-| [[Decisions/06 - Why signalfd not sigaction\|signalfd]] | Receiving UNIX signals as epoll events for clean shutdown |
+| [[06 - Why signalfd not sigaction]] | Receiving UNIX signals as epoll events for clean shutdown |
 
 ---
 
@@ -53,7 +53,7 @@ Every significant term used in this project has its own note in the unified [[Co
 | [[WPQ]] | Waitable Priority Queue — workers sleep here until a command arrives |
 | [[Exponential Backoff]] | 1s → 2s → 4s retry strategy before failing over to replica |
 | [[EIO]] | The errno surfaced to the user when all retries are exhausted |
-| [[Decisions/01 - Why RAII\|Why RAII]] | Design decision: why RAII is enforced everywhere |
-| [[Decisions/04 - Why UDP not TCP\|Why UDP not TCP]] | Design decision: full reasoning |
-| [[Decisions/02 - Why Observer Pattern\|Why Observer]] | Design decision: loose coupling via Dispatcher |
-| [[Decisions/03 - Why Templates not Virtual Functions\|Why Templates]] | Design decision: compile-time vs runtime dispatch |
+| [[01 - Why RAII]] | Design decision: why RAII is enforced everywhere |
+| [[04 - Why UDP not TCP]] | Design decision: full reasoning |
+| [[02 - Why Observer Pattern]] | Design decision: loose coupling via Dispatcher |
+| [[03 - Why Templates not Virtual Functions]] | Design decision: compile-time vs runtime dispatch |

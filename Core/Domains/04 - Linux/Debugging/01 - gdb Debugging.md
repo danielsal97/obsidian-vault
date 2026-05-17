@@ -169,7 +169,7 @@ sudo gdb ./bin/LDS
 (gdb) thread apply all bt
 ```
 
-For race conditions: AddressSanitizer (ASan) catches them at runtime — faster than gdb for concurrent bugs. See [[Memory/09 - Memory Errors and Tools]].
+For race conditions: AddressSanitizer (ASan) catches them at runtime — faster than gdb for concurrent bugs. See [[09 - Memory Errors and Tools]].
 
 ---
 

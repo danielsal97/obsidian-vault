@@ -153,7 +153,7 @@ client.Disconnect();
 
 ## Related Notes
 
-- [[Architecture/03 - Client-Server Architecture]]
+- [[03 - Client-Server Architecture]]
 - [[Components/TCPServer]] — the Linux-side counterpart
 - [[Phase 2A - Mac Client TCP Bridge]]
-- [[Decisions/05 - Why TCP for Client]]
+- [[05 - Why TCP for Client]]

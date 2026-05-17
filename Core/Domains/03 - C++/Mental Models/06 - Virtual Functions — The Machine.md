@@ -67,7 +67,7 @@ public:
 
 ## Connections
 
-**Theory:** [[Core/Domains/03 - C++/Theory/06 - Virtual Functions]]  
+**Theory:** [[06 - Virtual Functions]]  
 **Mental Models:** [[Inheritance — The Machine]], [[Templates — The Machine]], [[Strategy Pattern — The Machine]], [[Smart Pointers — The Machine]]  
 **Tradeoffs:** [[LDS/Decisions/Why Templates not Virtual Functions]]  
 **LDS Implementation:** [[LDS/Runtime Machines/InputMediator — The Machine]] — IDriverComm vtable dispatch  

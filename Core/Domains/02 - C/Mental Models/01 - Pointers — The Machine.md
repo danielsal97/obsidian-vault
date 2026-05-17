@@ -129,6 +129,6 @@ Every call advances the sticky note. The constraint: `ptr` must always point ins
 
 ## Connections
 
-**Theory:** [[Core/Domains/02 - C/Theory/01 - Pointers]]  
+**Theory:** [[01 - Pointers]]  
 **Mental Models:** [[Stack vs Heap — The Machine]], [[Process Memory Layout — The Machine]], [[Smart Pointers — The Machine]], [[Serialization — The Machine]]  
 **LDS Implementation:** [[LDS/Linux Integration/NBDDriverComm]] — ReadAll pointer-walk pattern

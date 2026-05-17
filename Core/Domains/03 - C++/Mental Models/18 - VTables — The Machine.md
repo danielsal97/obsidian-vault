@@ -160,5 +160,5 @@ Cost: walks the base-class chain. O(depth) with constant per level. For deep hie
 
 → [[18 - Object Layout — The Machine]]
 → [[06 - Virtual Functions — The Machine]]
-→ [[../Domains/03 - C++/Theory/06 - Virtual Functions]]
-→ [[../Domains/01 - Memory/Mental Models/08 - Cache Hierarchy — The Machine]]
+→ [[06 - Virtual Functions]]
+→ [[08 - Cache Hierarchy — The Machine]]

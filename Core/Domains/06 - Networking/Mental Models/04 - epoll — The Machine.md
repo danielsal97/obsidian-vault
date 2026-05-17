@@ -85,7 +85,7 @@ The LDS Reactor is a direct implementation of the epoll pattern. It maintains `m
 
 ## Connections
 
-**Theory:** [[Core/Domains/06 - Networking/Theory/04 - epoll]]  
+**Theory:** [[04 - epoll]]  
 **Mental Models:** [[Reactor Pattern — The Machine]], [[File Descriptors — The Machine]], [[TCP Sockets — The Machine]], [[Kernel — The Machine]]  
 **Tradeoffs:** [[Why epoll over select and poll]]  
 **LDS Implementation:** [[LDS/Infrastructure/Reactor]] — epoll is the core; [[LDS/Architecture/Concurrency Model]]  

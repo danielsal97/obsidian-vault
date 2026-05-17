@@ -1,205 +1,98 @@
 # Core — Systems Engineering
 
-> How does a Linux system actually live and execute? This vault maps the full stack from hardware to user-space — organized by layer. Every domain has Theory (the what/why) and Mental Models (the machine: step-by-step execution). Runtime Machines cross-cut all layers to show how concepts combine at runtime.
+---
+
+## Level 0 — The Full Stack
+
+Read this once. Everything in the vault is one row of this diagram.
+
+```
+Layer 7 — Build Pipeline
+  source.cpp → preprocessor → compiler → assembler → linker → ELF binary
+                                                                    │
+                                                               exec() syscall
+                                                                    │
+Layer 2 — Linux (OS interface)                                      ▼
+  fork() · exec() · signals · mmap            ┌─── Process (virtual address space) ───┐
+  context switch · scheduler ────────────────▶│ .text │ .data │ .bss │ heap │  stack  │
+                                              └──────────────────────┬────────────────┘
+Layer 1 — Memory                                                     │
+  virtual memory · page tables · MMU · TLB                           │ allocation
+  heap allocator · page fault · cache ───────────────────────────────┘
+
+Layer 3 — Languages (running inside the process)
+  C:   open() · read() · write() · malloc() · pointers · structs · serialize
+  C++: RAII · unique_ptr · move semantics · vtable · templates · exceptions
+
+Layer 4 — Concurrency
+  Thread 1 (Reactor)  │  Thread 2 (worker)  │  Thread 3 (worker)
+  ─── shared heap ────┴──── shared .text ───┴──── shared globals ───
+  mutex · futex · memory ordering · atomics · false sharing
+
+Layer 6 — Design Patterns
+  Reactor ──epoll──▶ handler dispatch ──Command──▶ ThreadPool
+  Observer · Factory · Singleton · Strategy
+
+Layer 5 — Networking
+  epoll_wait() → socket fd → recv() / send()
+  TCP (reliable stream)  │  UDP (unreliable datagram)
+  NIC DMA → softirq → socket buffer → epoll ready list → handler
+
+Layer 0 — Hardware
+  CPU cores │ MMU+TLB │ L1/L2/L3 cache │ DRAM │ NIC │ SSD
+```
+
+The path: **source file → linker → ELF → exec() → address space → C/C++ objects → threads → epoll → NIC**.
+Every bug, every design decision, every interview question lives at one of these transitions.
 
 ---
 
-## Layers (bottom → top)
+## 1 — Understand the LDS Project
 
-**Layer 0 — Hardware**
-→ [[Domains/01 - Memory/Mental Models/09 - Cache Hierarchy — The Machine (deep)|Cache Hierarchy]] — L1/L2/L3, cache lines, MESI protocol
+LDS is a Linux live-data server: it watches files via inotify, serves reads over UDP, and delivers changes to clients over TCP. It implements every concept in the stack diagram above.
 
-**Layer 1 — Memory**
-→ [[Domains/01 - Memory|Memory]] — virtual memory · paging · MMU · TLB · heap · allocators · page fault
+**The system in one sentence**: inotify fd fires → Reactor reads event → Command queued to ThreadPool → worker reads file → UDP reply sent.
 
-**Layer 2 — Linux**
-→ [[Domains/04 - Linux|Linux]] — processes · file descriptors · signals · threads · context switch · scheduler · mmap
+**Understand the architecture:**
+→ [[01 - LDS System — The Machine]] — full system map: which threads, which fds, which patterns
+→ [[02 - Request Lifecycle — The Machine]] — one request end-to-end: NBD → Reactor → RAID → UDP reply
+→ [[03 - Reactor — The Machine]] — how the epoll loop dispatches to handlers
 
-**Layer 3 — Languages**
-→ [[Domains/02 - C|C]] — pointers · malloc · strings · structs · serialization
-→ [[Domains/03 - C++|C++]] — RAII · smart ptrs · move · vtables · exceptions · STL · allocators
+**Explain the design decisions:**
+→ [[04 - Why UDP not TCP]] — application controls retry; TCP retransmit unacceptable for block I/O SLA
+→ [[05 - Why TCP for Client]] — client connections are reliable; delivery guarantee matters here
+→ [[06 - Why signalfd not sigaction]] — signals as fds fit the Reactor; sigaction breaks async-signal-safety
+→ [[01 - Why RAII]] — destructor fires even on exception; no resource leak possible
+→ [[02 - Why Observer Pattern]] — decouple file-event source from multiple consumers
+→ [[03 - Why Templates not Virtual Functions]] — zero-cost serialization; no vtable overhead in hot path
+→ [[07 - Why IN_CLOSE_WRITE not IN_CREATE]] — IN_CREATE fires before write completes; file is empty
 
-**Layer 4 — Concurrency**
-→ [[Domains/05 - Concurrency|Concurrency]] — thread patterns · memory ordering · atomics · false sharing
-
-**Layer 5 — Networking**
-→ [[Domains/06 - Networking|Networking]] — sockets · TCP · UDP · epoll · IPC
-
-**Layer 6 — Design Patterns**
-→ [[Domains/07 - Design Patterns|Design Patterns]] — Reactor · Observer · Singleton · Factory · Command · Strategy
-
-**Layer 7 — Systems**
-→ [[Domains/00 - Build Process|Build Process]] — preprocessor · compiler · assembler · linker · make
-→ [[Domains/09 - DevOps|DevOps]] — Docker
+**Walk through the code:**
+→ [[02 - main() Wiring Explained]] — how to trace the wiring from memory, thread by thread
 
 ---
 
-## Runtime Machines — Synthesis
+## 2 — Prepare for the Interview
 
-These cross all layers. Start here to see how concepts connect at runtime:
+**Step 1 — See the big picture, then drill each layer.**
+→ [[01 - Learn Systems Engineering]] — full curriculum: Layer 1 (build pipeline) → Layer 9 (machine)
+→ [[02 - Build Runtime Intuition]] — 12 runtime moments, each showing what the CPU/kernel does
 
-| Machine | What it synthesizes |
-|---|---|
-| [[Runtime Machines/Linux Runtime — The Machine\|Linux Runtime]] | All 6 kernel subsystems in one map |
-| [[Runtime Machines/Fork and Exec — The Machine\|Fork and Exec]] | fork() CoW → exec() ELF → dynamic linker → main() |
-| [[Runtime Machines/Program Startup — The Machine\|Program Startup]] | exec() → constructors → main() (detailed linker path) |
-| [[Runtime Machines/Page Fault — The Machine\|Page Fault]] | #PF handler → demand paging → CoW → stack growth |
-| [[Runtime Machines/Memory System — The Machine\|Memory System]] | malloc → brk/mmap → page fault → TLB → cache |
-| [[Runtime Machines/Concurrency Runtime — The Machine\|Concurrency Runtime]] | thread spawn → futex fast path → mutex contention → wakeup |
-| [[Runtime Machines/Networking Stack — The Machine\|Networking Stack]] | NIC DMA → softirq → socket → epoll → handler |
-| [[Runtime Machines/Virtual Dispatch — The Machine\|Virtual Dispatch]] | vptr → vtable → indirect call, cold miss, devirtualization |
-| [[Runtime Machines/C++ Object Lifetime — The Machine\|C++ Object Lifetime]] | ctor sets vptr → use → exception unwind → dtor |
-| [[Runtime Machines/Request Lifecycle — The Machine\|Request Lifecycle]] | LDS end-to-end: NBD → Reactor → RAID → UDP reply |
+**Step 2 — Answer every question cold.**
+→ [[05 - Interview Questions Bank]] — full checklist: C++, Linux, Concurrency, Networking, Algorithms
 
----
+**Step 3 — Know the tradeoffs.**
+→ [[03 - Study Tradeoffs]] — why epoll, why UDP, why ThreadPool — with full context
 
-## Guided paths
+**Step 4 — Practice explaining LDS.**
+→ [[01 - Interview Guide]] — 3-minute pitch, cold Q&A, bugs to mention honestly
+→ Use entry 1 above as your anchor: every abstract concept maps to a concrete LDS decision
 
-→ [[Portals/01 - Learn Systems Engineering]] — full layered curriculum, bottom to top
-→ [[Portals/02 - Build Runtime Intuition]] — execution stories for every component
-→ [[Portals/03 - Study Tradeoffs]] — why each design decision was made
-→ [[Portals/04 - Interview Preparation]] — interview-ready in sequence
-
----
-
-## Start from a runtime question
-
-### What happens when you run `./program`?
-→ [[Domains/00 - Build Process/Theory/04 - Linker]] — how the binary was assembled from .o files
-→ [[Domains/04 - Linux/Theory/01 - Processes]] — exec(), fork(), process image loaded by kernel
-→ [[Domains/01 - Memory/Theory/01 - Process Memory Layout]] — where text/data/BSS/heap/stack land in virtual memory
-**→ See it all connected:** [[Runtime Machines/Fork and Exec — The Machine]] — fork() CoW → exec() ELF → dynamic linker → .init_array → main()
-**→ Or just the startup detail:** [[Runtime Machines/Program Startup — The Machine]] — exec() → ELF loader → dynamic linker → main()
-
----
-
-### What happens when `malloc()` is called?
-→ [[Domains/02 - C/Theory/02 - Memory - malloc and free]] — the allocator, brk(), mmap()
-→ [[Domains/01 - Memory/Theory/02 - Stack vs Heap]] — why the heap is needed at all
-→ [[Domains/01 - Memory/Theory/03 - Virtual Memory]] — pages, page faults, the kernel's role
-→ [[Domains/03 - C++/Mental Models/24 - Allocators — The Machine]] — ptmalloc2 free bins, arena/pool/tcmalloc patterns
-→ [[Domains/01 - Memory/Mental Models/10 - Allocators and Memory Pools — The Machine]] — chunk layout, fragmentation, multi-threaded arenas
-**→ See it all connected:** [[Runtime Machines/Memory System — The Machine]] — malloc → brk/mmap → page fault → TLB miss → cache miss
-**→ The page fault in detail:** [[Runtime Machines/Page Fault — The Machine]] — #PF handler → allocate physical page → TLB fill → resume
-
----
-
-### What happens when a virtual function is called?
-→ [[Domains/03 - C++/Mental Models/18 - VTables — The Machine]] — vptr at offset 0, vtable in .rodata, three-instruction dispatch
-→ [[Domains/03 - C++/Mental Models/19 - Object Layout — The Machine]] — struct padding, EBO, multiple inheritance pointer adjustment
-→ [[Domains/01 - Memory/Mental Models/09 - Cache Hierarchy — The Machine (deep)]] — vtable in .rodata, cache miss on cold indirect call
-**→ See it all connected:** [[Runtime Machines/Virtual Dispatch — The Machine]] — construction sets vptr, three-instruction dispatch, cold miss, devirtualization
-**→ Full object story:** [[Runtime Machines/C++ Object Lifetime — The Machine]] — ctor → vptr → use → exception → dtor
-
----
-
-### What happens when a thread starts?
-→ [[Domains/04 - Linux/Theory/04 - Threads - pthreads]] — clone(), new kernel stack, TLS allocation
-→ [[Domains/04 - Linux/Mental Models/10 - Context Switch — The Machine]] — timer interrupt → save registers → scheduler picks next → load new state
-→ [[Domains/04 - Linux/Mental Models/11 - Scheduler — The Machine]] — CFS red-black tree, vruntime, TIF_NEED_RESCHED preemption
-→ [[Domains/05 - Concurrency/Theory/01 - Multithreading Patterns]] — thread pool, work queue
-→ [[Domains/05 - Concurrency/Theory/02 - Memory Ordering]] — what "visible to another thread" actually means
-**→ See it all connected:** [[Runtime Machines/Concurrency Runtime — The Machine]] — spawn → futex contention → mutex → wake cycle
-
----
-
-### What happens when `epoll_wait()` wakes?
-→ [[Domains/06 - Networking/Theory/04 - epoll]] — edge-triggered vs level-triggered, kernel internals
-→ [[Domains/07 - Design Patterns/Theory/01 - Reactor]] — Reactor pattern: epoll as event demultiplexer
-→ [[Domains/04 - Linux/Theory/02 - File Descriptors]] — everything is a file descriptor
-**→ See it all connected:** [[Runtime Machines/Networking Stack — The Machine]] — NIC DMA → softirq → socket lookup → epoll ready list → Reactor dispatch → ThreadPool
-
----
-
-### What happens when a UDP packet arrives?
-→ [[Domains/06 - Networking/Theory/03 - UDP Sockets]] — socket buffer, recvfrom, no connection state
-→ [[Domains/06 - Networking/Theory/01 - Overview]] — the full networking stack picture
-→ [[Domains/06 - Networking/Mental Models/03 - UDP Sockets — The Machine]]
-**→ See it all connected:** [[Runtime Machines/Networking Stack — The Machine]] — NIC DMA → IP/UDP demux → sk_buff → recvfrom returns
-
----
-
-### What happens when a `std::vector` reallocates?
-→ [[Domains/03 - C++/Mental Models/17 - std::vector — The Machine]] — 2x growth, move_if_noexcept, iterator invalidation
-→ [[Domains/03 - C++/Mental Models/21 - Move Semantics — The Machine (deep)]] — why noexcept on move matters: missing it means copies, not moves
-→ [[Domains/01 - Memory/Mental Models/09 - Cache Hierarchy — The Machine (deep)]] — why sequential vector beats linked list 100x
-**→ See it all connected:** [[Runtime Machines/Memory System — The Machine]] — malloc new block → move elements → cache-warm sequential layout
-
----
-
-### What happens when two threads share a struct?
-→ [[Domains/05 - Concurrency/Mental Models/03 - False Sharing — The Machine]] — MESI protocol, 64-byte cache line fights between cores
-→ [[Domains/05 - Concurrency/Mental Models/04 - Atomics — The Machine]] — lock xadd, acquire/release semantics, CAS
-→ [[Domains/05 - Concurrency/Mental Models/02 - Memory Ordering — The Machine]] — what the CPU is allowed to reorder and when
-**→ See it all connected:** [[Runtime Machines/Concurrency Runtime — The Machine]] — WPQ push/pop, futex fast path, cache coherence traffic
-
----
-
-### What happens when an exception is thrown?
-→ [[Domains/03 - C++/Mental Models/20 - Exception Unwinding — The Machine]] — .eh_frame lookup, __cxa_throw, destructor per stack frame
-→ [[Domains/03 - C++/Mental Models/01 - RAII — The Machine]] — why destructors always run: zero-cost until thrown, then RAII saves you
-→ [[Domains/03 - C++/Theory/09 - Exception Handling]] — exception safety levels, noexcept, destructor rules
-**→ See it all connected:** [[Runtime Machines/C++ Object Lifetime — The Machine]] — throw → unwind → RAII destructors fire in reverse order → catch
-
----
-
-### What happens when a `shared_ptr` is copied?
-→ [[Domains/03 - C++/Mental Models/22 - shared_ptr — The Machine]] — control block layout, atomic strong count, deleter, make_shared optimization
-→ [[Domains/03 - C++/Mental Models/25 - weak_ptr — The Machine]] — non-owning observer, lock() CAS atomicity, expired() TOCTOU race
-→ [[Domains/03 - C++/Mental Models/21 - Move Semantics — The Machine (deep)]] — why move costs 1ns but copy costs 5-300ns (atomic vs pointer assign)
-**→ See it all connected:** [[Runtime Machines/C++ Object Lifetime — The Machine]] — shared ownership across threads, last ref destroys, weak_ptr lock() on destruction
-
----
-
-### What happens at end of scope (RAII)?
-→ [[Domains/03 - C++/Theory/01 - RAII]] — destructor timing, stack unwinding order
-→ [[Domains/03 - C++/Theory/02 - Smart Pointers]] — unique_ptr/shared_ptr destruction
-→ [[Domains/03 - C++/Mental Models/23 - Copy Elision — The Machine]] — RVO/NRVO: why the object is often built in-place with zero copy/move
-**→ See it all connected:** [[Runtime Machines/C++ Object Lifetime — The Machine]] — ctor → vptr → use → move → dtor, every transition
-
----
-
-## Guided paths (ordered study)
-
-→ [[Portals/01 - Learn Systems Engineering]] — full layered curriculum, bottom to top
-→ [[Portals/02 - Build Runtime Intuition]] — execution stories for every component
-→ [[Portals/03 - Study Tradeoffs]] — why each design decision was made
-→ [[Portals/04 - Interview Preparation]] — interview-ready in sequence
-
----
-
-## Runtime Machines (all entry points)
-
-**Start here to see how everything connects:**
-→ [[Runtime Machines/Linux Runtime — The Machine]] — the map: all 6 subsystems (memory, MMU, scheduler, threads, fds, networking) and how they interact
-
-**Zoom in on a subsystem:**
-→ [[Runtime Machines/Fork and Exec — The Machine]] — fork() CoW page tables → exec() ELF load → dynamic linker → main()
-→ [[Runtime Machines/Program Startup — The Machine]] — exec() → constructors → main() (detailed linker path)
-→ [[Runtime Machines/Page Fault — The Machine]] — #PF handler → demand paging → CoW → file-backed → stack growth
-→ [[Runtime Machines/Memory System — The Machine]] — malloc → brk/mmap → page fault → TLB miss → cache miss
-→ [[Runtime Machines/Networking Stack — The Machine]] — NIC DMA → softirq → socket lookup → epoll → handler
-→ [[Runtime Machines/Concurrency Runtime — The Machine]] — thread spawn → futex fast path → mutex contention → wakeup
-→ [[Runtime Machines/Virtual Dispatch — The Machine]] — vptr → vtable → indirect call, cold miss, devirtualization
-→ [[Runtime Machines/C++ Object Lifetime — The Machine]] — ctor sets vptr → use → exception unwind → dtor
-→ [[Runtime Machines/Request Lifecycle — The Machine]] — LDS: NBD → Reactor → RAID → UDP reply
-
----
-
-## Jump directly to a domain
-
-→ **[[Domains/00 - Build Process]]** — preprocessor · compiler · assembler · linker · make
-→ **[[Domains/01 - Memory]]** — layout · heap · virtual memory · paging · MMU · TLB · cache · allocators
-→ **[[Domains/02 - C]]** — pointers · malloc · strings · structs · file IO · bitwise · serialization
-→ **[[Domains/03 - C++]]** — RAII · smart ptrs · move · vtables · object layout · exception unwinding · STL · allocators · copy elision · versions
-→ **[[Domains/04 - Linux]]** — processes · fds · signals · threads · context switch · scheduler · mmap · kernel · gdb
-→ **[[Domains/05 - Concurrency]]** — threading patterns · memory ordering · false sharing · atomics
-→ **[[Domains/06 - Networking]]** — sockets · TCP · UDP · epoll · IPC · tradeoffs
-→ **[[Domains/07 - Design Patterns]]** — Reactor · Observer · Singleton · Factory · Command · Strategy
-→ **[[Domains/08 - Algorithms]]** — data structures · Big-O
-→ **[[Domains/09 - DevOps]]** — Docker
-
----
-
-## Quick vocabulary
-→ [[Glossary/16 - epoll]] · [[Glossary/12 - TCP]] · [[Glossary/14 - UDP]] · [[Glossary/11 - RAII]] · [[Glossary/13 - Templates]] · [[Glossary/17 - pthreads]] · [[Glossary/18 - shared_ptr]] · [[Glossary/15 - VFS]] · [[Glossary/19 - socketpair]]
+**The pattern interviewers test:**
+```
+"What does X do?"
+  → API level (what you call)
+  → kernel level (what the OS does)
+  → hardware level (what the CPU/MMU/NIC does)
+```
+If you can answer at all three levels, you pass.

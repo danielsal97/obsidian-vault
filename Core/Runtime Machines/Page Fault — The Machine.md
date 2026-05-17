@@ -172,11 +172,11 @@ File-backed, page cache miss (HDD):
 
 ## Links
 
-→ [[../Domains/01 - Memory/Mental Models/03 - Virtual Memory — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/04 - Paging — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/05 - MMU — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/06 - Page Walk — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/07 - TLB — The Machine]]
-→ [[../Domains/04 - Linux/Theory/07 - mmap]]
+→ [[03 - Virtual Memory — The Machine]]
+→ [[04 - Paging — The Machine]]
+→ [[05 - MMU — The Machine]]
+→ [[06 - Page Walk — The Machine]]
+→ [[07 - TLB — The Machine]]
+→ [[07 - mmap]]
 → [[Memory System — The Machine]]
 → [[Fork and Exec — The Machine]]

@@ -6,37 +6,66 @@ The right answer in an interview is never just "X is faster." It's: here was the
 
 ---
 
+## Level 0 — Where These Tradeoffs Live in the System
+
+Every tradeoff below is a decision at a specific layer of the stack. Understanding which layer clarifies the constraints:
+
+```
+[source.cpp] → [ELF binary] → [process]
+                                   │
+              ┌────────────────────┴──────────────────────┐
+              │                                           │
+        [Reactor thread]                         [Worker threads]
+         epoll_wait()                            process requests
+              │                                           │
+              │← I/O Model tradeoff (epoll vs select) ──→│
+              │                                           │
+              │← Threading Model (inline vs ThreadPool) →│
+              │
+         socket fd
+              │← Transport Protocol (TCP vs UDP) ────────→[NIC → wire]
+```
+
+| Tradeoff | Layer | The question |
+|---|---|---|
+| epoll over select/poll | Networking (Layer 6) | How does the Reactor wait for events without blocking? |
+| Reactor over thread-per-conn | Design Patterns (Layer 7) | How do we serve many connections with one thread? |
+| UDP over TCP | Networking (Layer 6) | Who controls reliability: kernel (TCP) or application? |
+| ThreadPool over inline | Concurrency (Layer 8) | Where does CPU work run relative to I/O completion? |
+
+---
+
 ## I/O Model
 
 **Why epoll over select/poll?**
-→ [[../Domains/06 - Networking/Tradeoffs/01 - Why epoll over select and poll]] — O(1) per-event cost vs O(n) fd scanning; kernel maintains ready list
+→ [[01 - Why epoll over select and poll]] — O(1) per-event cost vs O(n) fd scanning; kernel maintains ready list
 
-Context: [[../Domains/06 - Networking/Theory/04 - epoll]] — full epoll API and internals
-Runtime: [[../Domains/06 - Networking/Mental Models/04 - epoll — The Machine]] — how the ready list is populated and drained
+Context: [[04 - epoll]] — full epoll API and internals
+Runtime: [[04 - epoll — The Machine]] — how the ready list is populated and drained
 
 **Why Reactor over thread-per-connection?**
-→ [[../Domains/07 - Design Patterns/Theory/01 - Reactor]] — one thread, one epoll loop, no per-connection stack cost
-Runtime: [[../Domains/07 - Design Patterns/Mental Models/01 - Reactor Pattern — The Machine]] — how epoll becomes a dispatch table
+→ [[01 - Reactor]] — one thread, one epoll loop, no per-connection stack cost
+Runtime: [[01 - Reactor Pattern — The Machine]] — how epoll becomes a dispatch table
 
 ---
 
 ## Transport Protocol
 
 **Why UDP not TCP for storage I/O?**
-→ [[../Domains/06 - Networking/Tradeoffs/02 - Why UDP vs TCP]] — application controls retry/timeout; TCP retransmit delay unacceptable for block storage SLA
+→ [[02 - Why UDP vs TCP]] — application controls retry/timeout; TCP retransmit delay unacceptable for block storage SLA
 
-Context: [[../Domains/06 - Networking/Theory/02 - Sockets TCP]] · [[../Domains/06 - Networking/Theory/03 - UDP Sockets]]
-Runtime: [[../Domains/06 - Networking/Mental Models/03 - UDP Sockets — The Machine]] · [[../Domains/06 - Networking/Mental Models/02 - TCP Sockets — The Machine]]
+Context: [[02 - Sockets TCP]] · [[03 - UDP Sockets]]
+Runtime: [[03 - UDP Sockets — The Machine]] · [[02 - TCP Sockets — The Machine]]
 
 ---
 
 ## Threading Model
 
 **Why ThreadPool over inline execution?**
-→ [[../Domains/05 - Concurrency/Tradeoffs/01 - Why ThreadPool over inline execution]] — decouple I/O from CPU; bounded thread count; work queued not blocked
+→ [[01 - Why ThreadPool over inline execution]] — decouple I/O from CPU; bounded thread count; work queued not blocked
 
-Context: [[../Domains/05 - Concurrency/Theory/01 - Multithreading Patterns]] — thread pool, WPQ, producer/consumer
-Runtime: [[../Domains/05 - Concurrency/Mental Models/01 - Multithreading Patterns — The Machine]] — how threads idle, wake, steal, and complete work
+Context: [[01 - Multithreading Patterns]] — thread pool, WPQ, producer/consumer
+Runtime: [[01 - Multithreading Patterns — The Machine]] — how threads idle, wake, steal, and complete work
 
 ---
 

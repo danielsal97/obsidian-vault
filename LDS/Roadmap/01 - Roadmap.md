@@ -97,7 +97,7 @@ All done. Reactor, NBD, ThreadPool, Factory, PNP, InputMediator wired together.
 - [x] `ServerResponse` struct: status (1B) + length (4B big-endian)
 
 #### Task 2A.3 — TCPServer on Linux (5 hrs)
-[[LDS/Linux Integration/04 - TCPServer|TCPServer]]
+[[04 - TCPServer|TCPServer]]
 - [x] `socket()` + `bind()` + `listen()` on port 7800
 - [x] `OnAccept()` — `accept()` + `reactor.Add(client_fd, handler)`
 - [x] `RecvAll()` helper — loops until all N bytes received
@@ -105,7 +105,7 @@ All done. Reactor, NBD, ThreadPool, Factory, PNP, InputMediator wired together.
 - [x] Wire into `LDS.cpp`
 
 #### Task 2A.4 — BlockClient on Mac (4 hrs)
-[[LDS/Linux Integration/01 - BlockClient|BlockClient]]
+[[01 - BlockClient|BlockClient]]
 - [x] `Connect(ip, port)` — TCP socket + connect
 - [x] `Write(offset, data)` — serialize request, send, recv response
 - [x] `Read(offset, len)` — serialize request, send, recv response + data

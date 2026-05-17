@@ -72,6 +72,6 @@ len = ntohl(len);
 
 ## Connections
 
-**Theory:** [[Core/Domains/03 - C++/Theory/10 - Type Casting]]  
+**Theory:** [[10 - Type Casting]]  
 **Mental Models:** [[Inheritance — The Machine]], [[Virtual Functions — The Machine]], [[Undefined Behavior — The Machine]], [[Serialization — The Machine]]  
 **LDS Implementation:** [[LDS/Linux Integration/NBDDriverComm]] — memcpy over reinterpret_cast for protocol parsing

@@ -161,8 +161,8 @@ RTTI lives in .rodata alongside the vtable. `dynamic_cast` is the only virtual o
 
 ## Links
 
-→ [[../Domains/03 - C++/Mental Models/18 - VTables — The Machine]]
-→ [[../Domains/03 - C++/Mental Models/19 - Object Layout — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/09 - Cache Hierarchy — The Machine (deep)]]
-→ [[../Domains/03 - C++/Theory/06 - Virtual Functions]]
+→ [[18 - VTables — The Machine]]
+→ [[19 - Object Layout — The Machine]]
+→ [[09 - Cache Hierarchy — The Machine (deep)]]
+→ [[06 - Virtual Functions]]
 → [[C++ Object Lifetime — The Machine]]

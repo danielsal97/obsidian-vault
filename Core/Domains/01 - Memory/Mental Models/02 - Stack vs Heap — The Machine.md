@@ -172,7 +172,7 @@ Each worker thread in the LDS ThreadPool gets its own stack (OS-allocated at thr
 
 ## Connections
 
-**Theory:** [[Core/Domains/01 - Memory/Theory/02 - Stack vs Heap]], [[Core/Domains/01 - Memory/Theory/01 - Process Memory Layout]]  
+**Theory:** [[02 - Stack vs Heap]], [[01 - Process Memory Layout]]  
 **Mental Models:** [[Process Memory Layout — The Machine]], [[malloc and free — The Machine]], [[RAII — The Machine]], [[Pointers — The Machine]], [[Build Process — The Machine]], [[Linker — The Machine]]  
 **LDS Implementation:** [[LDS/Application/LocalStorage]] — vector heap allocation  
 **Runtime Machines:** [[LDS/Runtime Machines/LocalStorage — The Machine]]

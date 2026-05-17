@@ -23,6 +23,6 @@ With 10,000 monitored fds and 10 active: `select`/`poll` scan all 10,000 every c
 - **io_uring**: completion-based, zero per-operation syscalls — better for high-throughput storage I/O
 
 ## See also
-→ [[../../06 - Networking/Theory/04 - epoll]] — full API reference
-→ [[../../06 - Networking/Mental Models/04 - epoll — The Machine]] — runtime intuition
-→ [[../../07 - Design Patterns/Mental Models/01 - Reactor Pattern — The Machine]] — how epoll becomes an event loop
+→ [[04 - epoll]] — full API reference
+→ [[04 - epoll — The Machine]] — runtime intuition
+→ [[01 - Reactor Pattern — The Machine]] — how epoll becomes an event loop

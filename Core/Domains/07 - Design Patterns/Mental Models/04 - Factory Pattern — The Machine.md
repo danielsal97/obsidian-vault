@@ -72,7 +72,7 @@ LDS's plugin system uses `dlopen`/`dlsym` as a factory. The plugin monitor watch
 
 ## Connections
 
-**Theory:** [[Core/Domains/07 - Design Patterns/Theory/04 - Factory]]  
+**Theory:** [[04 - Factory]]  
 **Mental Models:** [[Strategy Pattern — The Machine]], [[Templates — The Machine]], [[Virtual Functions — The Machine]]  
 **LDS Implementation:** [[LDS/Linux Integration/Plugin Loading Internals]] — dlopen plugin factory; [[LDS/Application/Plugins]]  
 **Runtime Machines:** [[LDS/Runtime Machines/Plugin System — The Machine]]  

@@ -201,8 +201,8 @@ diff random.bin readback.bin  # must be empty
 ## Related Notes
 
 - [[Phase 2A - Mac Client TCP Bridge]]
-- [[Architecture/03 - Client-Server Architecture]]
-- [[Decisions/05 - Why TCP for Client]]
+- [[03 - Client-Server Architecture]]
+- [[05 - Why TCP for Client]]
 - [[Components/TCPServer]]
 - [[Components/BlockClient]]
 - [[Engineering/Known Bugs]]

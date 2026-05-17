@@ -34,7 +34,7 @@ Example: fire-and-forget PUT with MSG_ID → ResponseManager matches ACK → Sch
 This avoids TCP's head-of-line blocking when one minion is slow.
 
 ## See also
-→ [[../../06 - Networking/Theory/02 - Sockets TCP]] — TCP API and theory
-→ [[../../06 - Networking/Theory/03 - UDP Sockets]] — UDP API and theory
+→ [[02 - Sockets TCP]] — TCP API and theory
+→ [[03 - UDP Sockets]] — UDP API and theory
 → LDS/Decisions/Why UDP not TCP — how LDS applies this for minion communication
 → LDS/Decisions/Why TCP for Client — why LDS uses TCP for the Mac client link

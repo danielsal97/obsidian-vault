@@ -157,5 +157,5 @@ If you need to update two variables atomically together: use a mutex. If you're 
 → [[02 - Memory Ordering — The Machine]]
 → [[03 - False Sharing — The Machine]]
 → [[01 - Multithreading Patterns — The Machine]]
-→ [[../Domains/05 - Concurrency/Theory/02 - Memory Ordering]]
-→ [[../Domains/04 - Linux/Mental Models/10 - Context Switch — The Machine]]
+→ [[02 - Memory Ordering]]
+→ [[10 - Context Switch — The Machine]]

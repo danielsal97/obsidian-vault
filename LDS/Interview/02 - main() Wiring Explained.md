@@ -454,6 +454,6 @@ The compiler does not check this for you. Construction order in `main()` is your
 - [[Glossary/RAII]] — why destructors clean up automatically
 - [[Glossary/shared_ptr]] — make_shared and reference counting
 - [[Glossary/Templates]] — how Singleton<T> and Factory<T> work
-- [[Glossary/11 - WPQ]] — what happens after pool.Enqueue()
+- [[11 - WPQ]] — what happens after pool.Enqueue()
 - [[Glossary/epoll]] — what reactor.Run() is actually doing
 - [[Request Lifecycle]] — the full journey of one NBD request through this wiring

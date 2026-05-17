@@ -72,10 +72,10 @@ Control block (refcount + weakcount) is allocated once, alongside the Foo when u
 
 ## Links
 
-→ [[../Domains/03 - C++/Theory/01 - RAII]] — RAII theory and patterns
-→ [[../Domains/03 - C++/Theory/02 - Smart Pointers]] — unique_ptr, shared_ptr, weak_ptr
-→ [[../Domains/03 - C++/Theory/03 - Move Semantics]] — rvalue references, move semantics
-→ [[../Domains/03 - C++/Theory/09 - Exception Handling]] — exception safety levels, noexcept
-→ [[../Domains/03 - C++/Mental Models/01 - RAII — The Machine]]
-→ [[../Domains/03 - C++/Mental Models/02 - Smart Pointers — The Machine]]
-→ [[../Domains/03 - C++/Mental Models/03 - Move Semantics — The Machine]]
+→ [[01 - RAII]] — RAII theory and patterns
+→ [[02 - Smart Pointers]] — unique_ptr, shared_ptr, weak_ptr
+→ [[03 - Move Semantics]] — rvalue references, move semantics
+→ [[09 - Exception Handling]] — exception safety levels, noexcept
+→ [[01 - RAII — The Machine]]
+→ [[02 - Smart Pointers — The Machine]]
+→ [[03 - Move Semantics — The Machine]]

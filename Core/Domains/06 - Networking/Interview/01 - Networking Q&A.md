@@ -160,9 +160,9 @@ LDS uses TCP for the Mac client link (reliability matters — you can't lose a w
 
 ## Related
 
-→ [[../../04 - Linux/Interview/01 - Linux Q&A]]
-→ [[../Mental Models/04 - epoll — The Machine]]
-→ [[../Mental Models/02 - TCP Sockets — The Machine]]
-→ [[../Mental Models/03 - UDP Sockets — The Machine]]
-→ [[../Tradeoffs/01 - Why epoll over select and poll]]
-→ [[../Tradeoffs/02 - Why UDP vs TCP]]
+→ [[01 - Linux Q&A]]
+→ [[04 - epoll — The Machine]]
+→ [[02 - TCP Sockets — The Machine]]
+→ [[03 - UDP Sockets — The Machine]]
+→ [[01 - Why epoll over select and poll]]
+→ [[02 - Why UDP vs TCP]]

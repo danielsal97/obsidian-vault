@@ -117,6 +117,6 @@ Symptoms without tools: parallel version of program is slower or same speed as s
 
 → [[02 - Memory Ordering — The Machine]]
 → [[01 - Multithreading Patterns — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/08 - Cache Hierarchy — The Machine]]
-→ [[../Domains/04 - Linux/Mental Models/10 - Context Switch — The Machine]]
-→ [[../Domains/05 - Concurrency/Theory/02 - Memory Ordering]]
+→ [[08 - Cache Hierarchy — The Machine]]
+→ [[10 - Context Switch — The Machine]]
+→ [[02 - Memory Ordering]]

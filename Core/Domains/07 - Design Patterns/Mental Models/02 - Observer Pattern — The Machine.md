@@ -64,7 +64,7 @@ LDS uses `ICallBack<T>` (virtual interface) and `CallBack<T>` (template concrete
 
 ## Connections
 
-**Theory:** [[Core/Domains/07 - Design Patterns/Theory/02 - Observer]]  
+**Theory:** [[02 - Observer]]  
 **Mental Models:** [[Strategy Pattern — The Machine]], [[Templates — The Machine]], [[Factory Pattern — The Machine]]  
 **LDS Implementation:** [[LDS/Infrastructure/Observer Pattern Internals]], [[LDS/Decisions/Why Observer Pattern]]  
 **Runtime Machines:** [[LDS/Runtime Machines/InputMediator — The Machine]]  

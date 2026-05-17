@@ -105,7 +105,7 @@ uint32_t id  = ntohl(hdr.msg_id);
 uint64_t off = be64toh(hdr.offset);
 ```
 
-See [[../../02 - C/Theory/07 - Serialization]] — full wire protocol design.
+See [[07 - Serialization]] — full wire protocol design.
 
 ---
 
@@ -261,7 +261,7 @@ Response: [MSG_ID: 4B][STATUS: 1B][LEN: 4B][DATA: var]
 
 MSG_ID lets `ResponseManager` match replies to pending requests even out-of-order.
 
-See [[../../02 - C/Theory/07 - Serialization]] for how to build and parse binary wire protocols.
+See [[07 - Serialization]] for how to build and parse binary wire protocols.
 
 ---
 
@@ -367,8 +367,8 @@ ip route show                  # routing table
 - [[UDP Sockets]] — UDP socket API, message boundaries, broadcast, multicast
 - [[epoll]] — multiplexing many connections, Reactor pattern
 - [[IPC Overview]] — local IPC: pipes, socketpair, unix sockets, shared memory
-- [[../../02 - C/Theory/07 - Serialization]] — binary wire protocol design and byte ordering
-- [[../../04 - Linux/Theory/03 - Signals]] — SIGPIPE when writing to a closed socket
+- [[07 - Serialization]] — binary wire protocol design and byte ordering
+- [[03 - Signals]] — SIGPIPE when writing to a closed socket
 
 ---
 

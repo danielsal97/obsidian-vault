@@ -137,10 +137,10 @@ flowchart LR
 
 | Pattern | Where |
 |---|---|
-| [[Reactor\|Reactor]] | Drives the event loop, calls InputMediator |
-| [[Factory\|Factory]] | Creates ReadCommand / WriteCommand by type string |
-| [[Command\|Command]] | ReadCommand / WriteCommand as ICommand subclasses |
-| [[Singleton\|Singleton]] | Accesses Factory and Logger globally |
+| [[Reactor\]] | Drives the event loop, calls InputMediator |
+| [[Factory\]] | Creates ReadCommand / WriteCommand by type string |
+| [[Command\]] | ReadCommand / WriteCommand as ICommand subclasses |
+| [[Singleton\]] | Accesses Factory and Logger globally |
 
 ---
 

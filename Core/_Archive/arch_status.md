@@ -123,15 +123,15 @@ Specific dangling wikilinks confirmed by reviewer-cpp — these silently fail in
 
 | File | Broken link | Correct target |
 |---|---|---|
-| [[Domains/03 - C++/Mental Models/22 - shared_ptr — The Machine]] | `[[04 - Atomics — The Machine]]` | File does not exist yet — needs creating at `Domains/05 - Concurrency/Mental Models/04 - Atomics — The Machine` (already listed as missing) |
-| [[Domains/03 - C++/Mental Models/25 - weak_ptr — The Machine]] | `[[04 - Atomics — The Machine]]` | Same — same dangling ref in second file |
-| [[Domains/03 - C++/Mental Models/12 - C++11 — The Machine]] | `[[Core/Domains/03 - C++/Theory/C++11]]` | `[[Domains/03 - C++/Theory/Versions/01 - C++11]]` |
-| [[Domains/03 - C++/Mental Models/13 - C++14 — The Machine]] | `[[Core/Domains/03 - C++/Theory/C++14]]` (likely) | `[[Domains/03 - C++/Theory/Versions/02 - C++14]]` |
-| [[Domains/03 - C++/Mental Models/14 - C++17 — The Machine]] | `[[Core/Domains/03 - C++/Theory/C++17]]` (likely) | `[[Domains/03 - C++/Theory/Versions/03 - C++17]]` |
-| [[Domains/03 - C++/Mental Models/15 - C++20 — The Machine]] | `[[Core/Domains/03 - C++/Theory/C++20]]` (likely) | `[[Domains/03 - C++/Theory/Versions/04 - C++20]]` |
-| [[Domains/03 - C++/Mental Models/04 - Templates — The Machine]] | `[[Observer Pattern — The Machine]]`, `[[Factory Pattern — The Machine]]`, `[[Strategy Pattern — The Machine]]` | Bare names — may resolve if Obsidian finds unique filenames; verify in graph view. Actual files: `Domains/07 - Design Patterns/Mental Models/` |
-| [[LDS/Architecture/03 - Client-Server Architecture]] | `[[Components/TCPServer]]` | `[[Linux Integration/04 - TCPServer\|TCPServer]]` |
-| [[LDS/Architecture/03 - Client-Server Architecture]] | `[[Components/BlockClient]]` | `[[Linux Integration/01 - BlockClient\|BlockClient]]` |
+| [[22 - shared_ptr — The Machine]] | `[[04 - Atomics — The Machine]]` | File does not exist yet — needs creating at `Domains/05 - Concurrency/Mental Models/04 - Atomics — The Machine` (already listed as missing) |
+| [[25 - weak_ptr — The Machine]] | `[[04 - Atomics — The Machine]]` | Same — same dangling ref in second file |
+| [[12 - C++11 — The Machine]] | `[[Core/Domains/03 - C++/Theory/C++11]]` | `[[01 - C++11]]` |
+| [[13 - C++14 — The Machine]] | `[[Core/Domains/03 - C++/Theory/C++14]]` (likely) | `[[02 - C++14]]` |
+| [[14 - C++17 — The Machine]] | `[[Core/Domains/03 - C++/Theory/C++17]]` (likely) | `[[03 - C++17]]` |
+| [[15 - C++20 — The Machine]] | `[[Core/Domains/03 - C++/Theory/C++20]]` (likely) | `[[04 - C++20]]` |
+| [[04 - Templates — The Machine]] | `[[Observer Pattern — The Machine]]`, `[[Factory Pattern — The Machine]]`, `[[Strategy Pattern — The Machine]]` | Bare names — may resolve if Obsidian finds unique filenames; verify in graph view. Actual files: `Domains/07 - Design Patterns/Mental Models/` |
+| [[03 - Client-Server Architecture]] | `[[Components/TCPServer]]` | `[[Linux Integration/04 - TCPServer\]]` |
+| [[03 - Client-Server Architecture]] | `[[Components/BlockClient]]` | `[[Linux Integration/01 - BlockClient\]]` |
 
 ---
 
@@ -178,40 +178,40 @@ Specific dangling wikilinks confirmed by reviewer-cpp — these silently fail in
 Files confirmed to exist but **not linked from `LDS/00 START HERE.md`**:
 
 **Architecture**
-- [[LDS/Architecture/05 - App Layer]] — not in START HERE Architecture section
-- [[LDS/Architecture/09 - Services]] — stale pre-LDS doc; review for archiving
+- [[05 - App Layer]] — not in START HERE Architecture section
+- [[09 - Services]] — stale pre-LDS doc; review for archiving
 
 **UML** (high value — both should be linked)
-- [[LDS/UML/06 - State Diagram - Minion]] — Minion lifecycle state machine; needed for Phase 3/Watchdog and interview prep
-- [[LDS/UML/07 - Phase Dependencies]] — full build dependency graph + critical path; needed for sprint planning
+- [[06 - State Diagram - Minion]] — Minion lifecycle state machine; needed for Phase 3/Watchdog and interview prep
+- [[07 - Phase Dependencies]] — full build dependency graph + critical path; needed for sprint planning
 
 **Infrastructure** (deep-dive files)
-- [[LDS/Infrastructure/02 - Singleton Memory Model]]
-- [[LDS/Infrastructure/04 - Reactor — Component]]
-- [[LDS/Infrastructure/07 - Threading Deep Dive]]
-- [[LDS/Infrastructure/08 - Dispatcher]]
-- [[LDS/Infrastructure/11 - Utils Helpers]]
+- [[02 - Singleton Memory Model]]
+- [[04 - Reactor — Component]]
+- [[07 - Threading Deep Dive]]
+- [[08 - Dispatcher]]
+- [[11 - Utils Helpers]]
 
 **Application**
-- [[LDS/Application/Commands]]
-- [[LDS/Application/Factory]]
-- [[LDS/Application/Factory — Component]]
-- [[LDS/Application/AutoDiscovery]]
-- [[LDS/Application/InputMediator]] (reachable via Runtime Machines only)
+- [[Commands]]
+- [[Factory]]
+- [[Factory — Component]]
+- [[AutoDiscovery]]
+- [[InputMediator]] (reachable via Runtime Machines only)
 
 **Phases**
-- [[LDS/Phases/06 - Phase 5 - Integration & Testing]]
-- [[LDS/Phases/07 - Phase 6 - Optimization & Polish]]
+- [[06 - Phase 5 - Integration & Testing]]
+- [[07 - Phase 6 - Optimization & Polish]]
 
 **Roadmap** (8 of 11 unlinked)
-- [[LDS/Roadmap/02 - The Plan]], [[LDS/Roadmap/03 - Progress Tracker]], [[LDS/Roadmap/05 - Timeline & Milestones]], [[LDS/Roadmap/06 - Phase 2 Execution Plan]], [[LDS/Roadmap/08 - Risk Register]], [[LDS/Roadmap/09 - Test Strategy]], [[LDS/Roadmap/10 - Lessons Learned]], [[LDS/Roadmap/11 - Job Search Plan]]
+- [[02 - The Plan]], [[03 - Progress Tracker]], [[05 - Timeline & Milestones]], [[06 - Phase 2 Execution Plan]], [[08 - Risk Register]], [[09 - Test Strategy]], [[10 - Lessons Learned]], [[11 - Job Search Plan]]
 
 **Glossary**
-- [[LDS/Glossary/01 - Key Terms]] — the index; not linked from Vocabulary section
-- [[LDS/Glossary/04 - EIO]], [[LDS/Glossary/07 - IoT]], [[LDS/Glossary/10 - Raspberry Pi]]
+- [[01 - Key Terms]] — the index; not linked from Vocabulary section
+- [[04 - EIO]], [[07 - IoT]], [[10 - Raspberry Pi]]
 
 **Debugging / misplaced**
-- [[LDS/Debugging/04 - 2026-05-01]] — daily study log, should be in Journal/ not Debugging/
+- [[04 - 2026-05-01]] — daily study log, should be in Journal/ not Debugging/
 
 **Broken links (confirmed)**
 - `Architecture/03 - Client-Server Architecture.md` contains `[[Components/TCPServer]]` and `[[Components/BlockClient]]` — the `Components/` folder does not exist; correct paths are `Linux Integration/04 - TCPServer` and `Linux Integration/01 - BlockClient`
@@ -222,15 +222,15 @@ Files confirmed to exist but **not linked from `LDS/00 START HERE.md`**:
 
 Priority order per reviewer-lds:
 
-1. **UML section** — add `[[UML/06 - State Diagram - Minion|State Diagram: Minion]]` and `[[UML/07 - Phase Dependencies|Phase Dependencies]]`
-2. **Build Phases section** — add `[[Phases/06 - Phase 5 - Integration & Testing|Phase 5]]` and `[[Phases/07 - Phase 6 - Optimization & Polish|Phase 6]]`
-3. **Fix broken links** in `Architecture/03` — replace `[[Components/TCPServer]]` → `[[Linux Integration/04 - TCPServer|TCPServer]]` and `[[Components/BlockClient]]` → `[[Linux Integration/01 - BlockClient|BlockClient]]`
+1. **UML section** — add `[[06 - State Diagram - Minion|State Diagram: Minion]]` and `[[07 - Phase Dependencies|Phase Dependencies]]`
+2. **Build Phases section** — add `[[06 - Phase 5 - Integration & Testing|Phase 5]]` and `[[07 - Phase 6 - Optimization & Polish|Phase 6]]`
+3. **Fix broken links** in `Architecture/03` — replace `[[Components/TCPServer]]` → `[[04 - TCPServer|TCPServer]]` and `[[Components/BlockClient]]` → `[[01 - BlockClient|BlockClient]]`
 4. **Runtime Machines** — add `[[../Core/...]]` back-links inside individual machine files (Reactor→epoll, ThreadPool→pthreads, RAID01Manager→UDP sockets)
 5. **Roadmap section** — add a sub-index or collapsible block for the 8 unlinked Roadmap files
-6. **Vocabulary section** — add `[[Glossary/01 - Key Terms|Key Terms]]` as the lead entry
-7. **Layer 3 — Application** — add `[[Application/Commands|Commands]]`, `[[Application/Factory|Factory]]`, `[[Application/AutoDiscovery|AutoDiscovery]]`, `[[Application/InputMediator|InputMediator]]`
-8. **Layer 1 — Core Infrastructure** — add `[[Infrastructure/08 - Dispatcher|Dispatcher]]`, `[[Infrastructure/07 - Threading Deep Dive|Threading Deep Dive]]`
-9. **Architecture section** — add `[[Architecture/05 - App Layer|App Layer]]`; review Architecture/09 for archiving vs rewrite
+6. **Vocabulary section** — add `[[01 - Key Terms|Key Terms]]` as the lead entry
+7. **Layer 3 — Application** — add `[[Commands|Commands]]`, `[[Factory|Factory]]`, `[[AutoDiscovery|AutoDiscovery]]`, `[[InputMediator|InputMediator]]`
+8. **Layer 1 — Core Infrastructure** — add `[[08 - Dispatcher|Dispatcher]]`, `[[07 - Threading Deep Dive|Threading Deep Dive]]`
+9. **Architecture section** — add `[[05 - App Layer|App Layer]]`; review Architecture/09 for archiving vs rewrite
 10. **Flows section** — create `LDS/Flows/02 - Read Request — End to End.md` and link it
 11. **Housekeeping** — move `Debugging/04 - 2026-05-01` to a `Journal/` folder
 
@@ -276,7 +276,7 @@ Priority order per reviewer-lds:
 
 16. **Update `LDS/00 START HERE.md`** — add UML/06 and UML/07 (high-value orphans), Phases/06–07, Glossary/01 as lead Vocabulary entry, Application layer orphans (Commands, Factory, AutoDiscovery, InputMediator), Roadmap sub-index for the 8 unlinked files.
 
-17. **Add Core back-links inside LDS Runtime Machines files** — Reactor → `[[../Core/Domains/06 - Networking/Theory/04 - epoll|epoll]]`; ThreadPool → `[[../Core/Domains/04 - Linux/Theory/04 - Threads - pthreads|pthreads]]`; RAID01Manager → `[[../Core/Domains/06 - Networking/Theory/03 - UDP Sockets|UDP sockets]]`.
+17. **Add Core back-links inside LDS Runtime Machines files** — Reactor → `[[04 - epoll|epoll]]`; ThreadPool → `[[04 - Threads - pthreads|pthreads]]`; RAID01Manager → `[[03 - UDP Sockets|UDP sockets]]`.
 
 18. **Create `LDS/Flows/02 - Read Request — End to End.md`** and link from START HERE Flows section.
 

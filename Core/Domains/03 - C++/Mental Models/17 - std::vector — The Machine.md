@@ -143,8 +143,8 @@ For anything involving iteration, vector wins unless you need O(1) insert-in-mid
 
 ## Related Machines
 
-→ [[../Domains/02 - C/Mental Models/08 - malloc and free — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/08 - Cache Hierarchy — The Machine]]
+→ [[08 - malloc and free — The Machine]]
+→ [[08 - Cache Hierarchy — The Machine]]
 → [[01 - RAII — The Machine]]
 → [[03 - Move Semantics — The Machine]]
-→ [[../Domains/03 - C++/Theory/08 - STL Containers]]
+→ [[08 - STL Containers]]

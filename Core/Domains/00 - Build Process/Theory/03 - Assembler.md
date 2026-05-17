@@ -34,7 +34,7 @@ ELF Object File (.o)
 └── Relocation table    — where the linker needs to patch addresses
 ```
 
-See [[../../01 - Memory/Theory/01 - Process Memory Layout]] — these sections map directly to the runtime memory segments.
+See [[01 - Process Memory Layout]] — these sections map directly to the runtime memory segments.
 
 ---
 

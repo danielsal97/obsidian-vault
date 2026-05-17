@@ -88,7 +88,7 @@ m_signal_fd = signalfd(-1, &mask, SFD_CLOEXEC);
 
 ## Connections
 
-**Theory:** [[Core/Domains/04 - Linux/Theory/02 - File Descriptors]]  
+**Theory:** [[02 - File Descriptors]]  
 **Mental Models:** [[epoll — The Machine]], [[TCP Sockets — The Machine]], [[Processes — The Machine]], [[RAII — The Machine]], [[File IO — The Machine]]  
 **LDS Implementation:** [[LDS/Linux Integration/NBDDriverComm]] — socketpair fd lifecycle; [[LDS/Infrastructure/Reactor]] — epoll fd  
 **Runtime Machines:** [[LDS/Runtime Machines/NBDDriverComm — The Machine]]  

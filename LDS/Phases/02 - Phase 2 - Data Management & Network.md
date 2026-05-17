@@ -194,9 +194,9 @@ sequenceDiagram
 
 | Pattern | Where |
 |---|---|
-| [[Command\|Command]] | ReadCommand/WriteCommand use these components |
-| [[Singleton\|Singleton]] | RAID01Manager as global registry |
-| [[Observer\|Observer]] | ResponseManager callbacks notify commands |
+| [[Command\]] | ReadCommand/WriteCommand use these components |
+| [[Singleton\]] | RAID01Manager as global registry |
+| [[Observer\]] | ResponseManager callbacks notify commands |
 
 ---
 

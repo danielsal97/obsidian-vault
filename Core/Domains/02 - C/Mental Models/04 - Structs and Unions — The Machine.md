@@ -112,6 +112,6 @@ Without `__attribute__((packed))`, the compiler would insert 4 bytes of padding 
 
 ## Connections
 
-**Theory:** [[Core/Domains/02 - C/Theory/07 - Serialization]] (covers wire-format structs)  
+**Theory:** [[07 - Serialization]] (covers wire-format structs)  
 **Mental Models:** [[Serialization — The Machine]], [[Memory Ordering — The Machine]], [[Bitwise Operations — The Machine]]  
 **LDS Implementation:** [[LDS/Architecture/Wire Protocol Spec]] — RequestHeader packed struct; [[LDS/Linux Integration/TCPServer]]

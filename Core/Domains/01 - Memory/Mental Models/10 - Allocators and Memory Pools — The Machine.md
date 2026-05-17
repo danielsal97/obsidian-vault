@@ -4,7 +4,7 @@
 
 When `malloc()` needs memory it hasn't seen before, it asks the kernel via `brk()` or `mmap()`. The kernel maps a virtual page — 4KB of address space backed by a physical page only when first touched. The allocator owns the page from there, carving it into small blocks as requests come in. The question is how it organizes those blocks, how it finds a free one, and what happens under multi-threaded load.
 
-This note covers the runtime path. For allocator design patterns (arena, pool, tcmalloc) see [[../Domains/03 - C++/Mental Models/24 - Allocators — The Machine]].
+This note covers the runtime path. For allocator design patterns (arena, pool, tcmalloc) see [[24 - Allocators — The Machine]].
 
 ---
 
@@ -153,8 +153,8 @@ Fix: arena allocator (batch-free at epoch boundary eliminates fragmentation enti
 
 ## Related Machines
 
-→ [[../Domains/02 - C/Mental Models/08 - malloc and free — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/03 - Virtual Memory — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/04 - Paging — The Machine]]
-→ [[../Domains/01 - Memory/Mental Models/09 - Cache Hierarchy — The Machine (deep)]]
-→ [[../Domains/03 - C++/Mental Models/24 - Allocators — The Machine]]
+→ [[08 - malloc and free — The Machine]]
+→ [[03 - Virtual Memory — The Machine]]
+→ [[04 - Paging — The Machine]]
+→ [[09 - Cache Hierarchy — The Machine (deep)]]
+→ [[24 - Allocators — The Machine]]

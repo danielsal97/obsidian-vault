@@ -102,6 +102,6 @@ For Phase 2, `docker-compose` would spin up one manager container and N minion c
 
 ## Connections
 
-**Theory:** [[Core/Domains/09 - DevOps/Theory/01 - Docker]]  
+**Theory:** [[01 - Docker]]  
 **Mental Models:** [[Processes — The Machine]], [[File Descriptors — The Machine]], [[Networking Overview — The Machine]], [[Make and CMake — The Machine]]  
 **LDS Implementation:** [[LDS/DevOps/Build System]] — no Dockerfile yet; integration point is the Makefile and main entry binary; docker-compose would orchestrate manager + minion containers for RAID01 testing

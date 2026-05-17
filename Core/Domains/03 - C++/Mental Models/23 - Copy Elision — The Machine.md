@@ -129,4 +129,4 @@ Even when NRVO applies, if the compiler cannot elide (suppressed NRVO, multiple 
 → [[21 - Move Semantics — The Machine (deep)]]
 → [[17 - std::vector — The Machine]]
 → [[01 - RAII — The Machine]]
-→ [[../Domains/03 - C++/Theory/03 - Move Semantics]]
+→ [[03 - Move Semantics]]

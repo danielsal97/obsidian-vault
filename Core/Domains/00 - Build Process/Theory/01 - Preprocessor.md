@@ -20,8 +20,8 @@ This is why large headers slow compilation. If `<windows.h>` is 50,000 lines, ev
 → What goes in headers: type definitions, function declarations, inline functions, templates.  
 → What belongs in `.cpp` only: function bodies, global variables.
 
-See [[../../02 - C/Theory/04 - Structs and Unions]] — struct definitions go in headers so every `.cpp` gets the same layout.  
-See [[../../03 - C++/Theory/04 - Templates]] — templates must be in headers (the compiler needs the full definition to instantiate).
+See [[04 - Structs and Unions]] — struct definitions go in headers so every `.cpp` gets the same layout.  
+See [[04 - Templates]] — templates must be in headers (the compiler needs the full definition to instantiate).
 
 ---
 

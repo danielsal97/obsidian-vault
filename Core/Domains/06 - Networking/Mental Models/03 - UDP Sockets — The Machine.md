@@ -86,7 +86,7 @@ The interface's `SendReply` and `RecvRequest` are designed for a request-respons
 
 ## Connections
 
-**Theory:** [[Core/Domains/06 - Networking/Theory/03 - UDP Sockets]]  
+**Theory:** [[03 - UDP Sockets]]  
 **Mental Models:** [[TCP Sockets — The Machine]], [[IPC Overview — The Machine]], [[Serialization — The Machine]]  
 **Tradeoffs:** [[Why UDP vs TCP]]  
 **LDS Implementation:** [[LDS/Linux Integration/BlockClient]], [[LDS/Decisions/Why UDP not TCP]]  

@@ -74,7 +74,7 @@ if (auto m = observer.lock()) {
 
 ## Connections
 
-**Theory:** [[Core/Domains/03 - C++/Theory/02 - Smart Pointers]]  
+**Theory:** [[02 - Smart Pointers]]  
 **Mental Models:** [[RAII — The Machine]], [[Move Semantics — The Machine]], [[Strategy Pattern — The Machine]], [[Inheritance — The Machine]]  
 **LDS Implementation:** [[LDS/Application/LocalStorage]] — shared ownership of mediator/driver  
 **Runtime Machines:** [[LDS/Runtime Machines/InputMediator — The Machine]]  

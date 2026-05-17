@@ -70,7 +70,7 @@ Both `NBDDriverComm` and `TCPDriverComm` inherit from `IDriverComm`. This is the
 
 ## Connections
 
-**Theory:** [[Core/Domains/03 - C++/Theory/05 - Inheritance]]  
+**Theory:** [[05 - Inheritance]]  
 **Mental Models:** [[Virtual Functions — The Machine]], [[Strategy Pattern — The Machine]], [[Templates — The Machine]]  
 **LDS Implementation:** [[LDS/Runtime Machines/InputMediator — The Machine]] — NBDDriverComm/TCPDriverComm via IDriverComm  
 **Glossary:** [[shared_ptr]]

@@ -83,7 +83,7 @@ The Reactor registers the listening socket with `EPOLLIN`. When a new connection
 
 ## Connections
 
-**Theory:** [[Core/Domains/06 - Networking/Theory/02 - Sockets TCP]]  
+**Theory:** [[02 - Sockets TCP]]  
 **Mental Models:** [[epoll — The Machine]], [[File Descriptors — The Machine]], [[IPC Overview — The Machine]], [[UDP Sockets — The Machine]], [[Serialization — The Machine]]  
 **Tradeoffs:** [[Why UDP vs TCP]]  
 **LDS Implementation:** [[LDS/Linux Integration/TCPServer]], [[LDS/Decisions/Why TCP for Client]]  

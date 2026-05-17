@@ -108,7 +108,7 @@ Work through the Obsidian notes in this order — one topic per day:
 | 3 | Linux & Networking | [[Engineering/Interview - Linux & Networking]] |
 | 4 | Data Structures | [[Engineering/Interview - Data Structures]] |
 | 5 | LDS system design | [[Start Here]], [[System Overview]], [[Request Lifecycle]] |
-| 6 | Design patterns | [[Design Patterns/Reactor]], [[Design Patterns/Observer]], [[Design Patterns/Factory]] |
+| 6 | Design patterns | [[Design Patterns/Reactor]], [[Design Patterns/Observer]], [[Factory]] |
 | 7 | Known bugs + decisions | [[Engineering/Known Bugs]], [[Decisions/]] |
 | 8–∞ | Repeat + practice explaining LDS out loud | [[Engineering/Interview Guide]] |
 

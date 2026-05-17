@@ -142,8 +142,8 @@ Useful for: large file access without read() loops, IPC shared memory, zero-copy
 
 ## Related
 
-→ [[../../06 - Networking/Interview/01 - Networking Q&A]]
-→ [[../Mental Models/10 - Context Switch — The Machine]]
-→ [[../Mental Models/11 - Scheduler — The Machine]]
-→ [[../Mental Models/01 - Processes — The Machine]]
-→ [[../Mental Models/03 - Signals — The Machine]]
+→ [[01 - Networking Q&A]]
+→ [[10 - Context Switch — The Machine]]
+→ [[11 - Scheduler — The Machine]]
+→ [[01 - Processes — The Machine]]
+→ [[03 - Signals — The Machine]]

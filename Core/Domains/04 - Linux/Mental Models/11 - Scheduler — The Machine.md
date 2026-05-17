@@ -93,7 +93,7 @@ On multi-socket systems, the scheduler tracks which NUMA node's memory a task ha
 ## Related Machines
 
 → [[10 - Context Switch — The Machine]]
-→ [[../Domains/04 - Linux/Mental Models/04 - Threads and pthreads — The Machine]]
-→ [[../Domains/05 - Concurrency/Mental Models/01 - Multithreading Patterns — The Machine]]
-→ [[../Domains/04 - Linux/Theory/04 - Threads - pthreads]]
-→ [[../Domains/04 - Linux/Theory/01 - Processes]]
+→ [[04 - Threads and pthreads — The Machine]]
+→ [[01 - Multithreading Patterns — The Machine]]
+→ [[04 - Threads - pthreads]]
+→ [[01 - Processes]]

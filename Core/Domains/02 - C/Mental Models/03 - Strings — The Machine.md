@@ -60,6 +60,6 @@ TCP data arrives as raw bytes. The `RecvAll` loop reads into a `char` buffer usi
 
 ## Connections
 
-**Theory:** [[Core/Domains/02 - C/Theory/03 - Strings]]  
+**Theory:** [[03 - Strings]]  
 **Mental Models:** [[Serialization — The Machine]], [[Pointers — The Machine]], [[Stack vs Heap — The Machine]]  
 **LDS Implementation:** [[LDS/Linux Integration/TCPServer]] — binary protocol, not string-based

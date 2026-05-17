@@ -260,7 +260,7 @@ The system is organized into three layers. Each layer depends only on the one be
 | [[LocalStorage]] | `services/local_storage/` | ✅ | In-memory storage backend |
 | [[InputMediator]] | `services/mediator/` | ✅ | Reads DriverData, dispatches READ/WRITE/FLUSH/TRIM/DISCONNECT to LocalStorage |
 | [[Logger]] | `utilities/logger/` | ✅ | Thread-safe centralized logging |
-| [[Utilities Framework\|ThreadPool + WPQ]] | `utilities/threading/` | ✅ | Priority-ordered async execution |
+| [[Utilities Framework\]] | `utilities/threading/` | ✅ | Priority-ordered async execution |
 | [[Factory]] | `design_patterns/factory/` | ✅ | Creates commands and plugins by name at runtime |
 | [[Command]] | `design_patterns/command/` | ✅ | Abstract `ICommand` interface + priority enum |
 | [[Singleton]] | `design_patterns/singleton/` | ✅ | Safe global instances — note: filename is `singelton.hpp` (typo baked in) |
@@ -275,8 +275,8 @@ The system is organized into three layers. Each layer depends only on the one be
 |-----------|------------|--------|------|
 | Reactor upgrade | `design_patterns/reactor/` | ❌ not built | Per-fd handler map — enables dynamic client fd registration |
 | NetworkProtocol | `services/network/include/` | ❌ not built | Shared wire format structs used by both sides |
-| [[Components/TCPServer\|TCPServer]] | `services/network/` | ❌ not built | Linux-side TCP listener; accepts clients, routes through LocalStorage |
-| [[Components/BlockClient\|BlockClient]] | `client/` | ❌ not built | Mac-side TCP client: Connect / Read / Write |
+| [[Components/TCPServer\]] | `services/network/` | ❌ not built | Linux-side TCP listener; accepts clients, routes through LocalStorage |
+| [[Components/BlockClient\]] | `client/` | ❌ not built | Mac-side TCP client: Connect / Read / Write |
 
 ### Phase 2 — Data Management & Network (⏳ Pending)
 

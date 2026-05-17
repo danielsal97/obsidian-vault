@@ -50,7 +50,7 @@ socketpair(AF_UNIX, SOCK_STREAM, 0, fds);  // bidirectional pipe
 // fds[0] and fds[1] are connected — write to one, read from the other
 ```
 
-LDS uses `socketpair` for the NBD kernel↔userspace connection (`NBDDriverComm`). Works with `epoll` unlike regular pipes. See [[../../04 - Linux/Theory/02 - File Descriptors]].
+LDS uses `socketpair` for the NBD kernel↔userspace connection (`NBDDriverComm`). Works with `epoll` unlike regular pipes. See [[02 - File Descriptors]].
 
 ---
 
@@ -146,12 +146,12 @@ Messages are ordered and bounded. Supports `select`/`epoll` via the `mqd_t` fd.
 
 ## Related Notes
 
-- [[../../04 - Linux/Theory/05 - Shared Memory]] — zero-copy data sharing
-- [[../../04 - Linux/Theory/06 - Semaphores]] — synchronizing access to shared resources
-- [[../../04 - Linux/Theory/07 - mmap]] — memory-mapped files and anonymous mappings
+- [[05 - Shared Memory]] — zero-copy data sharing
+- [[06 - Semaphores]] — synchronizing access to shared resources
+- [[07 - mmap]] — memory-mapped files and anonymous mappings
 - [[Sockets TCP]] — full TCP socket API
 - [[UDP Sockets]] — UDP socket API
-- [[../../04 - Linux/Theory/02 - File Descriptors]] — fd-based IPC, `socketpair`, `dup`
+- [[02 - File Descriptors]] — fd-based IPC, `socketpair`, `dup`
 
 ---
 

@@ -49,13 +49,13 @@ See: [[Phase 2 Execution Plan]]
 
 | Phase                                             | Focus                           | Dates         | Hours       | Status   |
 | ------------------------------------------------- | ------------------------------- | ------------- | ----------- | -------- |
-| [[Phase 1 - Core Framework Integration\|Phase 1]] | Core framework, NBD, wiring     | Apr 2026      | 18          | ✅ Done   |
-| [[Phase 2A - Mac Client TCP Bridge\|Phase 2A]]    | Mac client ↔ Linux TCP          | May 6–20 2026      | 16     | ✅ Done   |
-| [[Phase 2 - Data Management & Network\|Phase 2]]  | RAID01, MinionProxy, Scheduler  | May 21–Jun 17 2026 | 46     | ⏳ Active |
-| [[Phase 3 - Reliability Features\|Phase 3]]       | Watchdog, AutoDiscovery         | Jun 18–Jul 8 2026  | 24     | ⏳        |
-| [[Phase 4 - Minion Server\|Phase 4]]              | Minion-side implementation      | Jul 9–22 2026      | 12     | ⏳        |
-| [[Phase 5 - Integration & Testing\|Phase 5]]      | Full system integration + tests | Jul 23–Aug 12 2026 | 68     | ⏳        |
-| [[Phase 6 - Optimization & Polish\|Phase 6]]      | Performance, CI/CD, docs        | Aug 13–26 2026     | 26     | ⏳        |
+| [[Phase 1 - Core Framework Integration\]] | Core framework, NBD, wiring     | Apr 2026      | 18          | ✅ Done   |
+| [[Phase 2A - Mac Client TCP Bridge\]]    | Mac client ↔ Linux TCP          | May 6–20 2026      | 16     | ✅ Done   |
+| [[Phase 2 - Data Management & Network\]]  | RAID01, MinionProxy, Scheduler  | May 21–Jun 17 2026 | 46     | ⏳ Active |
+| [[Phase 3 - Reliability Features\]]       | Watchdog, AutoDiscovery         | Jun 18–Jul 8 2026  | 24     | ⏳        |
+| [[Phase 4 - Minion Server\]]              | Minion-side implementation      | Jul 9–22 2026      | 12     | ⏳        |
+| [[Phase 5 - Integration & Testing\]]      | Full system integration + tests | Jul 23–Aug 12 2026 | 68     | ⏳        |
+| [[Phase 6 - Optimization & Polish\]]      | Performance, CI/CD, docs        | Aug 13–26 2026     | 26     | ⏳        |
 | **Total**                                         |                                 |               | **210 hrs** |          |
 
 ---
@@ -126,7 +126,7 @@ Reactor ✅
 - [[Why signalfd not sigaction]]
 
 ### Manager
-- **[[Strategy/00 Master Dashboard]] ← START HERE (daily entry point)**
+- **[[00 Master Dashboard]] ← START HERE (daily entry point)**
 - **[[Manager/Job Search Plan]] ← job search checklist**
 - [[Phase 2 Execution Plan]] ← active sprint
 - [[Timeline & Milestones]]

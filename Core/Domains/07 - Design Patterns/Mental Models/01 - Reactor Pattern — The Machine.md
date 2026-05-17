@@ -78,7 +78,7 @@ When an event fires, the handler creates a task (Command object) and submits it 
 
 ## Connections
 
-**Theory:** [[Core/Domains/07 - Design Patterns/Theory/01 - Reactor]]  
+**Theory:** [[01 - Reactor]]  
 **Mental Models:** [[epoll — The Machine]], [[Threads and pthreads — The Machine]], [[Multithreading Patterns — The Machine]], [[Signals — The Machine]], [[File Descriptors — The Machine]]  
 **Tradeoffs:** [[Why epoll over select and poll]], [[Why ThreadPool over inline execution]]  
 **LDS Implementation:** [[LDS/Infrastructure/Reactor]], [[LDS/Infrastructure/Reactor — Component]]  

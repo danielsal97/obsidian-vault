@@ -134,7 +134,7 @@ void trigger(const std::string& event) {
 }
 ```
 
-See [[../../03 - C++/Theory/02 - Smart Pointers]] — `weak_ptr` for non-owning references.
+See [[02 - Smart Pointers]] — `weak_ptr` for non-owning references.
 
 ---
 
@@ -163,9 +163,9 @@ UDP recv → ResponseManager::on_response()
 ## Related Notes
 
 - [[Factory]] — subjects often created via factory
-- [[../../03 - C++/Theory/06 - Virtual Functions]] — observer interface uses virtual functions
-- [[../../03 - C++/Theory/02 - Smart Pointers]] — weak_ptr for safe observer references
-- [[../../03 - C++/Theory/08 - STL Containers]] — vector of observers
+- [[06 - Virtual Functions]] — observer interface uses virtual functions
+- [[02 - Smart Pointers]] — weak_ptr for safe observer references
+- [[08 - STL Containers]] — vector of observers
 
 ---
 

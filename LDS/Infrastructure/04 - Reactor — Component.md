@@ -77,6 +77,6 @@ See: [[Why signalfd not sigaction]]
 
 ## Related Notes
 - [[Design Patterns/Reactor]] — deep dive with diagrams
-- [[Architecture/04 - Concurrency Model]] — how Reactor fits with other threads
-- [[Architecture/08 - Request Lifecycle]] — what happens inside the handler
+- [[04 - Concurrency Model]] — how Reactor fits with other threads
+- [[08 - Request Lifecycle]] — what happens inside the handler
 - [[Engineering/NBD Protocol Deep Dive]]

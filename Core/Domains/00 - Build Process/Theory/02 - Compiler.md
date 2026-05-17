@@ -50,7 +50,7 @@ When the compiler sees `std::vector<int>`, it generates the full `vector<int>` c
 
 This is why templates must be fully defined in headers: the compiler needs the template body at instantiation time.
 
-See [[../../03 - C++/Theory/04 - Templates]] for template mechanics.
+See [[04 - Templates]] for template mechanics.
 
 ---
 
@@ -61,8 +61,8 @@ The compiler enforces:
 - const correctness — cannot pass `const T*` where `T*` is expected
 - Virtual function overrides match base class signature
 
-See [[../../03 - C++/Theory/10 - Type Casting]] — only `static_cast` and friends are safe because the compiler checks them.  
-See [[../../03 - C++/Theory/06 - Virtual Functions]] — vtable pointers are set up by the compiler based on `virtual` declarations.
+See [[10 - Type Casting]] — only `static_cast` and friends are safe because the compiler checks them.  
+See [[06 - Virtual Functions]] — vtable pointers are set up by the compiler based on `virtual` declarations.
 
 ---
 

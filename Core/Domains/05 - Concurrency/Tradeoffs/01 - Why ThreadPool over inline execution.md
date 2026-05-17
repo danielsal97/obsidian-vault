@@ -41,7 +41,7 @@ The two responsibilities are separated: *routing* (fast, hot path) and *executio
 - Concurrency would introduce ordering bugs worse than the latency cost
 
 ## See also
-→ [[../../05 - Concurrency/Theory/01 - Multithreading Patterns]] — thread pool theory
-→ [[../../05 - Concurrency/Mental Models/01 - Multithreading Patterns — The Machine]]
+→ [[01 - Multithreading Patterns]] — thread pool theory
+→ [[01 - Multithreading Patterns — The Machine]]
 → LDS/Infrastructure/ThreadPool — LDS's ThreadPool + WPQ implementation
 → LDS/Runtime Machines/ThreadPool and WPQ — The Machine

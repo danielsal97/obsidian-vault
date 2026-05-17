@@ -177,9 +177,9 @@ struct alignas(64) { int val; } counters[2];
 ## Related Notes
 
 - [[Multithreading Patterns]] — thread pool, producer/consumer
-- [[../../04 - Linux/Theory/04 - Threads - pthreads]] — pthreads mutex/condvar
+- [[04 - Threads - pthreads]] — pthreads mutex/condvar
 - [[../../03 - C++/Theory/C++11/Overview]] — `std::atomic`, `std::thread`, `std::mutex` added in C++11
-- [[../../01 - Memory/Theory/01 - Process Memory Layout]] — how variables map to memory regions
+- [[01 - Process Memory Layout]] — how variables map to memory regions
 
 ---
 

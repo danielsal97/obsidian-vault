@@ -71,7 +71,7 @@ max("a", 1);   // clear error: types don't satisfy totally_ordered
 
 ## Connections
 
-**Theory:** [[Core/Domains/03 - C++/Theory/04 - Templates]]  
+**Theory:** [[04 - Templates]]  
 **Mental Models:** [[Observer Pattern — The Machine]], [[Factory Pattern — The Machine]], [[Strategy Pattern — The Machine]], [[STL Containers — The Machine]]  
 **Tradeoffs:** [[LDS/Decisions/Why Templates not Virtual Functions]]  
 **LDS Implementation:** [[LDS/Infrastructure/Observer Pattern Internals]] — CallBack<T>; [[LDS/Infrastructure/Utilities Framework]] — WPQ template  

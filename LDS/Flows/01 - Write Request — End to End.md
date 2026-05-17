@@ -21,7 +21,7 @@ user process:  write(fd, buf, 512)
 
 The kernel acts as a bridge. The user writes to what looks like a disk. The NBD driver packages it into a struct and hands it to our process through a socketpair. The user's call is blocked until we reply.
 
-→ [[../Architecture/06 - NBD Layer]] · [[../Linux Integration/03 - NBD Protocol Deep Dive]]
+→ [[06 - NBD Layer]] · [[03 - NBD Protocol Deep Dive]]
 
 ---
 
@@ -38,7 +38,7 @@ The kernel acts as a bridge. The user writes to what looks like a disk. The NBD 
 
 The Reactor is the heartbeat of the master. It sits idle (zero CPU) until an fd becomes readable, then dispatches to the registered handler and returns immediately. It never does the work itself.
 
-→ [[../Infrastructure/03 - Reactor]] · [[../Runtime Machines/03 - Reactor — The Machine]]
+→ [[03 - Reactor]] · [[03 - Reactor — The Machine]]
 
 ---
 
@@ -62,7 +62,7 @@ The Reactor is the heartbeat of the master. It sits idle (zero CPU) until an fd 
 
 InputMediator bridges the event world (raw fds) and the command world (typed objects). It reads the raw struct, creates the right command, pushes it to the priority queue. The main thread never blocks.
 
-→ [[../Application/InputMediator]] · [[../Application/Commands]] · [[../Application/Factory]]
+→ [[InputMediator]] · [[Commands]] · [[Factory]]
 
 ---
 
@@ -78,7 +78,7 @@ InputMediator bridges the event world (raw fds) and the command world (typed obj
 
 The ThreadPool holds N worker threads, all blocking on the WPQ (Waitable Priority Queue). Priority: `WRITE (High) > READ (Med) > FLUSH (Low)`.
 
-→ [[../Infrastructure/06 - ThreadPool]] · [[../Runtime Machines/04 - ThreadPool and WPQ — The Machine]]
+→ [[06 - ThreadPool]] · [[04 - ThreadPool and WPQ — The Machine]]
 
 ---
 
@@ -96,7 +96,7 @@ The ThreadPool holds N worker threads, all blocking on the WPQ (Waitable Priorit
 
 Pure mapping logic — no networking, no I/O. Returns two minion IDs for any block number. Failed minions are skipped.
 
-→ [[../Application/02 - RAID01 Manager]] · [[../Architecture/07 - RAID01 Explained]]
+→ [[02 - RAID01 Manager]] · [[07 - RAID01 Explained]]
 
 ---
 
@@ -117,7 +117,7 @@ Pure mapping logic — no networking, no I/O. Returns two minion IDs for any blo
 
 Serializes the request into wire format and fires UDP. Returns a MSG_ID for tracking.
 
-→ [[../Application/03 - MinionProxy]] · [[../Architecture/10 - Wire Protocol Spec]]
+→ [[03 - MinionProxy]] · [[10 - Wire Protocol Spec]]
 
 ---
 
@@ -138,7 +138,7 @@ Serializes the request into wire format and fires UDP. Returns a MSG_ID for trac
              max retries exceeded → propagate error
 ```
 
-→ [[../Application/04 - ResponseManager]] · [[../Application/05 - Scheduler]]
+→ [[04 - ResponseManager]] · [[05 - Scheduler]]
 
 ---
 
@@ -158,7 +158,7 @@ Serializes the request into wire format and fires UDP. Returns a MSG_ID for trac
 
 If `error != 0`, the user sees `EIO`.
 
-→ [[../Architecture/08 - Request Lifecycle]] · [[../Linux Integration/02 - NBDDriverComm]]
+→ [[08 - Request Lifecycle]] · [[02 - NBDDriverComm]]
 
 ---
 

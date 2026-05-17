@@ -61,7 +61,7 @@ The entire LDS event loop revolves around `epoll_wait` — a single syscall that
 
 ## Connections
 
-**Theory:** [[Core/Domains/04 - Linux/Theory/08 - Kernel]]  
+**Theory:** [[08 - Kernel]]  
 **Mental Models:** [[Processes — The Machine]], [[File Descriptors — The Machine]], [[Signals — The Machine]], [[mmap — The Machine]], [[Process Memory Layout — The Machine]]  
 **LDS Implementation:** [[LDS/Infrastructure/Reactor]] — syscall batching via epoll_wait  
 **Glossary:** [[epoll]], [[VFS]], [[socketpair]]

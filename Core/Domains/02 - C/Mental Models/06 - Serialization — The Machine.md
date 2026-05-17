@@ -58,7 +58,7 @@ The NBD request and reply structs are wire-format: `nbd_request` and `nbd_reply`
 
 ## Connections
 
-**Theory:** [[Core/Domains/02 - C/Theory/07 - Serialization]]  
+**Theory:** [[07 - Serialization]]  
 **Mental Models:** [[TCP Sockets — The Machine]], [[UDP Sockets — The Machine]], [[Strings — The Machine]], [[Pointers — The Machine]], [[Bitwise Operations — The Machine]]  
 **LDS Implementation:** [[LDS/Architecture/Wire Protocol Spec]] — NBD request/reply wire format  
 **Runtime Machines:** [[LDS/Runtime Machines/NBDDriverComm — The Machine]], [[LDS/Runtime Machines/TCPDriverComm — The Machine]]  

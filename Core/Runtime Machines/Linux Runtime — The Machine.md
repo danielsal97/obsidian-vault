@@ -73,7 +73,7 @@ Process virtual address space (64-bit Linux):
 **All threads share the virtual address space.** Each thread has its own stack (separate mmap region), but they all read/write the same heap, same globals, same .text.
 
 → Deep dive: [[Page Fault — The Machine]] — what happens when a VA has no physical mapping
-→ Deep dive: [[../Domains/01 - Memory/Mental Models/04 - Paging — The Machine]]
+→ Deep dive: [[04 - Paging — The Machine]]
 
 ---
 
@@ -91,8 +91,8 @@ Thread accesses address 0x7fff1234:
 
 The TLB is per-core. On a context switch to a **different process** (different CR3), the TLB is flushed — next access is a TLB miss. Switching between **threads of the same process** (same CR3) does NOT flush the TLB.
 
-→ Deep dive: [[../Domains/01 - Memory/Mental Models/07 - TLB — The Machine]]
-→ Deep dive: [[../Domains/01 - Memory/Mental Models/06 - Page Walk — The Machine]]
+→ Deep dive: [[07 - TLB — The Machine]]
+→ Deep dive: [[06 - Page Walk — The Machine]]
 
 ---
 
@@ -115,8 +115,8 @@ On return from interrupt (or syscall):
 
 **Context switch cost:** ~2-5μs direct. The expensive part is not saving/restoring registers — it's the cache warm-up after switching (new thread's working set is cold).
 
-→ Deep dive: [[../Domains/04 - Linux/Mental Models/10 - Context Switch — The Machine]]
-→ Deep dive: [[../Domains/04 - Linux/Mental Models/11 - Scheduler — The Machine]]
+→ Deep dive: [[10 - Context Switch — The Machine]]
+→ Deep dive: [[11 - Scheduler — The Machine]]
 
 ---
 
@@ -148,7 +148,7 @@ All threads share:
 - Slow path (contended): `futex(FUTEX_WAIT)` syscall → thread sleeps in kernel wait queue → `futex(FUTEX_WAKE)` when lock released
 
 → Deep dive: [[Concurrency Runtime — The Machine]]
-→ Deep dive: [[../Domains/05 - Concurrency/Mental Models/04 - Atomics — The Machine]]
+→ Deep dive: [[04 - Atomics — The Machine]]
 
 ---
 
@@ -171,7 +171,7 @@ All of these respond to: read() / write() / close() / epoll_ctl()
 
 The uniformity of fds is what makes `Reactor` possible: one epoll loop watches sockets, signals (signalfd), timers (timerfd), and filesystem events (inotify) — all as fds.
 
-→ Deep dive: [[../Domains/04 - Linux/Mental Models/02 - File Descriptors — The Machine]]
+→ Deep dive: [[02 - File Descriptors — The Machine]]
 
 ---
 

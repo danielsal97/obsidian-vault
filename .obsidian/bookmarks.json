@@ -1,99 +1,14 @@
 {
   "items": [
     {
-      "type": "group",
-      "title": "Start Here",
-      "items": [
-        {
-          "type": "file",
-          "path": "README.md",
-          "title": "Vault Overview"
-        },
-        {
-          "type": "file",
-          "path": "Core/00 START HERE.md",
-          "title": "Core — Systems Engineering"
-        },
-        {
-          "type": "file",
-          "path": "LDS/00 START HERE.md",
-          "title": "LDS — Local Drive Storage"
-        }
-      ]
+      "type": "file",
+      "path": "Core/00 START HERE.md",
+      "title": "Learning"
     },
     {
-      "type": "group",
-      "title": "Runtime Machines",
-      "items": [
-        {
-          "type": "file",
-          "path": "Core/Runtime Machines/Linux Runtime — The Machine.md"
-        },
-        {
-          "type": "file",
-          "path": "Core/Runtime Machines/Networking Stack — The Machine.md"
-        },
-        {
-          "type": "file",
-          "path": "Core/Runtime Machines/Concurrency Runtime — The Machine.md"
-        },
-        {
-          "type": "file",
-          "path": "Core/Runtime Machines/Memory System — The Machine.md"
-        },
-        {
-          "type": "file",
-          "path": "Core/Runtime Machines/C++ Object Lifetime — The Machine.md"
-        },
-        {
-          "type": "file",
-          "path": "LDS/Runtime Machines/01 - LDS System — The Machine.md"
-        },
-        {
-          "type": "file",
-          "path": "LDS/Runtime Machines/02 - Request Lifecycle — The Machine.md"
-        }
-      ]
-    },
-    {
-      "type": "group",
-      "title": "LDS — Active",
-      "items": [
-        {
-          "type": "file",
-          "path": "LDS/Roadmap/07 - Phase 2A Execution Plan.md"
-        },
-        {
-          "type": "file",
-          "path": "LDS/Roadmap/04 - Project Status & Metrics.md"
-        },
-        {
-          "type": "file",
-          "path": "LDS/Interview/01 - Interview Guide.md"
-        },
-        {
-          "type": "file",
-          "path": "LDS/Debugging/03 - Known Bugs.md"
-        }
-      ]
-    },
-    {
-      "type": "group",
-      "title": "Study Tracks",
-      "items": [
-        {
-          "type": "file",
-          "path": "Core/Tracks/01 - Learning Curriculum.md"
-        },
-        {
-          "type": "file",
-          "path": "Core/Tracks/02 - Interview Prep Track.md"
-        },
-        {
-          "type": "file",
-          "path": "Core/Portals/04 - Interview Preparation.md"
-        }
-      ]
+      "type": "file",
+      "path": "LDS/00 START HERE.md",
+      "title": "LDS Project"
     }
   ]
 }

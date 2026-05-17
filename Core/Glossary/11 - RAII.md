@@ -59,7 +59,7 @@ LDS is multi-threaded. Exceptions on worker threads, plugin load failures, and n
 
 ## Connections
 
-**Theory:** [[Core/Domains/03 - C++/Theory/01 - RAII]]  
+**Theory:** [[01 - RAII]]  
 **Mental Models:** [[RAII — The Machine]], [[Smart Pointers — The Machine]], [[Exception Handling — The Machine]]  
 **LDS Implementation:** [[Decisions/Why RAII]] — design decision; [[Plugin Loading Internals]] — Loader RAII for dlopen  
 **Related Glossary:** [[shared_ptr]], [[Templates]]

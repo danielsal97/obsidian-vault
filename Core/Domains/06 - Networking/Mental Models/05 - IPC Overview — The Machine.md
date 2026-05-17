@@ -67,7 +67,7 @@ LDS chose TCP sockets for both the NBD-replacement interface and minion communic
 
 ## Connections
 
-**Theory:** [[Core/Domains/06 - Networking/Theory/05 - IPC Overview]]  
+**Theory:** [[05 - IPC Overview]]  
 **Mental Models:** [[TCP Sockets — The Machine]], [[UDP Sockets — The Machine]], [[Shared Memory — The Machine]], [[Semaphores — The Machine]], [[File Descriptors — The Machine]]  
 **LDS Implementation:** [[LDS/Architecture/Concurrency Model]], [[LDS/Linux Integration/TCPServer]]  
 **Glossary:** [[TCP]], [[UDP]], [[socketpair]]

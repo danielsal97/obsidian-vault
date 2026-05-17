@@ -71,7 +71,7 @@ NBDDriverComm(NBDDriverComm&& o) noexcept : m_fd(o.m_fd) { o.m_fd = -1; }
 
 ## Connections
 
-**Theory:** [[Core/Domains/03 - C++/Theory/09 - Exception Handling]]  
+**Theory:** [[09 - Exception Handling]]  
 **Mental Models:** [[RAII — The Machine]], [[Undefined Behavior — The Machine]], [[Threads and pthreads — The Machine]]  
 **LDS Implementation:** [[LDS/Application/LocalStorage]] — bounds check via out_of_range  
 **Runtime Machines:** [[LDS/Runtime Machines/Reactor — The Machine]]

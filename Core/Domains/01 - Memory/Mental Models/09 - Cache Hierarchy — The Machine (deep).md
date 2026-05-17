@@ -145,7 +145,7 @@ Particularly useful in LDS-style systems when zeroing large I/O buffers before s
 
 → [[07 - TLB — The Machine]]
 → [[04 - Paging — The Machine]]
-→ [[../Domains/05 - Concurrency/Mental Models/03 - False Sharing — The Machine]]
-→ [[../Domains/03 - C++/Mental Models/17 - std::vector — The Machine]]
-→ [[../Domains/03 - C++/Mental Models/19 - Object Layout — The Machine]]
-→ [[../Domains/01 - Memory/Theory/08 - Cache Hierarchy]]
+→ [[03 - False Sharing — The Machine]]
+→ [[17 - std::vector — The Machine]]
+→ [[19 - Object Layout — The Machine]]
+→ [[08 - Cache Hierarchy]]

@@ -30,10 +30,10 @@ Evening  (30 min)    Apply — 2–3 job applications + follow up
 
 | Area | Task |
 |---|---|
-| **Study** | [[Engineering/Build Process]] → [[Engineering/Build Process/1 - Preprocessor\|Preprocessor]] → [[Engineering/Build Process/2 - Compiler\|Compiler]] → [[Engineering/Build Process/3 - Assembler\|Assembler]] → [[Engineering/Build Process/4 - Linker\|Linker]] → [[Engineering/Build Process/Make and CMake\|Make & CMake]] |
-| **Study** | [[Engineering/Memory/Process Memory Layout\|Process Memory Layout]] → [[Engineering/Memory/Stack vs Heap\|Stack vs Heap]] → [[Engineering/C/Memory - malloc and free\|malloc and free]] |
+| **Study** | [[Build Process]] → [[Engineering/Build Process/1 - Preprocessor\]] → [[Engineering/Build Process/2 - Compiler\]] → [[Engineering/Build Process/3 - Assembler\]] → [[Engineering/Build Process/4 - Linker\]] → [[Engineering/Build Process/Make and CMake\]] |
+| **Study** | [[Engineering/Memory/Process Memory Layout\]] → [[Engineering/Memory/Stack vs Heap\]] → [[Engineering/C/Memory - malloc and free\]] |
 | **Interview prep** | Memorise the LDS pitch — [[LDS/Engineering/Interview Guide]]. Record yourself. No notes. |
-| **Interview prep** | [[Engineering/Algorithms/Big-O and Complexity\|Big-O]] + [[Engineering/Algorithms/Data Structures\|Data Structures]] — these don't require any prior knowledge, do them now |
+| **Interview prep** | [[Engineering/Algorithms/Big-O and Complexity\]] + [[Engineering/Algorithms/Data Structures\]] — these don't require any prior knowledge, do them now |
 | **LDS** | Add gtest unit tests (3 files) — [[LDS/Manager/Job Search Plan]] checklist |
 | **LDS** | Add GitHub Actions CI — green checkmark on every commit |
 | **Apply** | Send first 5–10 applications — [[LDS/Manager/Job Search Plan]] |
@@ -46,7 +46,7 @@ Evening  (30 min)    Apply — 2–3 job applications + follow up
 
 | Area | Task |
 |---|---|
-| **Study** | [[Engineering/C/Pointers\|Pointers]] → [[Engineering/C/Structs and Unions\|Structs]] → [[Engineering/C/Bitwise Operations\|Bitwise]] → [[Engineering/C/Strings\|Strings]] → [[Engineering/C/File IO\|File IO]] → [[Engineering/C/Serialization\|Serialization]] → [[Engineering/C/Undefined Behavior\|Undefined Behavior]] |
+| **Study** | [[Engineering/C/Pointers\]] → [[Engineering/C/Structs and Unions\]] → [[Engineering/C/Bitwise Operations\]] → [[Engineering/C/Strings\]] → [[Engineering/C/File IO\]] → [[Engineering/C/Serialization\]] → [[Engineering/C/Undefined Behavior\]] |
 | **Interview prep** | LeetCode: 1 problem/day — arrays and hash maps only (Easy → Medium) |
 | **Interview prep** | Can you explain Big-O of every data structure without notes? |
 | **LDS** | Phase 2 — MinionProxy skeleton: define the interface and UDP send |
@@ -60,7 +60,7 @@ Evening  (30 min)    Apply — 2–3 job applications + follow up
 
 | Area | Task |
 |---|---|
-| **Study** | [[Engineering/Linux/File Descriptors\|File Descriptors]] → [[Engineering/Linux/Processes\|Processes]] → [[Engineering/Linux/Signals\|Signals]] → [[Engineering/Memory/Memory Errors and Tools\|Memory Errors]] → [[Engineering/Kernel\|Kernel]] → [[Engineering/Linux/gdb Debugging\|gdb]] |
+| **Study** | [[Engineering/Linux/File Descriptors\]] → [[Engineering/Linux/Processes\]] → [[Engineering/Linux/Signals\]] → [[Engineering/Memory/Memory Errors and Tools\]] → [[Engineering/Kernel\]] → [[Engineering/Linux/gdb Debugging\]] |
 | **Interview prep** | LeetCode: 1 problem/day — linked lists + two pointers |
 | **Interview prep** | Explain: what is a file descriptor? what happens on fork()? what is epoll? |
 | **LDS** | Phase 2 — MinionProxy: UDP send with MSG_ID, basic retry loop |
@@ -74,7 +74,7 @@ Evening  (30 min)    Apply — 2–3 job applications + follow up
 
 | Area | Task |
 |---|---|
-| **Study** | [[Engineering/C++/RAII\|RAII]] → [[Engineering/C++/Smart Pointers\|Smart Pointers]] → [[Engineering/C++/Move Semantics\|Move Semantics]] → [[Engineering/C++/Virtual Functions\|Virtual Functions]] → [[Engineering/C++/Inheritance\|Inheritance]] → [[Engineering/C++/Templates\|Templates]] |
+| **Study** | [[Engineering/C++/RAII\]] → [[Engineering/C++/Smart Pointers\]] → [[Engineering/C++/Move Semantics\]] → [[Engineering/C++/Virtual Functions\]] → [[Engineering/C++/Inheritance\]] → [[Engineering/C++/Templates\]] |
 | **Interview prep** | [[LDS/Engineering/Interview - C++ Language]] — answer every question without looking |
 | **Interview prep** | LeetCode: 1 problem/day — stacks, queues, heaps |
 | **LDS** | Phase 2 — ResponseManager: match MSG_IDs, handle timeouts |
@@ -88,8 +88,8 @@ Evening  (30 min)    Apply — 2–3 job applications + follow up
 
 | Area | Task |
 |---|---|
-| **Study** | [[Engineering/C++/STL Containers\|STL]] → [[Engineering/C++/Exception Handling\|Exceptions]] → [[Engineering/C++/Type Casting\|Type Casting]] → [[Engineering/C++/Effective C++ - Meyers\|Meyers]] → [[Engineering/C++/Version Comparison\|Versions]] |
-| **Study** | [[Engineering/Linux/Threads - pthreads\|pthreads]] → [[Engineering/Concurrency/Multithreading Patterns\|Multithreading Patterns]] → [[Engineering/Concurrency/Memory Ordering\|Memory Ordering]] |
+| **Study** | [[Engineering/C++/STL Containers\]] → [[Engineering/C++/Exception Handling\]] → [[Engineering/C++/Type Casting\]] → [[Engineering/C++/Effective C++ - Meyers\]] → [[Engineering/C++/Version Comparison\]] |
+| **Study** | [[Engineering/Linux/Threads - pthreads\]] → [[Engineering/Concurrency/Multithreading Patterns\]] → [[Engineering/Concurrency/Memory Ordering\]] |
 | **Interview prep** | [[LDS/Engineering/Interview - Concurrency]] — race conditions, deadlock, condition_variable |
 | **Interview prep** | LeetCode: 1 problem/day — binary search + sorting |
 | **LDS** | Phase 2 — Scheduler: exponential backoff, timeout tracking |
@@ -103,8 +103,8 @@ Evening  (30 min)    Apply — 2–3 job applications + follow up
 
 | Area | Task |
 |---|---|
-| **Study** | [[Engineering/Networking/Overview\|Networking Overview]] → [[Engineering/Networking/Sockets TCP\|TCP Sockets]] → [[Engineering/Networking/UDP Sockets\|UDP]] → [[Engineering/Networking/epoll\|epoll]] → [[Engineering/Networking/IPC Overview\|IPC]] |
-| **Study** | [[Engineering/Linux/Shared Memory\|Shared Memory]] → [[Engineering/Linux/Semaphores\|Semaphores]] → [[Engineering/Linux/mmap\|mmap]] |
+| **Study** | [[Engineering/Networking/Overview\]] → [[Engineering/Networking/Sockets TCP\]] → [[Engineering/Networking/UDP Sockets\]] → [[Engineering/Networking/epoll\]] → [[Engineering/Networking/IPC Overview\]] |
+| **Study** | [[Engineering/Linux/Shared Memory\]] → [[Engineering/Linux/Semaphores\]] → [[Engineering/Linux/mmap\]] |
 | **Interview prep** | [[LDS/Engineering/Interview - Linux & Networking]] — epoll, TCP, byte ordering, fork |
 | **Interview prep** | Practice: walk through a write() to /dev/nbd0 end-to-end — [[LDS/Request Lifecycle]] |
 | **LDS** | Phase 2 — complete RAID01Manager or begin integration |
@@ -118,8 +118,8 @@ Evening  (30 min)    Apply — 2–3 job applications + follow up
 
 | Area | Task |
 |---|---|
-| **Study** | [[Engineering/Design Patterns/Reactor\|Reactor]] → [[Engineering/Design Patterns/Observer\|Observer]] → [[Engineering/Design Patterns/Command\|Command]] → [[Engineering/Design Patterns/Factory\|Factory]] → [[Engineering/Design Patterns/Strategy\|Strategy]] → [[Engineering/Design Patterns/Singleton\|Singleton]] |
-| **Study** | [[Engineering/DevOps/Docker\|Docker]] + [[Engineering/C++/C++20/Overview\|C++20]] |
+| **Study** | [[Engineering/Design Patterns/Reactor\]] → [[Engineering/Design Patterns/Observer\]] → [[Engineering/Design Patterns/Command\]] → [[Factory]] → [[Engineering/Design Patterns/Strategy\]] → [[Engineering/Design Patterns/Singleton\]] |
+| **Study** | [[Engineering/DevOps/Docker\]] + [[Engineering/C++/C++20/Overview\]] |
 | **Interview prep** | For each LDS pattern: say out loud — *why* this pattern, *what* the alternative was, *what* it gave you |
 | **Interview prep** | Practice drawing the LDS architecture diagram from memory |
 | **LDS** | Polish: ASan clean run, README up to date, CI green |
@@ -146,10 +146,10 @@ Evening  (30 min)    Apply — 2–3 job applications + follow up
 
 | Area | Status |
 |---|---|
-| Topics studied | 0 / 57 — [[Strategy/Progress Tracker\|tracker]] |
-| Applications sent | 0 — [[LDS/Manager/Job Search Plan\|tracker]] |
+| Topics studied | 0 / 57 — [[Strategy/Progress Tracker\]] |
+| Applications sent | 0 — [[LDS/Manager/Job Search Plan\]] |
 | Technical screens | 0 |
-| LDS phase | [[LDS/00 Dashboard\|Phase 2 — Active]] |
+| LDS phase | [[00 Dashboard]] |
 
 ---
 
@@ -164,4 +164,4 @@ Evening  (30 min)    Apply — 2–3 job applications + follow up
 | [[Strategy/Interview Prep Track]] | Interview stage details and question lists |
 | [[LDS/Manager/Job Search Plan]] | Applications, CV bullets, where to apply |
 | [[LDS/Engineering/Interview Guide]] | The pitch + cold Q&A |
-| [[Engineering/00 Dashboard]] | All Engineering topics by category |
+| [[00 Dashboard]] | All Engineering topics by category |

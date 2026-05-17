@@ -71,7 +71,7 @@ LDS does not fork — it uses a single-process multi-threaded architecture. But 
 
 ## Connections
 
-**Theory:** [[Core/Domains/04 - Linux/Theory/01 - Processes]]  
+**Theory:** [[01 - Processes]]  
 **Mental Models:** [[File Descriptors — The Machine]], [[Process Memory Layout — The Machine]], [[Signals — The Machine]], [[Shared Memory — The Machine]]  
 **LDS Implementation:** [[LDS/Linux Integration/NBDDriverComm]] — fork/exec for nbd-client subprocess  
 **Glossary:** [[pthreads]], [[VFS]]
