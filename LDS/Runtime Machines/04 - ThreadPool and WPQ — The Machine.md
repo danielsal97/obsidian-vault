@@ -3,6 +3,24 @@
 ## The Model
 A factory floor with N permanent workers and one priority conveyor belt. The belt has three lanes: Admin (WRITE), High (READ), Medium (FLUSH). Workers sleep at the belt's end. When a box arrives, the worker who's awake picks up the highest-priority box, opens it, executes whatever is inside, then returns to the belt. The main thread drops boxes on the belt and immediately walks away — it never waits.
 
+## Why This Exists
+
+**Without ThreadPool (inline execution in Reactor):**
+- Reactor thread executes storage I/O and UDP sends directly
+- A slow minion reply (100ms timeout) blocks the Reactor for 100ms
+- During that 100ms: ALL other file descriptors are unmonitored
+- One slow operation starves all other clients
+- No priority control: a low-priority flush blocks a high-priority write
+
+**ThreadPool + WPQ solves:**
+- Reactor thread NEVER blocks: enqueues work in O(1), returns to epoll_wait()
+- Worker threads absorb all blocking operations (storage, UDP, timeouts)
+- WPQ priority lanes: Admin (WRITE) > High (READ) > Med (FLUSH)
+  → a WRITE request always executes before a pending FLUSH
+- N workers = N concurrent operations without spawning new threads per request
+
+**Runtime effect:** A minion times out on a UDP ACK (Scheduler waits 100ms, retries with backoff). During all 100ms, the Reactor is free, handling other clients' reads and writes without any delay. The ThreadPool absorbs the blocking wait completely. Without this design, one slow minion would freeze the entire server.
+
 ## How It Moves
 
 ```

@@ -3,6 +3,24 @@
 ## The Model
 A single traffic controller at a busy intersection. One thread sits at the intersection (epoll_wait). When a vehicle arrives (fd event), the controller looks up the registered handler for that road (fd) and waves it through (dispatches the handler). The controller never leaves the intersection. It never handles traffic itself. It only dispatches.
 
+## Why This Exists
+
+**Without Reactor (thread-per-connection model):**
+- 1000 concurrent clients = 1000 threads
+- 1000 kernel stacks × 8MB default = 8GB memory just for thread stacks
+- Scheduler must context-switch between 1000 threads → cache thrashing
+- Most threads are idle (waiting for I/O) — wasting scheduler slots
+- Wake latency: kernel must schedule the right thread after I/O completes
+
+**Reactor solves:**
+- ONE thread handles ALL connections via epoll's O(1) ready notification
+- epoll_wait() returns only file descriptors that are READY — no wasted work
+- No context switch per connection: same thread handles all ready events in a loop
+- Memory: one epoll fd + one handler table — independent of connection count
+- Scales to 100,000+ concurrent connections with single-digit CPU usage
+
+**Runtime effect:** LDS Reactor: one thread, one `epoll_wait()` loop. 10 concurrent clients or 10,000 — same code path, same memory, same CPU overhead for the Reactor layer. The bottleneck moves to the ThreadPool workers (which do actual work), not the event dispatcher (which just routes).
+
 ## How It Moves
 
 ```

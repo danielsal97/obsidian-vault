@@ -57,7 +57,8 @@ Layer 0 — Hardware
 
 These notes trace real execution paths through the stack. Read them after understanding the architecture.
 
-→ [[00 - Traversal Paths]] — 5 explicit runtime walks: networking, memory, startup, concurrency, plugin
+→ [[A Request Journey — End To End]] — **THE master note**: one read request, every layer, 12 steps from syscall to reply
+→ [[00 - Traversal Paths]] — 5 focused runtime walks: networking, memory, startup, concurrency, plugin
 
 Quick access to the key cross-system machines:
 → [[Linux Runtime — The Machine]] — all 6 kernel subsystems at once

@@ -3,6 +3,24 @@
 ## The Model
 A bidirectional pipe between two processes with guaranteed delivery and ordering. You hold one end (a file descriptor). The remote process holds the other end. Data you write flows through the pipe to the remote. Data the remote writes flows back. The kernel manages the pipe's internals: buffers, acknowledgments, retransmits, flow control.
 
+## Why This Exists
+
+**Without TCP (raw UDP for everything):**
+- Application must implement its own reliability: retransmit, deduplication, ordering, flow control
+- Every "reliable" application reinvents TCP — poorly
+- Lost packet → silent data corruption (no notification to application)
+- Reordered packets → garbled stream unless application tracks sequence numbers
+- No congestion control → one fast sender floods a slow receiver, drops everything
+
+**TCP solves:**
+- Kernel handles retransmission, ordering, deduplication, flow control transparently
+- Application calls send()/recv() and gets a reliable, ordered byte stream
+- Three-way handshake ensures both sides ready before data flows
+- Sliding window prevents sender from overwhelming receiver's buffer
+- Congestion control prevents one connection from collapsing the network
+
+**Runtime effect:** LDS uses TCP for client connections (reliable delivery of block data matters — a dropped byte corrupts a filesystem). LDS uses UDP for minion writes (application controls retry with exponential backoff — TCP's blind retransmit would block the I/O path unpredictably, violating block I/O latency requirements).
+
 ## How It Moves
 
 ```

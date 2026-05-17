@@ -49,6 +49,20 @@ while (true) {
 3. Check shutdown condition (`!m_is_running`) inside the predicate — avoids deadlock on shutdown
 4. Use `notify_all` when shutting down — all workers must see the signal
 
+### Why futex exists
+
+**Without futex (kernel-only mutex):**
+- Every lock/unlock requires a syscall into the kernel: user→kernel mode switch ~100–200ns
+- A mutex locked 100,000 times/sec = 10–20ms/sec wasted on syscall overhead alone
+- Uncontested locks (the common case) pay the same cost as contended ones
+
+**futex solves:**
+- Uncontested lock: single atomic CAS in userspace — ~5ns, no syscall, no kernel involvement
+- Contended: one syscall to FUTEX_WAIT (sleep) and one to FUTEX_WAKE (wake waiter)
+- Fast path: 99% of locks are uncontested in well-designed code → 40× faster than kernel mutex
+
+**Runtime effect:** The WPQ mutex in LDS is acquired/released every time a Command is enqueued or dequeued. At high request rate, this could be 10,000×/sec. With futex: 50μs/sec overhead. With kernel-only mutex: 2000μs/sec — 40× slower for the same work.
+
 ## Where It Breaks
 
 - **Lock held during task execution**: one worker executes, others block — defeats parallelism

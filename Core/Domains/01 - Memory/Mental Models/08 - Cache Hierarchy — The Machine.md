@@ -3,6 +3,23 @@
 ## The Model
 A worker's desk, a nearby filing cabinet, a building archive, and a warehouse across town. RAM is the warehouse — huge but slow. L1 cache is the desk — tiny but instant. Work happens at the desk. If the file you need isn't on the desk, you fetch it from the cabinet (L2), then the archive (L3), then the warehouse (DRAM). Each level costs more time. The CPU is always hoping the file is already on the desk.
 
+## Why This Exists
+
+**Without cache:**
+- Every memory access hits DRAM: 100ns latency
+- Modern CPU executes ~1 instruction/ns (1GHz baseline), DRAM is 100× slower
+- CPU would stall 99% of the time waiting for operands from memory
+- Peak throughput: ~10GB/s — far below the 100+ GB/s CPUs need
+
+**Cache solves:**
+- L1 (32KB, on-die): ~0.5ns — 200× faster than DRAM
+- L2 (256KB): ~3ns — 33× faster
+- L3 (8MB, shared): ~10ns — 10× faster
+- Hardware prefetcher: detects sequential access patterns, preloads next cache lines
+- Spatial locality: one cache line = 64 bytes — loads surrounding bytes for free
+
+**Runtime effect:** The difference between iterating a `std::vector` (cache-line sequential, ~10GB/s) vs traversing a linked list (pointer chasing, ~100MB/s) is purely cache behavior — 100× performance gap on the same algorithm complexity. Cache is why `std::vector` beats `std::list` even for O(n) traversal.
+
 ## How It Moves
 
 ```

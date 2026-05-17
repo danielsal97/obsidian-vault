@@ -3,6 +3,22 @@
 ## The Model
 A cheat sheet taped to the MMU's desk. The full answer (walking the 4-level page table) takes dozens of memory accesses. The cheat sheet holds the last ~64–1536 answers. If your virtual address is on the cheat sheet — done in 1 cycle. If not — look up the full table, write the answer on the cheat sheet, evict an old entry.
 
+## Why This Exists
+
+**Without TLB:**
+- Every memory access (load, store, instruction fetch) requires a 4-level page table walk
+- Walk = 5 DRAM reads = ~200–500ns per access
+- A tight loop touching 1000 variables per iteration: 200ms wasted on address translation
+- The CPU would stall waiting for page table data on literally every instruction
+
+**TLB solves:**
+- On-chip hardware cache of recent VA→PA translations
+- Hit rate on hot code/data: >99%
+- TLB hit: ~1–4 CPU cycles (~0.5–2ns) — 100–1000× faster than a walk
+- Separate iTLB (instructions) and dTLB (data) for independent hit rates
+
+**Runtime effect:** Without TLB, modern software is structurally impossible — every array index, every function return, every object field read requires 5 DRAM reads just to translate the address. TLB is the hardware feature that makes virtual memory affordable.
+
 ## How It Moves
 
 ```

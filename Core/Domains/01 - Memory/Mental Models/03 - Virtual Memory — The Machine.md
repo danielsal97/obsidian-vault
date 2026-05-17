@@ -3,6 +3,24 @@
 ## The Model
 A personal address book where every entry looks like it's in your private building — but the actual rooms are shared, rented, or don't physically exist yet. Each process believes it owns the entire 64-bit address space. The OS and MMU maintain the illusion: virtual addresses are mapped to physical RAM transparently, on demand, and with per-process isolation.
 
+## Why This Exists
+
+**Without virtual memory:**
+- All processes share physical addresses — Process A can read/write Process B's memory
+- No security isolation between processes
+- Programs must know their physical address at compile time — relocation impossible
+- Can only run as many programs as physical RAM allows, no overcommit
+- fork() must copy all of parent's physical memory = slow and wasteful
+
+**Virtual memory solves:**
+- Each process gets its own isolated 128TB virtual address space
+- MMU enforces isolation — a VA in one process is meaningless in another
+- Programs compile to fixed virtual addresses (e.g. 0x400000 for .text) — OS maps wherever
+- Physical pages allocated lazily on first access (demand paging) — malloc is free until you touch
+- fork() shares pages via CoW — copied only on write, not upfront
+
+**Runtime effect:** `malloc(1GB)` returns in microseconds even if the system has 100MB free — the virtual address range is reserved, physical pages fault in on first touch. LDS can request large storage buffers at startup with zero upfront cost.
+
 ## How It Moves
 
 ```

@@ -6,6 +6,24 @@ Move semantics transfers ownership of a resource from one object to another with
 
 The compiler uses moves automatically whenever it can prove the source object will not be used again. Understanding when the compiler chooses move vs copy unlocks both performance and correctness.
 
+## Why This Exists
+
+**Without move semantics (C++03 copy-only world):**
+- Returning a vector from a function = deep copy = heap allocation + memcpy of all elements
+- Storing a string in a container = copy of string bytes
+- Passing a unique_ptr = impossible (would require a copy, but unique_ptr is non-copyable)
+- std::sort's swap = 2 copies per element swap = O(n log n) copies for a sort
+- Factory returning a polymorphic object must return a raw pointer (ownership unclear)
+
+**Move semantics solves:**
+- Move = O(1) pointer steal: transfer internal buffer pointer, null out original
+- Return Value Optimization (RVO) / NRVO: compiler eliminates copy entirely at return
+- noexcept move: vector growth uses move instead of copy — O(n) moves avoid O(n) allocations
+- std::unique_ptr: movable but not copyable — enforces single ownership at compile time
+- Perfect forwarding: template code passes arguments without unnecessary copies
+
+**Runtime effect:** `WPQ.Push(std::move(cmd))` where cmd is `unique_ptr<ICommand>` — transfers ownership of the Command object to the queue in O(1) with zero heap allocation. The Reactor thread creates one Command, moves it into the queue, moves it out to the worker. The Command object is allocated exactly once and freed exactly once, with no copies.
+
 ---
 
 ## Memory View — Move vs Copy

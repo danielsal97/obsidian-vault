@@ -4,6 +4,23 @@
 
 Every memory access goes through the MMU. If the virtual address has no physical page mapped, the MMU raises a #PF (page fault) exception, transfers control to the kernel's fault handler, which resolves the mapping and resumes the instruction that faulted — transparently to the program. The page fault is how the OS implements demand paging, copy-on-write, stack growth, and memory-mapped files. The program never sees it happen.
 
+## Why This Exists
+
+**Without page fault / demand paging:**
+- OS must allocate and zero physical pages for ALL virtual address space at exec()
+- A program using 4GB of heap must wait for 4GB of DRAM to be zeroed at startup
+- fork() must copy entire parent address space — proportional to parent's memory usage
+- Swap space unused — all pages must be in RAM or the program cannot run
+
+**Page fault solves:**
+- Physical pages allocated lazily on FIRST access, not at reservation time
+- `mmap(MAP_ANONYMOUS)` returns a virtual address range instantly — no physical page yet
+- CoW: fork() shares parent's physical pages; page copied only when written
+- Swap: cold pages can be evicted to disk, reloaded on fault — run more processes than RAM
+- Zero-fill: BSS segment zeroed lazily (one zero page mapped CoW for all uninitialized globals)
+
+**Runtime effect:** LDS startup: `new vector<uint8_t>(512MB)` returns in microseconds. Physical pages fault in only as blocks are written. The first write to each 4KB page costs ~1–10μs for the fault handler; subsequent accesses are pure DRAM at ~100ns.
+
 ---
 
 ## How It Moves — Demand Paging (anonymous allocation)

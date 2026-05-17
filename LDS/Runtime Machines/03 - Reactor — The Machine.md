@@ -3,6 +3,22 @@
 ## The Model
 A traffic controller at a single intersection who never moves. Two roads feed into the intersection: the driver fd (NBD requests or TCP data) and the signal fd (SIGINT/SIGTERM). The controller watches both with `epoll_wait`. When a vehicle arrives on either road, the controller calls the registered handler and immediately returns to watching. The controller never handles traffic itself.
 
+## Why This Exists
+
+**Without Reactor (thread-per-connection):**
+- 1000 concurrent NBD/TCP clients → 1000 threads
+- 1000 kernel stacks × 8MB = 8GB memory for stacks alone
+- Scheduler context-switches between idle threads every quantum → cache pollution
+- Each I/O completion wakes one blocked thread → one syscall per event
+
+**Reactor solves:**
+- One thread monitors ALL file descriptors simultaneously via epoll
+- epoll_wait() returns only ready fds — zero wasted work on idle connections
+- No context switch per event: same thread calls all handlers in the event loop
+- O(1) fd readiness notification regardless of how many fds are registered
+
+**Runtime effect:** LDS registers the NBD socketpair fd, the TCP server fd, the signalfd, and each connected client fd — all watched by one epoll instance. When a write request arrives on the NBD fd AND a new TCP client connects simultaneously, the Reactor handles both in the same `epoll_wait()` call, no synchronization needed, no race conditions. One thread, zero locks in the hot path.
+
 ## How It Moves
 
 ```

@@ -3,6 +3,23 @@
 ## The Model
 A contract between an object and the stack: when the object is constructed, it acquires a resource; when the object is destroyed (stack unwinds), it releases the resource. The stack's lifetime IS the resource's lifetime. No manual cleanup — the destructor is the cleanup.
 
+## Why This Exists
+
+**Without RAII (manual resource management):**
+- Every acquisition must be matched with a release: malloc/free, open/close, lock/unlock
+- An exception thrown mid-function skips all remaining cleanup code → leak
+- An early return in any path requires duplicated cleanup at each exit point
+- Concurrent code: cleanup during exception while another thread holds a reference → race
+- Real code: N resources acquired, M possible error paths = N×M cleanup combinations
+
+**RAII solves:**
+- Resource lifetime = object lifetime: destructor fires ALWAYS — normal return, exception, early return
+- No explicit cleanup: compiler guarantees destructor runs when object goes out of scope
+- Stack unwind during exception: every RAII object on the stack destroyed in reverse order
+- One cleanup path per resource type (the destructor), not one per call site
+
+**Runtime effect:** An epoll handler throws mid-request. Every RAII object on the stack — the Command's unique_ptr, any lock_guard, any buffer wrapper — is destroyed automatically in reverse construction order. Zero manual cleanup code needed. Without RAII, a single thrown exception could leak file descriptors, locks, and heap memory simultaneously.
+
 ## How It Moves
 
 ```

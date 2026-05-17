@@ -8,6 +8,12 @@ A packet travels in two directions. Inbound: electrical signal → NIC → DMA �
 
 ## How It Moves — Inbound TCP Packet
 
+### Why DMA exists here
+
+**Without DMA:** CPU must copy every byte from NIC hardware registers into kernel memory. At 10Gbps that is 1.25GB/s of copying — consuming an entire CPU core just for data movement, leaving nothing for protocol processing.
+
+**With DMA:** NIC's on-board DMA controller reads bus addresses from RX ring descriptors and writes frame bytes directly into pre-allocated kernel pages. Zero CPU cycles for data movement. The CPU only writes one descriptor pointer and handles one completion interrupt per batch.
+
 ```
 [1] Electrical signal arrives on NIC
       │
@@ -21,6 +27,15 @@ NIC hardware:
       │
       ▼
 CPU pauses current execution → enters kernel interrupt handler
+```
+
+### Why softirq exists here
+
+**Without softirq (doing TCP processing in hard interrupt context):** IRQ handlers must complete in microseconds with IRQs disabled. TCP checksum, socket demux, and buffer management are too slow for hard interrupt. Keeping IRQs disabled during TCP processing would delay ALL other interrupts (keyboard, timers, disk) on that CPU.
+
+**With softirq:** Hard interrupt does only: clear NIC interrupt status, schedule NET_RX_SOFTIRQ, return. Softirq runs shortly after with IRQs re-enabled — can be preempted. NAPI polling coalesces multiple frames per softirq invocation, reducing interrupt rate from millions/sec to thousands/sec under load.
+
+```
       │
       ▼
 Kernel network interrupt (softirq, not hard interrupt):
