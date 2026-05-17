@@ -1,5 +1,7 @@
 # Core — Systems Engineering
 
+→ [[00 - VAULT MAP]] — top-level vault entry point
+
 ---
 
 ## Level 0 — The Full Stack
@@ -43,15 +45,62 @@ Layer 0 — Hardware
 ```
 
 The path: **source file → linker → ELF → exec() → address space → C/C++ objects → threads → epoll → NIC**.
-Every bug, every design decision, every interview question lives at one of these transitions.
+
+---
+
+## Level 1 — Runtime Machines (start here for traversal learning)
+
+Each machine shows a live execution path. Read these before diving into domain notes.
+
+| Machine | Runtime Path It Shows |
+|---|---|
+| [[Linux Runtime — The Machine]] | All 6 kernel subsystems simultaneously — the master map |
+| [[Networking Stack — The Machine]] | NIC DMA → softirq → epoll → Reactor → ThreadPool |
+| [[Memory System — The Machine]] | malloc → page fault → TLB → cache hierarchy |
+| [[Concurrency Runtime — The Machine]] | thread spawn → futex → wake → execute |
+| [[C++ Object Lifetime — The Machine]] | ctor → vptr set → use → move → dtor |
+| [[Fork and Exec — The Machine]] | fork() → CoW → exec() → ELF load → main() |
+| [[Program Startup — The Machine]] | exec() → dynamic linker → constructors → main() |
+| [[Virtual Dispatch — The Machine]] | vptr load → vtable → indirect call → cache |
+| [[Page Fault — The Machine]] | #PF exception → kernel allocates page → resume |
+| [[Request Lifecycle — The Machine]] | application request end-to-end: fd event → response |
+
+→ [[00 - Traversal Paths]] — 5 explicit step-by-step runtime walks (networking, memory, startup, concurrency, plugin)
+
+---
+
+## Level 2 — Domain Maps (after you know the runtime)
+
+Enter each domain through its hub. These map the theory + machine notes for that layer.
+
+| Domain | Hub | Key Machine |
+|---|---|---|
+| C++ | [[00 - C++ Hub]] | [[C++ Object Lifetime — The Machine]] |
+| Linux | [[00 - Linux Hub]] | [[Linux Runtime — The Machine]] |
+| Networking | [[00 - Networking Hub]] | [[Networking Stack — The Machine]] |
+| Concurrency | [[00 - Concurrency Hub]] | [[Concurrency Runtime — The Machine]] |
+| Memory | [[03 - Virtual Memory — The Machine]] | [[Memory System — The Machine]] |
+| Build Pipeline | [[01 - Build Process — The Machine]] | [[Program Startup — The Machine]] |
+| Design Patterns | [[01 - Reactor Pattern — The Machine]] | [[Concurrency Runtime — The Machine]] |
+| Algorithms | [[00 - Algorithms Hub]] | — |
+
+---
+
+## Level 3 — Portals (structured learning paths)
+
+→ [[01 - Learn Systems Engineering]] — full curriculum layer by layer
+→ [[02 - Build Runtime Intuition]] — 12 runtime moments with machine links
+→ [[03 - Study Tradeoffs]] — why epoll, why UDP, why ThreadPool
+→ [[04 - Interview Preparation]] — interview strategy, domain hubs, tracks
+→ [[05 - Interview Questions Bank]] — full checklist: C++, Linux, Concurrency, Networking
 
 ---
 
 ## 1 — Understand the LDS Project
 
-LDS is a Linux live-data server: it watches files via inotify, serves reads over UDP, and delivers changes to clients over TCP. It implements every concept in the stack diagram above.
+LDS is a Linux live-data server: NBD kernel module → Reactor → ThreadPool → RAID01 → UDP minions.
 
-**The system in one sentence**: inotify fd fires → Reactor reads event → Command queued to ThreadPool → worker reads file → UDP reply sent.
+**The system in one sentence**: kernel write() fires → Reactor reads event → Command queued to ThreadPool → worker writes to storage → reply sent.
 
 **Understand the architecture:**
 → [[01 - LDS System — The Machine]] — full system map: which threads, which fds, which patterns
@@ -85,8 +134,8 @@ LDS is a Linux live-data server: it watches files via inotify, serves reads over
 → [[03 - Study Tradeoffs]] — why epoll, why UDP, why ThreadPool — with full context
 
 **Step 4 — Practice explaining LDS.**
-→ [[01 - Interview Guide]] — 3-minute pitch, cold Q&A, bugs to mention honestly
-→ Use entry 1 above as your anchor: every abstract concept maps to a concrete LDS decision
+→ [[01 - Interview Guide]] — 3-minute pitch, cold Q&A, bugs to mention
+→ Use Level 1 above as your anchor: every abstract concept maps to a concrete LDS decision
 
 **The pattern interviewers test:**
 ```

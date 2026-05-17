@@ -2,6 +2,16 @@
 
 Shared state, ordering guarantees, and the primitives that make parallel code safe.
 
+## Place in Runtime
+
+```
+thread spawn → clone() → scheduler → mutex/futex → acquire/release → worker executes
+```
+
+→ [[Concurrency Runtime — The Machine]] — full thread lifecycle (start here)
+→ [[00 - VAULT MAP]] — vault root
+→ [[Core/00 START HERE|Core Start Here]]
+
 ## The Machine
 
 → [[01 - Multithreading Patterns — The Machine]] — thread pool WPQ, work stealing, idle/wake cycle

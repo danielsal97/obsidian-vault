@@ -117,3 +117,11 @@ extern "C" { void createPlugin() { /* self-register */ } }
 1. A file `storage_plugin.so` is copied to `plugins/` with `cp`. When exactly does `IN_CLOSE_WRITE` fire? Would it fire during the copy, or after? What would happen if LDS used `IN_CREATE` instead?
 2. `SoLoader::OnLoad` runs on the `DirMonitor` background thread. The Reactor's main thread simultaneously calls `mediator.Notify()`. Is there a data race? What shared state could both threads access?
 3. `~PNP` destroys `m_soLoader` before `m_dirMonitor` (reverse declaration order). The Dispatcher inside `m_dirMonitor` calls `NotifyEnd()` on the SoLoader's CallBack during `~Dispatcher`. By then, is `m_soLoader.m_pluginCB` still valid? Trace the destruction sequence.
+
+---
+
+## Core Vault Cross-Links
+
+→ [[02 - Observer Pattern — The Machine]] — the Observer pattern DirMonitor uses
+→ [[04 - Factory Pattern — The Machine]] — how plugins self-register into the Factory
+→ [[Program Startup — The Machine]] — dlopen runs the same ELF loading sequence

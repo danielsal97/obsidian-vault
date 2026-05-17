@@ -81,3 +81,11 @@ Sends a `SuspendCommand` to each worker. `SuspendCommand::Execute()` waits on `m
 1. 100 READ commands and 1 WRITE command are pushed to the WPQ simultaneously. In what order will workers execute them?
 2. A worker is mid-`Execute()` (holding no lock) when `Stop()` is called. Does `Stop()` wait for that worker to finish? Trace the exact sequence.
 3. The WPQ has 0 items. 4 workers are sleeping in `Pop()`. A WRITE command arrives. How many workers wake up? Which one gets the command?
+
+---
+
+## Core Vault Cross-Links
+
+→ [[01 - Multithreading Patterns — The Machine]] — the general ThreadPool + WPQ pattern
+→ [[Concurrency Runtime — The Machine]] — clone() → futex → wake cycle behind workers
+→ [[10 - Context Switch — The Machine]] — what happens when scheduler picks a worker thread

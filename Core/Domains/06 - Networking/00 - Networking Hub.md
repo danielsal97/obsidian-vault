@@ -2,6 +2,16 @@
 
 Sockets, protocols, and the I/O multiplexing that makes non-blocking servers possible.
 
+## Place in Runtime
+
+```
+NIC DMA → softirq → socket buffer → epoll ready list → Reactor → ThreadPool
+```
+
+→ [[Networking Stack — The Machine]] — full packet path NIC→application (start here)
+→ [[00 - VAULT MAP]] — vault root
+→ [[Core/00 START HERE|Core Start Here]]
+
 ## The Machine
 
 → [[04 - epoll — The Machine]] — kernel ready list, epoll_wait() return, level vs edge

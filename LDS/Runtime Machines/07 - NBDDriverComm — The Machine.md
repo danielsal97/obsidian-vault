@@ -113,3 +113,10 @@ In testing/Phase 1 development, `TCPDriverComm` can replace `NBDDriverComm` with
 1. The kernel issues a WRITE of 4096 bytes to offset 0. Walk through the exact bytes that appear on `m_serverFd` (header + payload). What does `ReadAll` in `ReceiveRequest()` do with them?
 2. `ReadAll` is called with `count=28`. `read()` returns 10 bytes on the first call. What happens next? What would happen if `ReadAll` wasn't there and you called `read()` once?
 3. `~NBDDriverComm` is called while `ListenerThread` is inside `ioctl(NBD_DO_IT)`. Without any shutdown protocol, what happens to `m_listener.join()`? What must happen before `join()` to make this safe?
+
+---
+
+## Core Vault Cross-Links
+
+→ [[02 - File Descriptors — The Machine]] — what an fd is at the kernel level
+→ [[Linux Runtime — The Machine]] — how the kernel's VFS layer handles this socketpair

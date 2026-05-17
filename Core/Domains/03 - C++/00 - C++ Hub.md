@@ -2,6 +2,16 @@
 
 Resource management, object lifetime, and zero-cost abstractions.
 
+## Place in Runtime
+
+```
+exec() → constructors run → objects live on heap/stack → destructors on exit/exception
+```
+
+→ [[C++ Object Lifetime — The Machine]] — ctor → use → move → dtor (start here)
+→ [[00 - VAULT MAP]] — vault root
+→ [[Core/00 START HERE|Core Start Here]]
+
 ## The Machine
 
 - [[01 - RAII — The Machine]] — destructor call order, stack unwind sequence

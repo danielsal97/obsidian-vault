@@ -121,3 +121,10 @@ InputMediator mediator(&driver, &storage);   // identical line
 1. A 4KB WRITE arrives at RAID01Manager with offset 0. With 4 minions (at indices 0,1,2,3), which two minions receive the write? If the block size is 4096, which minions receive a write at offset 4096?
 2. A WRITE sends UDP to both minions. Primary ACKs in 5ms. Replica never ACKs (it crashed). The manager is waiting with `future::get()`. What exactly blocks? How would you add a timeout so the main pipeline doesn't stall forever?
 3. The `ResponseManager` receiver thread calls `promise.set_value(ack)` for MSG_ID 42. Meanwhile, the main thread has already timed out on MSG_ID 42 and moved on. The promise is now dangling. What runtime behavior results, and how would you handle this race?
+
+---
+
+## Core Vault Cross-Links
+
+→ [[03 - UDP Sockets — The Machine]] — sendto() semantics, message boundaries
+→ [[Networking Stack — The Machine]] — how the UDP datagrams travel to minions

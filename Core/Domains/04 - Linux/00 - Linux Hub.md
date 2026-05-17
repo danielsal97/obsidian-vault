@@ -2,6 +2,16 @@
 
 The OS interface: processes, file descriptors, signals, and kernel interaction.
 
+## Place in Runtime
+
+```
+exec() → address space → threads → scheduler → fd table → signals
+```
+
+→ [[Linux Runtime — The Machine]] — all 6 subsystems simultaneously (start here)
+→ [[00 - VAULT MAP]] — vault root
+→ [[Core/00 START HERE|Core Start Here]]
+
 ## The Machine
 
 - [[01 - Processes — The Machine]] — fork/exec lifecycle, COW pages, address space setup

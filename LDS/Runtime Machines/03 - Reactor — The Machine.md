@@ -78,3 +78,11 @@ reactor.Run();   // hands control to epoll — blocks here
 1. SIGINT is sent to LDS. What happens to it before it reaches the Reactor? Why doesn't the signal handler fire?
 2. The driver fd has a new request AND a SIGTERM arrives in the same `epoll_wait` batch. The loop processes the driver event first. What happens when it reaches the signal fd event?
 3. `MAX_EVENTS = 10`. 15 fds become ready simultaneously. What happens to the remaining 5?
+
+---
+
+## Core Vault Cross-Links
+
+→ [[01 - Reactor Pattern — The Machine]] — the general pattern this implements
+→ [[04 - epoll — The Machine]] — what epoll_wait() actually does in the kernel
+→ [[Networking Stack — The Machine]] — the full path from NIC to this Reactor

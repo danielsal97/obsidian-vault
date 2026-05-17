@@ -170,3 +170,8 @@ OrderProcessor processor(mock_logger, mock_db);
 - Don't use for stateful objects with mutable state
 
 **Status**: ✅ Fully implemented and tested | **Used By**: Logger, PluginFactory, ServiceRegistry
+
+---
+
+→ [[02 - Singleton Memory Model]] — memory ordering proof: acquire-load + release-store
+→ [[03 - Singleton Pattern — The Machine]] — runtime: double-checked locking execution trace

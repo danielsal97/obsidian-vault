@@ -237,3 +237,8 @@ This is equivalent to the `std::unordered_map<int, handler>` approach, but witho
 - [[InputMediator]]
 - [[NBD Protocol Deep Dive]]
 - [[Why signalfd not sigaction]]
+
+---
+
+→ [[04 - Reactor — Component]] — component-level detail (methods, state, invariants)
+→ [[03 - Reactor — The Machine]] — runtime execution: how epoll dispatches handlers

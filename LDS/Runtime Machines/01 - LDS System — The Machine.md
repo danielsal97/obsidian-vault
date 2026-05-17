@@ -86,3 +86,12 @@ main() creates:
 1. The kernel sends a WRITE request. Trace exactly which objects are touched and in which order, naming the method called at each step.
 2. The Reactor is single-threaded but LDS handles requests concurrently. How?
 3. `IDriverComm` and `IStorage` are both interfaces. What does this enable that concrete types would not?
+
+---
+
+## Core Vault Cross-Links
+
+→ [[Linux Runtime — The Machine]] — the full kernel subsystem map behind this pipeline
+→ [[Networking Stack — The Machine]] — NIC DMA → epoll → the Reactor you just traced
+→ [[Concurrency Runtime — The Machine]] — thread lifecycle behind the ThreadPool
+→ [[00 - Traversal Paths]] — 5 explicit runtime walks through this system

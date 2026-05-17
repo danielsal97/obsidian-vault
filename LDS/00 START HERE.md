@@ -1,12 +1,87 @@
 # LDS — Local Drive Storage
 
-LDS is a distributed NAS built on Raspberry Pi minions that presents as a block device (`/dev/nbdX`) to Linux. Writes fan out via RAID01 across two minions over UDP; reads are served from the primary. The full pipeline is: NBD kernel module → Reactor (epoll event loop) → InputMediator → ThreadPool (WPQ) → RAID01Manager → MinionProxy UDP → ResponseManager.
+A distributed NAS: Linux kernel hands us raw block I/O → we fan it to Raspberry Pi minions over UDP. From the outside it looks like a real disk (`/dev/nbdX`). From the inside it's a pipeline of C++ components running across multiple threads.
+
+→ [[00 - VAULT MAP]] — top-level vault entry point
+
+---
+
+## The Full Pipeline
+
+Read this first. Every component in the vault is one box in this diagram.
+
+```
+KERNEL
+  write(fd, buf, 512)
+       │ ioctl(NBD_DO_IT) socketpair  OR  TCP socket
+       ▼
+┌──────────────────────────────────────────────────────────────┐
+│  REACTOR  (main thread — never blocks)                       │
+│  epoll_wait() fires on NBD or TCP socket fd                  │
+│  → looks up registered handler for this fd                  │
+│  → calls handler.onReadable()                                │
+└──────────────────────┬───────────────────────────────────────┘
+                       │ stays on main thread
+                       ▼
+┌──────────────────────────────────────────────────────────────┐
+│  INPUTMEDIATOR  (Layer 3 — Application)                      │
+│  → ReceiveRequest() decodes binary NBD/TCP frame             │
+│  → DriverData{action=WRITE, offset=X, len=512, buf=ptr}      │
+│  → creates WriteCommand (Factory)                            │
+│  → WPQ.Push(cmd, priority=ADMIN)                            │
+└──────────────────────┬───────────────────────────────────────┘
+                       │ main thread returns to epoll_wait()
+                       ▼
+┌──────────────────────────────────────────────────────────────┐
+│  THREADPOOL  (N worker threads)                              │
+│  WPQ priority: Admin > High > Med                           │
+│  → WPQ.Pop() unblocks a worker                              │
+│  → worker calls cmd.Execute()                                │
+└───────────┬─────────────────────────────────┬───────────────┘
+            │ Phase 1: local                  │ Phase 2+: distributed
+            ▼                                 ▼
+┌─────────────────────┐           ┌──────────────────────────────┐
+│  LocalStorage        │           │  RAID01Manager               │
+│  vector<uint8_t>    │           │  GetBlockLocation(block#)    │
+│  [offset] = buf     │           │  → (minionA_addr, minionB_addr)│
+└──────────┬──────────┘           └────────────┬─────────────────┘
+           │                                   │ UDP ×2 (fire + forget)
+           ▼                                   ▼
+┌─────────────────────┐           ┌──────────────────────────────┐
+│  IDriverComm        │           │  MinionProxy                  │
+│  SendReply(handle)  │           │  sendto() to each minion     │
+│  → kernel unblocks  │           │  ResponseManager waits ACKs  │
+└─────────────────────┘           └──────────────────────────────┘
+```
+
+**To traverse this vault**: start at [[01 - LDS System — The Machine]] (full pipeline in one note), then follow the Runtime Machines for each component, then drill into the Infrastructure/Application notes for implementation details.
+
+---
+
+## Runtime Machines — Start Here
+
+These notes show each component as a live system. Read in order for full traversal.
+
+| Step | Machine | What It Shows |
+|---|---|---|
+| 1 | [[01 - LDS System — The Machine]] | Full pipeline: kernel → Reactor → WPQ → storage |
+| 2 | [[02 - Request Lifecycle — The Machine]] | One request end-to-end: NBD → InputMediator → Command → reply |
+| 3 | [[03 - Reactor — The Machine]] | epoll loop internals, handler dispatch |
+| 4 | [[04 - ThreadPool and WPQ — The Machine]] | WPQ priority, worker thread lifecycle |
+| 5 | [[10 - InputMediator — The Machine]] | Event → Command creation, WPQ enqueue |
+| 6 | [[07 - NBDDriverComm — The Machine]] | Kernel socketpair, NBD request parsing |
+| 7 | [[08 - TCPDriverComm — The Machine]] | TCP client driver, frame parsing |
+| 8 | [[09 - RAID01Manager — The Machine]] | Block → minion mapping, UDP send ×2, ACK wait |
+| 9 | [[05 - Plugin System — The Machine]] | inotify → DirMonitor → PNP → dlopen() |
+| 10 | [[06 - LocalStorage — The Machine]] | In-memory vector, block read / write |
+
+→ Also see Core vault: [[Linux Runtime — The Machine]] — full kernel subsystems map · [[Networking Stack — The Machine]] — NIC → epoll
 
 ---
 
 ## Layer 0 — Linux / OS Primitives
 
-What the kernel gives us. Every higher layer depends on one or more of these.
+What the kernel gives us. Read when you want to understand WHY a component exists.
 
 - [[04 - epoll|epoll]] — Reactor's engine; all I/O events funnel through here
 - [[02 - Sockets TCP|socketpair / TCP]] — NBD transport (socketpair) and client transport (TCP)
@@ -69,28 +144,7 @@ Business logic. All handlers run on ThreadPool workers, not on the Reactor threa
 
 ---
 
-## Runtime Machines (Synthesis)
-
-Each machine animates one slice of the system. Read these after you understand the layers above.
-
-| Machine | What it shows | Layers |
-|---|---|---|
-| [[01 - LDS System — The Machine]] | Full pipeline: kernel → Reactor → WPQ → storage | All |
-| [[02 - Request Lifecycle — The Machine]] | NBD → InputMediator → Command → reply | 0→1→2→3 |
-| [[03 - Reactor — The Machine]] | epoll loop internals, handler dispatch | 0+1 |
-| [[04 - ThreadPool and WPQ — The Machine]] | WPQ priority, worker thread lifecycle | 1 |
-| [[07 - NBDDriverComm — The Machine]] | Kernel socketpair, NBD request parsing | 0+2 |
-| [[08 - TCPDriverComm — The Machine]] | TCP client driver, frame parsing | 0+2 |
-| [[09 - RAID01Manager — The Machine]] | Block → minion mapping, UDP send x2, ACK wait | 2+3 |
-| [[05 - Plugin System — The Machine]] | inotify → DirMonitor → PNP → dlopen() | 0+2 |
-| [[10 - InputMediator — The Machine]] | Event → Command creation, WPQ enqueue | 1+3 |
-| [[06 - LocalStorage — The Machine]] | In-memory vector, block read / write | 3 |
-
-→ Also see Core vault: [[Linux Runtime — The Machine]] — subsystems map · [[Networking Stack — The Machine]] — NIC → epoll
-
----
-
-## Architecture
+## Architecture — Deep Reference
 
 → [[01 - System Overview|System Overview]]
 → [[02 - Three-Tier Architecture|Three-Tier Architecture]]
@@ -111,7 +165,7 @@ Each machine animates one slice of the system. Read these after you understand t
 
 ---
 
-## Decisions
+## Decisions — Why Each Choice Was Made
 
 → [[01 - Why RAII|Why RAII]]
 → [[02 - Why Observer Pattern|Why Observer Pattern]]
@@ -170,6 +224,7 @@ Each machine animates one slice of the system. Read these after you understand t
 
 → [[01 - Interview Guide]] — pitch, cold Q&A, bugs to mention
 → [[02 - main() Wiring Explained]] — how it all connects at startup
+→ [[03 - NVIDIA Firmware Engineer Prep]] — NIC firmware role: DMA, MMIO, PCIe, LDS-to-NVIDIA bridge
 
 ---
 

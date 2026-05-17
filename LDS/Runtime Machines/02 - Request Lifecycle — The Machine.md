@@ -107,3 +107,12 @@ The Reactor handles many more events while the worker waits for minion ACKs.
 1. The application calls `write("/dev/nbd0", buf, 4096)`. Walk through every `ReadAll` call in `ReceiveRequest()` — how many bytes does each read, and what do they contain?
 2. Between step ③ (Reactor wakes) and step ⑦ (application unblocks), can the Reactor process a second request? In Phase 1, when does the main thread become free to handle a second epoll event?
 3. `ReceiveRequest()` reads the 28-byte header and sees `type=DISCONNECT`. Trace what happens through `InputMediator::Notify()` and the DISCONNECT handler lambda. Does `SendReply()` get called? Does the Reactor keep running?
+
+---
+
+## Core Vault Cross-Links
+
+→ [[Linux Runtime — The Machine]] — the kernel subsystems this request traverses
+→ [[Networking Stack — The Machine]] — the TCP/UDP path for replies
+→ [[00 - Traversal Paths]] — Traversal 1 traces this exact socket → ThreadPool path
+→ [[00 - DriverData]] — the DriverData struct decoded in step ③
